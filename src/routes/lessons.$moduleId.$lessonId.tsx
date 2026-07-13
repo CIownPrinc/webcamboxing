@@ -35,7 +35,13 @@ export const Route = createFileRoute("/lessons/$moduleId/$lessonId")({
 });
 
 function LessonPage() {
-  const { module: mod, lesson, prev, next } = Route.useLoaderData();
+  const data = Route.useLoaderData() as {
+    module: Module;
+    lesson: Lesson;
+    prev: { module: Module; lesson: Lesson } | null;
+    next: { module: Module; lesson: Lesson } | null;
+  };
+  const { module: mod, lesson, prev, next } = data;
   const hydrated = useHydrated();
   const { completed, isDone, toggle } = useProgress();
   const key = lessonKey(mod.id, lesson.id);
