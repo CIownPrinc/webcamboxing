@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ChevronDown, Info, Lightbulb, AlertTriangle, Sparkles } from "lucide-react";
 import type { Block } from "@/data/course";
 import { CodeBlock } from "./CodeBlock";
 
 function Callout({ kind, title, text }: Extract<Block, { type: "callout" }>) {
-  const styles: Record<string, { ring: string; icon: JSX.Element; label: string }> = {
+  const styles: Record<string, { ring: string; icon: ReactNode; label: string }> = {
     info: { ring: "border-l-primary/70", icon: <Info className="h-4 w-4 text-primary" />, label: title ?? "Note" },
     why: { ring: "border-l-primary", icon: <Sparkles className="h-4 w-4 text-primary" />, label: title ?? "Why we do this" },
     tip: { ring: "border-l-emerald-500", icon: <Lightbulb className="h-4 w-4 text-emerald-500" />, label: title ?? "Tip" },
