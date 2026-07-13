@@ -113,9 +113,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
+        <script
+          // Apply persisted theme before paint to avoid a flash.
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var s=JSON.parse(localStorage.getItem('wb.progress.v1')||'{}');document.documentElement.classList.toggle('dark',(s.theme||'dark')==='dark')}catch(e){}",
+          }}
+        />
       </head>
       <body>
         {children}
