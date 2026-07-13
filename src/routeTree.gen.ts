@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as CurriculumRouteImport } from './routes/curriculum'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LessonsModuleIdLessonIdRouteImport } from './routes/lessons.$moduleId.$lessonId'
 
+const GlossaryRoute = GlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CurriculumRoute = CurriculumRouteImport.update({
   id: '/curriculum',
   path: '/curriculum',
@@ -32,35 +38,51 @@ const LessonsModuleIdLessonIdRoute = LessonsModuleIdLessonIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/curriculum': typeof CurriculumRoute
+  '/glossary': typeof GlossaryRoute
   '/lessons/$moduleId/$lessonId': typeof LessonsModuleIdLessonIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/curriculum': typeof CurriculumRoute
+  '/glossary': typeof GlossaryRoute
   '/lessons/$moduleId/$lessonId': typeof LessonsModuleIdLessonIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/curriculum': typeof CurriculumRoute
+  '/glossary': typeof GlossaryRoute
   '/lessons/$moduleId/$lessonId': typeof LessonsModuleIdLessonIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/curriculum' | '/lessons/$moduleId/$lessonId'
+  fullPaths: '/' | '/curriculum' | '/glossary' | '/lessons/$moduleId/$lessonId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/curriculum' | '/lessons/$moduleId/$lessonId'
-  id: '__root__' | '/' | '/curriculum' | '/lessons/$moduleId/$lessonId'
+  to: '/' | '/curriculum' | '/glossary' | '/lessons/$moduleId/$lessonId'
+  id:
+    | '__root__'
+    | '/'
+    | '/curriculum'
+    | '/glossary'
+    | '/lessons/$moduleId/$lessonId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CurriculumRoute: typeof CurriculumRoute
+  GlossaryRoute: typeof GlossaryRoute
   LessonsModuleIdLessonIdRoute: typeof LessonsModuleIdLessonIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/glossary': {
+      id: '/glossary'
+      path: '/glossary'
+      fullPath: '/glossary'
+      preLoaderRoute: typeof GlossaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/curriculum': {
       id: '/curriculum'
       path: '/curriculum'
@@ -88,6 +110,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CurriculumRoute: CurriculumRoute,
+  GlossaryRoute: GlossaryRoute,
   LessonsModuleIdLessonIdRoute: LessonsModuleIdLessonIdRoute,
 }
 export const routeTree = rootRouteImport
