@@ -77,26 +77,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Webcam Boxing — Build a Punch-Out!!-style game with Python & MediaPipe" },
+      { title: "how to build a boxing game" },
       {
         name: "description",
         content:
-          "A free, beginner-friendly course that teaches you to build a webcam-driven boxing game from zero using Python, OpenCV, MediaPipe, and Pygame.",
+          "A free, beginner-friendly course that teaches you to build a webcam-driven boxing game from zero (and have fun)\nusing Python, OpenCV, MediaPipe, and Pygame.",
       },
-      { property: "og:title", content: "Webcam Boxing — the course" },
+      { property: "og:title", content: "how to build a boxing game" },
       {
         property: "og:description",
-        content: "Learn computer vision and game development by building a webcam boxing game step-by-step.",
+        content: "A free, beginner-friendly course that teaches you to build a webcam-driven boxing game from zero (and have fun)\nusing Python, OpenCV, MediaPipe, and Pygame.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "how to build a boxing game" },
+      { name: "twitter:description", content: "A free, beginner-friendly course that teaches you to build a webcam-driven boxing game from zero (and have fun)\nusing Python, OpenCV, MediaPipe, and Pygame." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b1612560-3631-4a80-b9e3-40010cfdd1de/id-preview-55d20118--56c2721b-f283-466f-8de8-0b831fbbab72.lovable.app-1783940110197.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b1612560-3631-4a80-b9e3-40010cfdd1de/id-preview-55d20118--56c2721b-f283-466f-8de8-0b831fbbab72.lovable.app-1783940110197.png" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
       {
