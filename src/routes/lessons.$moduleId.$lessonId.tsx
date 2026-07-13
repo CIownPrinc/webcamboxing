@@ -3,12 +3,17 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Circle, Clock, ExternalLink } from
 import { SiteHeader } from "@/components/SiteHeader";
 import { BlockView } from "@/components/LessonBlocks";
 import { CodeBlock } from "@/components/CodeBlock";
-import { findLesson, modules } from "@/data/course";
+import { findLesson, modules, type Lesson, type Module } from "@/data/course";
 import { lessonKey, useHydrated, useProgress } from "@/lib/progress";
 import { useState } from "react";
 
 export const Route = createFileRoute("/lessons/$moduleId/$lessonId")({
-  loader: ({ params }) => {
+  loader: ({ params }): {
+    module: Module;
+    lesson: Lesson;
+    prev: { module: Module; lesson: Lesson } | null;
+    next: { module: Module; lesson: Lesson } | null;
+  } => {
     const found = findLesson(params.moduleId, params.lessonId);
     if (!found) throw notFound();
     return found;
