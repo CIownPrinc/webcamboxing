@@ -10,24 +10,30 @@ export function BoxerEasterEgg({
 }) {
   const [showGlass, setShowGlass] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const hasImpacted = useRef(false);
 
   useEffect(() => {
-    // We assume the punch lands exactly when the video ends.
-    // If the video is longer, we might need a timeupdate event.
     const v = videoRef.current;
     if (!v) return;
 
-    const handleEnded = () => {
-      setShowGlass(true);
-      onImpact();
-      new Audio("/glass-break.wav").play().catch((e) => console.error(e));
+    const handleTimeUpdate = () => {
+      // Trigger the shatter effect ~200ms before the video finishes to align with the punch
+      if (v.duration > 0 && v.currentTime >= v.duration - 0.2 && !hasImpacted.current) {
+        hasImpacted.current = true;
+        setShowGlass(true);
+        onImpact();
+        new Audio("/glass-break.wav").play().catch((e) => console.error(e));
+      }
+    };
 
+    const handleEnded = () => {
       // Hide the easter egg after 3 seconds of shattered glass
       setTimeout(() => {
         onComplete();
       }, 3000);
     };
 
+    v.addEventListener("timeupdate", handleTimeUpdate);
     v.addEventListener("ended", handleEnded);
     // Auto-play the video
     v.play().catch((e) => {
@@ -35,7 +41,10 @@ export function BoxerEasterEgg({
       onComplete(); // abort if it fails
     });
 
-    return () => v.removeEventListener("ended", handleEnded);
+    return () => {
+      v.removeEventListener("timeupdate", handleTimeUpdate);
+      v.removeEventListener("ended", handleEnded);
+    };
   }, [onImpact, onComplete]);
 
   return createPortal(

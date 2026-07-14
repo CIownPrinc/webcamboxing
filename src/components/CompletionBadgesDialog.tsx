@@ -87,7 +87,12 @@ export function CompletionBadgesDialog() {
   const completedKeys = hydrated ? Object.keys(completed).filter((k) => completed[k]) : [];
   const completedCount = completedKeys.length;
 
-  const earnedBadges = courseBadges.filter((b) => {
+  const visibleBadges = courseBadges.filter((b) => {
+    if (b.id === "easter_egg") return easterEggFound;
+    return true;
+  });
+
+  const earnedBadges = visibleBadges.filter((b) => {
     if (b.id === "easter_egg") return easterEggFound;
     if (b.requiredCount !== undefined && completedCount >= b.requiredCount) {
       return true;
@@ -114,7 +119,7 @@ export function CompletionBadgesDialog() {
         />
         <span className="hidden sm:inline">Badges</span>
         <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[10px] font-bold text-primary tabular-nums">
-          {earnedBadges.length}/{courseBadges.length}
+          {earnedBadges.length}/{visibleBadges.length}
         </span>
       </button>
 
@@ -148,7 +153,7 @@ export function CompletionBadgesDialog() {
                 </div>
 
                 <div className="flex-1 space-y-3 overflow-y-auto p-4 sm:p-6">
-                  {courseBadges.map((b) => {
+                  {visibleBadges.map((b) => {
                     const isEarned = earnedBadges.some((e) => e.id === b.id);
                     return (
                       <div

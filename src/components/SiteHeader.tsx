@@ -16,7 +16,6 @@ export function SiteHeader() {
 
   const [clickTimes, setClickTimes] = useState<number[]>([]);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
-  const [isShaking, setIsShaking] = useState(false);
 
   const handleLogoClick = (e: React.MouseEvent) => {
     if (showEasterEgg) return;
@@ -45,9 +44,7 @@ export function SiteHeader() {
               alt="Boxing glove logo"
               className="h-7 w-7 object-contain transition-transform duration-200 group-hover:scale-110"
             />
-            <span
-              className={`font-display text-base font-bold tracking-tight text-foreground ${isShaking ? "animate-shake" : ""}`}
-            >
+            <span className="font-display text-base font-bold tracking-tight text-foreground">
               Webcam<span className="text-primary">Boxing</span>
             </span>
           </Link>
@@ -105,8 +102,8 @@ export function SiteHeader() {
       {showEasterEgg && (
         <BoxerEasterEgg
           onImpact={() => {
-            setIsShaking(true);
-            setTimeout(() => setIsShaking(false), 500); // Remove shake class after animation
+            document.body.classList.add("animate-shake");
+            setTimeout(() => document.body.classList.remove("animate-shake"), 500);
           }}
           onComplete={() => setShowEasterEgg(false)}
         />
