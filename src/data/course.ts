@@ -1751,6 +1751,14 @@ def apply_shake(screen_pos):
         difficulty: "Beginner",
         objectives: ["Pick a next step that matches your interest"],
         blocks: [
+          h("Congratulations! 🎉", 2),
+          p(
+            "You've just finished building a fully functional webcam-controlled game from scratch. We took raw, noisy pixels from a cheap camera, extracted landmarks with deep learning, smoothed out the jitter, mapped it to game state, and wrapped it in a satisfying game loop.",
+          ),
+          h("How to add on later things", 3),
+          p(
+            "Your game is a fantastic foundation. Here are ten ways you can expand it as you get more comfortable:",
+          ),
           list(
             [
               "Multiple enemies with different telegraph timings",

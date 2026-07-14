@@ -3,9 +3,10 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Circle, Clock, ExternalLink } from
 import { SiteHeader } from "@/components/SiteHeader";
 import { BlockView } from "@/components/LessonBlocks";
 import { CodeBlock } from "@/components/CodeBlock";
-import { findLesson, modules, type Lesson, type Module } from "@/data/course";
+import { findLesson, modules, totalLessons, type Lesson, type Module } from "@/data/course";
 import { lessonKey, useHydrated, useProgress } from "@/lib/progress";
 import { useEffect, useState } from "react";
+import confetti from "canvas-confetti";
 
 export const Route = createFileRoute("/lessons/$moduleId/$lessonId")({
   loader: ({
@@ -53,9 +54,30 @@ function LessonPage() {
   const key = lessonKey(mod.id, lesson.id);
   const done = hydrated && isDone(key);
 
+  const isFullyComplete = hydrated && Object.keys(completed).length === totalLessons;
+  const [hasCelebrated, setHasCelebrated] = useState(false);
+
   useEffect(() => {
     if (hydrated) setLastVisited(mod.id, lesson.id);
   }, [hydrated, mod.id, lesson.id, setLastVisited]);
+
+  useEffect(() => {
+    if (isFullyComplete && !hasCelebrated) {
+      setHasCelebrated(true);
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 },
+        zIndex: 9999,
+      });
+      new Audio("/party-blower.wav")
+        .play()
+        .catch((e) => console.error("Audio playback blocked", e));
+      setTimeout(() => {
+        new Audio("/clapping.wav").play().catch((e) => console.error("Audio playback blocked", e));
+      }, 500);
+    }
+  }, [isFullyComplete, hasCelebrated]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
