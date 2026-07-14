@@ -14,13 +14,12 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
-        <Link to="/" className="group flex items-center gap-2">
-          <span
-            aria-hidden
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-display text-lg leading-none"
-          >
-            ✦
-          </span>
+        <Link to="/" className="group flex items-center gap-2.5">
+          <img
+            src="/icon-192.png"
+            alt="Boxing glove logo"
+            className="h-8 w-8 object-contain transition-transform duration-200 group-hover:scale-110"
+          />
           <span className="font-display text-lg tracking-tight">
             Webcam <span className="text-primary">Boxing</span>
           </span>
