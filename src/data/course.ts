@@ -1226,6 +1226,7 @@ class Enemy:
           "Detect win (enemy hp ≤ 0) and lose (player hp ≤ 0)",
         ],
         blocks: [
+          info("`Tracker` here is a small facade class you'll assemble from the pieces built earlier: MediaPipe hands (Mod. 8), wrist extraction (Mod. 10), a `WristVelocity` per wrist (Mod. 11), a `PunchDetector` per wrist (Mod. 13), and the `is_blocking` check (Mod. 20). `tracker.step()` reads a frame and updates all of them; `punch_left/right(threshold)` returns a small object with `.pos` and `.speed` when a punch fired this frame, else `None`."),
           code("python", `# main.py — abridged
 import pygame, cv2, time
 from tracker import Tracker
