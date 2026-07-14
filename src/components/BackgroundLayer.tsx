@@ -1,21 +1,29 @@
 import { useProgress } from "@/lib/progress";
 
 export const WALLPAPER_PRESETS: Record<string, { name: string; url: string }> = {
+  glacier: {
+    name: "Glacier Ice",
+    url: "/backgrounds/glacier.jpeg",
+  },
+  lake: {
+    name: "Still Lake",
+    url: "/backgrounds/lake.JPG",
+  },
+  lake2: {
+    name: "Lake Reflection",
+    url: "/backgrounds/lake2.jpeg",
+  },
+  lush_hills: {
+    name: "Lush Hills",
+    url: "/backgrounds/lush_hills.JPG",
+  },
   mountain: {
-    name: "Mountain Dusk",
-    url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=80",
+    name: "Mountaintop",
+    url: "/backgrounds/mountaintop.jpeg",
   },
   ocean: {
     name: "Deep Ocean",
-    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80",
-  },
-  city: {
-    name: "Midnight City Grid",
-    url: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2000&q=80",
-  },
-  field: {
-    name: "Minimalist Field",
-    url: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=2000&q=80",
+    url: "/backgrounds/ocean.jpeg",
   },
 };
 

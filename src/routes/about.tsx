@@ -7,11 +7,16 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "@tanstack/react-router";
+
 export const Route = createFileRoute("/about")({
   component: AboutPage,
 });
 
 function AboutPage() {
+  const router = useRouter();
+
   return (
     <main className="min-h-screen py-16 px-4 sm:px-6">
       <div className="mx-auto max-w-5xl">
@@ -75,6 +80,15 @@ function AboutPage() {
               PSS: Thanks for reading all this. In fact, I have a present for you...but I need you
               to click the logo in the top left 5 times quickly to get it.
             </p>
+
+            <div className="pt-8">
+              <button
+                onClick={() => router.history.back()}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-card border border-border/80 px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
+              >
+                <ArrowLeft className="h-4 w-4" /> Go Back
+              </button>
+            </div>
           </div>
 
           {/* Carousel Column */}

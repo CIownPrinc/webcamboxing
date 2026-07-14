@@ -9,6 +9,7 @@ export function BoxerEasterEgg({
   onComplete: () => void;
 }) {
   const [showGlass, setShowGlass] = useState(false);
+  const [isFading, setIsFading] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasImpacted = useRef(false);
 
@@ -17,8 +18,8 @@ export function BoxerEasterEgg({
     if (!v) return;
 
     const handleTimeUpdate = () => {
-      // Trigger the shatter effect ~200ms before the video finishes to align with the punch
-      if (v.duration > 0 && v.currentTime >= v.duration - 0.2 && !hasImpacted.current) {
+      // Trigger the shatter effect ~400ms before the video finishes to align with the punch
+      if (v.duration > 0 && v.currentTime >= v.duration - 0.4 && !hasImpacted.current) {
         hasImpacted.current = true;
         setShowGlass(true);
         onImpact();
@@ -27,7 +28,12 @@ export function BoxerEasterEgg({
     };
 
     const handleEnded = () => {
-      // Hide the easter egg after 3 seconds of shattered glass
+      // Start fading out
+      setTimeout(() => {
+        setIsFading(true);
+      }, 1500);
+
+      // Hide the easter egg after 3 seconds total
       setTimeout(() => {
         onComplete();
       }, 3000);
@@ -64,14 +70,6 @@ export function BoxerEasterEgg({
 
       {/* Cracked Glass Overlay */}
       {showGlass && (
-        <div
-          className="absolute z-20 pointer-events-none animate-in fade-in duration-100 w-96 h-96 top-1/2 left-[35%] -translate-x-1/2 -translate-y-1/2"
-          style={{
-            backgroundImage: "url('/cracked-glass.png')",
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
         />
       )}
     </div>,
