@@ -70,6 +70,14 @@ export function BoxerEasterEgg({
 
       {/* Cracked Glass Overlay */}
       {showGlass && (
+        <div
+          className={`absolute z-20 pointer-events-none transition-opacity duration-[1500ms] ease-out w-96 h-96 top-1/2 left-[35%] -translate-x-1/2 -translate-y-1/2 ${isFading ? "opacity-0" : "opacity-100"}`}
+          style={{
+            backgroundImage: "url('/cracked-glass.png')",
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
         />
       )}
     </div>,
