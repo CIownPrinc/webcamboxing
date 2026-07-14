@@ -71,17 +71,24 @@ export const courseBadges: readonly BadgeDefinition[] = [
     icon: "👑",
     requiredCount: totalLessons,
   },
+  {
+    id: "easter_egg",
+    title: "The Ippo Dempsey",
+    description: "You uncovered a hidden secret by rapidly clicking the logo.",
+    icon: "💨",
+  },
 ];
 
 export function CompletionBadgesDialog() {
   const [open, setOpen] = useState(false);
   const hydrated = useHydrated();
-  const { completed } = useProgress();
+  const { completed, easterEggFound } = useProgress();
 
   const completedKeys = hydrated ? Object.keys(completed).filter((k) => completed[k]) : [];
   const completedCount = completedKeys.length;
 
   const earnedBadges = courseBadges.filter((b) => {
+    if (b.id === "easter_egg") return easterEggFound;
     if (b.requiredCount !== undefined && completedCount >= b.requiredCount) {
       return true;
     }

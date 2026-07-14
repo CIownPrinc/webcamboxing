@@ -56,7 +56,7 @@ export function BoxerEasterEgg({
       {/* Cracked Glass Overlay */}
       {showGlass && (
         <div
-          className="absolute z-20 mix-blend-screen pointer-events-none animate-in fade-in duration-100 w-96 h-96 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          className="absolute z-20 pointer-events-none animate-in fade-in duration-100 w-96 h-96 top-1/2 left-[35%] -translate-x-1/2 -translate-y-1/2"
           style={{
             backgroundImage: "url('/cracked-glass.png')",
             backgroundSize: "contain",

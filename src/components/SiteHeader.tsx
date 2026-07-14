@@ -10,7 +10,7 @@ import { BoxerEasterEgg } from "./BoxerEasterEgg";
 
 export function SiteHeader() {
   const hydrated = useHydrated();
-  const { completed } = useProgress();
+  const { completed, setEasterEggFound } = useProgress();
   const done = hydrated ? Object.keys(completed).length : 0;
   const pct = Math.round((done / totalLessons) * 100);
 
@@ -26,6 +26,7 @@ export function SiteHeader() {
     if (newTimes.length === 5 && now - newTimes[0] < 2000) {
       e.preventDefault();
       setShowEasterEgg(true);
+      setEasterEggFound(true);
       setClickTimes([]);
     }
   };

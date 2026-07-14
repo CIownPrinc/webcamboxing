@@ -23,6 +23,7 @@ const ProgressStateSchema = z.object({
   lastVisited: LastVisitedSchema.nullable().default(null),
   wallpaper: z.string().default("mountain"),
   customWallpaper: z.string().nullable().default(null),
+  easterEggFound: z.boolean().default(false),
 });
 
 export type LastVisited = z.infer<typeof LastVisitedSchema>;
@@ -34,12 +35,14 @@ export interface ProgressServiceResult {
   readonly wallpaper: string;
   readonly customWallpaper: string | null;
   readonly lastVisited: LastVisited | null;
+  readonly easterEggFound: boolean;
   readonly isDone: (key: string) => boolean;
   readonly toggle: (key: string) => void;
   readonly setTheme: (newTheme: "light" | "dark") => void;
   readonly setWallpaper: (newWallpaper: string) => void;
   readonly setCustomWallpaper: (dataUrl: string | null) => void;
   readonly setLastVisited: (moduleId: string, lessonId: string) => void;
+  readonly setEasterEggFound: (found: boolean) => void;
 }
 
 export interface LessonKeyParams {
@@ -53,6 +56,7 @@ const DEFAULT_STATE: State = {
   lastVisited: null,
   wallpaper: "mountain",
   customWallpaper: null,
+  easterEggFound: false,
 };
 
 function read(): State {
@@ -110,6 +114,7 @@ export function useProgress(): ProgressServiceResult {
     wallpaper: currentStore.wallpaper,
     customWallpaper: currentStore.customWallpaper,
     lastVisited: currentStore.lastVisited,
+    easterEggFound: currentStore.easterEggFound,
     isDone: (key: string): boolean => Boolean(currentStore.completed[key]),
     toggle: (key: string): void => {
       const updatedCompleted = { ...currentStore.completed };
@@ -142,6 +147,11 @@ export function useProgress(): ProgressServiceResult {
         ...currentStore,
         lastVisited: { moduleId, lessonId, at: Date.now() },
       });
+    },
+    setEasterEggFound: (found: boolean): void => {
+      if (currentStore.easterEggFound !== found) {
+        write({ ...currentStore, easterEggFound: found });
+      }
     },
   };
 }
