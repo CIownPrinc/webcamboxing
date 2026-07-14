@@ -135,14 +135,13 @@ function Index() {
             <Sparkles className="h-3 w-3 text-primary" /> A hands-on course
           </p>
           <h1 className="font-display text-5xl leading-[0.98] tracking-tight md:text-7xl">
-            Build a webcam
+            Learn Python game development and
             <br />
-            <span className="marker-red">boxing game</span> from zero.
+            <span className="marker-red">computer vision</span> from scratch.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
-            A step-by-step course that teaches Python, computer vision, and game design by building
-            an arcade boxing game (inspired by Punch-Out!!) that watches you through your own
-            webcam.
+            Write clean code that tracks your hands with your webcam and powers a live arcade boxing
+            game using Python, OpenCV, and MediaPipe. 25 interactive modules, zero prerequisites.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             {resume ? (
@@ -191,25 +190,25 @@ function Index() {
         <div className="mb-10 grid gap-4 md:grid-cols-3">
           <Feature
             icon={<Target className="h-4 w-4" />}
-            title="Designed for beginners"
-            body="Every lesson explains WHY before HOW. No hand-waving, no 'just use this'. Every important line is annotated."
+            title="Designed for total beginners"
+            body="Every lesson explains WHY before HOW. No hand-waving, no skipping steps, and every line of Python is clearly explained."
           />
           <Feature
             icon={<Sparkles className="h-4 w-4" />}
-            title="Built around webcam limits"
-            body="You'll learn what a webcam can and can't measure, and how to design gameplay that turns those limits into fair, fun input."
+            title="Built around real webcam tracking"
+            body="You will learn what a webcam can and cannot see, and how to design responsive gameplay that turns normal webcam tracking into fun, fair input."
           />
           <Feature
             icon={<BookOpen className="h-4 w-4" />}
             title="Real, working results"
-            body="Every lesson ends with something running. State machines, calibration, and modular architecture come along for the ride."
+            body="Every lesson ends with working code running on your screen. Game architecture, calibration, and finite state machines come along naturally as you build."
           />
         </div>
 
         <h2 className="mt-16 font-display text-3xl">The roadmap</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          25 modules take you from installing Python to a polished arcade boxing game with menus,
-          sound, and a state-machine driven opponent.
+          25 beginner modules take you from installing Python and OpenCV to a polished arcade boxing
+          game with menus, sound effects, and an intelligent opponent.
         </p>
         <ol className="mt-8 grid gap-3 md:grid-cols-2">
           {modules.map((m) => (
