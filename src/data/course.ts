@@ -191,6 +191,20 @@ export const modules: Module[] = [
             "Time in a state (has the punch cooled down yet?)",
           ]),
           info("You'll see this list appear again in Module 12 when we build the punch detector. Everything the game reads about the player is built from these five signals."),
+          {
+            type: "quiz",
+            question:
+              "You want your game to feel fair. Which of these is the WORST thing to base gameplay on from a single webcam?",
+            options: [
+              "The 2D position of your wrist on screen",
+              "How fast your wrist moved between two frames",
+              "The estimated force of your punch in newtons",
+              "Whether both hands are near the top of the frame",
+            ],
+            answer: 2,
+            explain:
+              "A single lens has no way to recover mass, acceleration, or distance in meters — so 'force in newtons' is a made-up number. The other three are shapes/positions the camera can actually see, which is what we'll build the game around.",
+          },
         ],
         recap: [
           "Webcams struggle with depth, motion blur, and absolute scale.",
