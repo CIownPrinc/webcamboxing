@@ -54,16 +54,9 @@ function LessonPage() {
   const key = lessonKey(mod.id, lesson.id);
   const done = hydrated && isDone(key);
 
-  const isFullyComplete = hydrated && Object.keys(completed).length === totalLessons;
-  const [hasCelebrated, setHasCelebrated] = useState(false);
-
-  useEffect(() => {
-    if (hydrated) setLastVisited(mod.id, lesson.id);
-  }, [hydrated, mod.id, lesson.id, setLastVisited]);
-
-  useEffect(() => {
-    if (isFullyComplete && !hasCelebrated) {
-      setHasCelebrated(true);
+  const handleComplete = () => {
+    toggle(key);
+    if (!done && next === null && Object.keys(completed).length === totalLessons - 1) {
       confetti({
         particleCount: 150,
         spread: 80,
@@ -77,7 +70,11 @@ function LessonPage() {
         new Audio("/clapping.wav").play().catch((e) => console.error("Audio playback blocked", e));
       }, 500);
     }
-  }, [isFullyComplete, hasCelebrated]);
+  };
+
+  useEffect(() => {
+    if (hydrated) setLastVisited(mod.id, lesson.id);
+  }, [hydrated, mod.id, lesson.id, setLastVisited]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -104,7 +101,7 @@ function LessonPage() {
         }
       } else if (e.shiftKey && e.key.toLowerCase() === "c") {
         e.preventDefault();
-        toggle(key);
+        handleComplete();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -234,7 +231,7 @@ function LessonPage() {
               {lesson.difficulty}
             </span>
             <button
-              onClick={() => toggle(key)}
+              onClick={handleComplete}
               title="Shift+C to complete · Shift+→ next lesson"
               className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-semibold transition-all ${done ? "border-primary bg-primary text-primary-foreground shadow-sm" : "border-border/80 bg-card hover:bg-accent hover:border-border"}`}
             >
@@ -380,7 +377,7 @@ function LessonPage() {
               ) : (
                 <button
                   onClick={() => {
-                    if (!done) toggle(key);
+                    if (!done) handleComplete();
                     router.navigate({
                       to: "/lessons/$moduleId/$lessonId",
                       params: { moduleId: next.module.id, lessonId: next.lesson.id },
