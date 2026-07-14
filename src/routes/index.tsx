@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, PlayCircle, Sparkles, Target } from "lucide-react";
+import { ArrowRight, BookOpen, Sparkles, Target } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { findLesson, modules, totalLessons, totalMinutes } from "@/data/course";
+import { ResumeLearningButton } from "@/components/ResumeLearningButton";
+import { modules, totalLessons, totalMinutes } from "@/data/course";
 import { useHydrated, useProgress } from "@/lib/progress";
 
 export const Route = createFileRoute("/")({
@@ -33,12 +34,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const first = modules[0].lessons[0];
   const totalHours = Math.round(totalMinutes / 60);
-  const hydrated = useHydrated();
-  const { lastVisited } = useProgress();
-  const resume =
-    hydrated && lastVisited ? findLesson(lastVisited.moduleId, lastVisited.lessonId) : null;
 
   const courseSchema = {
     "@context": "https://schema.org",
@@ -138,32 +134,7 @@ function Index() {
               prerequisites.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
-              {resume ? (
-                <Link
-                  to="/lessons/$moduleId/$lessonId"
-                  params={{ moduleId: resume.module.id, lessonId: resume.lesson.id }}
-                  className="neo-btn inline-flex items-center gap-2.5 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground"
-                >
-                  <PlayCircle className="h-4 w-4" /> Resume: {resume.lesson.title}
-                </Link>
-              ) : (
-                <Link
-                  to="/lessons/$moduleId/$lessonId"
-                  params={{ moduleId: modules[0].id, lessonId: first.id }}
-                  className="neo-btn inline-flex items-center gap-2.5 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground"
-                >
-                  Start Module 1 <ArrowRight className="h-4 w-4" />
-                </Link>
-              )}
-              {resume && (
-                <Link
-                  to="/lessons/$moduleId/$lessonId"
-                  params={{ moduleId: modules[0].id, lessonId: first.id }}
-                  className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-card/60 px-5 py-3.5 text-sm font-semibold backdrop-blur-md transition-colors hover:bg-card hover:border-border"
-                >
-                  Start from Module 1 <ArrowRight className="h-4 w-4" />
-                </Link>
-              )}
+              <ResumeLearningButton />
               <Link
                 to="/curriculum"
                 className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-card/60 px-5 py-3.5 text-sm font-semibold backdrop-blur-md transition-colors hover:bg-card hover:border-border"
@@ -265,23 +236,7 @@ function Index() {
             can actually play.
           </p>
           <div className="mt-7 flex justify-center">
-            {resume ? (
-              <Link
-                to="/lessons/$moduleId/$lessonId"
-                params={{ moduleId: resume.module.id, lessonId: resume.lesson.id }}
-                className="neo-btn inline-flex items-center gap-2.5 rounded-xl bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground"
-              >
-                <PlayCircle className="h-4 w-4" /> Resume: {resume.lesson.title}
-              </Link>
-            ) : (
-              <Link
-                to="/lessons/$moduleId/$lessonId"
-                params={{ moduleId: modules[0].id, lessonId: first.id }}
-                className="neo-btn inline-flex items-center gap-2.5 rounded-xl bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground"
-              >
-                Start Module 1 <ArrowRight className="h-4 w-4" />
-              </Link>
-            )}
+            <ResumeLearningButton />
           </div>
         </div>
       </section>

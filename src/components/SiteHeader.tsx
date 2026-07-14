@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { GlobalSearchDialog } from "./GlobalSearchDialog";
 import { CompletionBadgesDialog } from "./CompletionBadgesDialog";
 import { SettingsDialog } from "./SettingsDialog";
+import { ResumeLearningButton } from "./ResumeLearningButton";
 import { useHydrated, useProgress } from "@/lib/progress";
 import { totalLessons } from "@/data/course";
 
@@ -59,6 +60,7 @@ export function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
+          <ResumeLearningButton variant="header" />
           <GlobalSearchDialog />
           <CompletionBadgesDialog />
           <SettingsDialog />

@@ -61,6 +61,8 @@ function LessonPage() {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Avoid triggering when user is typing in an input or textarea
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      // Avoid triggering if the user is actively selecting text
+      if (window.getSelection()?.toString().length) return;
 
       if (e.shiftKey && (e.key === "ArrowRight" || e.key.toLowerCase() === "j")) {
         if (next) {
@@ -339,24 +341,73 @@ function LessonPage() {
               <span className="flex-1" />
             )}
             {next ? (
-              <Link
-                to="/lessons/$moduleId/$lessonId"
-                params={{ moduleId: next.module.id, lessonId: next.lesson.id }}
-                className="glass-panel group flex flex-1 items-center justify-end gap-3.5 rounded-xl p-4 text-right transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md"
-              >
-                <span className="min-w-0">
-                  <span className="block text-xs font-medium text-muted-foreground">Next</span>
-                  <span className="block truncate font-semibold text-foreground">
-                    {next.lesson.title}
+              done ? (
+                <Link
+                  to="/lessons/$moduleId/$lessonId"
+                  params={{ moduleId: next.module.id, lessonId: next.lesson.id }}
+                  className="glass-panel group flex flex-1 items-center justify-end gap-3.5 rounded-xl p-4 text-right transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md"
+                >
+                  <span className="min-w-0">
+                    <span className="block text-xs font-medium text-muted-foreground">Next</span>
+                    <span className="block truncate font-semibold text-foreground">
+                      {next.lesson.title}
+                    </span>
                   </span>
-                </span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
-              </Link>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
+                </Link>
+              ) : (
+                <button
+                  onClick={() => {
+                    if (!done) toggle(key);
+                    router.navigate({
+                      to: "/lessons/$moduleId/$lessonId",
+                      params: { moduleId: next.module.id, lessonId: next.lesson.id },
+                    });
+                  }}
+                  className="group flex flex-1 items-center justify-end gap-3.5 rounded-xl bg-primary/10 border border-primary/30 p-4 text-right transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary/20 hover:border-primary/50 hover:shadow-md hover:shadow-primary/20"
+                >
+                  <span className="min-w-0">
+                    <span className="block text-xs font-medium text-primary uppercase tracking-wider">
+                      Mark Complete
+                    </span>
+                    <span className="block truncate font-bold text-foreground">
+                      Continue to Next Lesson
+                    </span>
+                  </span>
+                  <ArrowRight className="h-5 w-5 shrink-0 text-primary transition-transform group-hover:translate-x-1" />
+                </button>
+              )
             ) : (
               <span className="flex-1" />
             )}
           </nav>
         </article>
+      </div>
+
+      <div className="fixed bottom-6 right-6 z-40 hidden md:flex items-center gap-4 glass-panel rounded-full px-4 py-2 shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-500 delay-1000 fill-mode-both pointer-events-none">
+        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          Power User
+        </span>
+        <div className="flex items-center gap-2 border-l border-border/60 pl-4">
+          <kbd className="inline-flex h-5 items-center gap-1 rounded border border-border/80 bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+            <span className="text-xs">⇧</span> Shift
+          </kbd>
+          <span className="text-muted-foreground/50 text-xs">+</span>
+          <kbd className="inline-flex h-5 items-center justify-center rounded border border-border/80 bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+            →
+          </kbd>
+          <span className="ml-1 text-xs font-medium text-foreground">Next</span>
+        </div>
+        <div className="flex items-center gap-2 border-l border-border/60 pl-4">
+          <kbd className="inline-flex h-5 items-center gap-1 rounded border border-border/80 bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+            <span className="text-xs">⇧</span> Shift
+          </kbd>
+          <span className="text-muted-foreground/50 text-xs">+</span>
+          <kbd className="inline-flex h-5 items-center justify-center rounded border border-border/80 bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+            C
+          </kbd>
+          <span className="ml-1 text-xs font-medium text-foreground">Complete</span>
+        </div>
       </div>
     </div>
   );
