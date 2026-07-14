@@ -7,13 +7,13 @@ import { lessonKey, useHydrated, useProgress } from "@/lib/progress";
 export const Route = createFileRoute("/curriculum")({
   head: () => ({
     meta: [
-      { title: "Curriculum — Webcam Boxing" },
+      { title: "Curriculum | Webcam Boxing" },
       {
         name: "description",
         content:
           "The full 25-module roadmap: from installing Python to a polished webcam boxing game.",
       },
-      { property: "og:title", content: "Curriculum — Webcam Boxing" },
+      { property: "og:title", content: "Curriculum | Webcam Boxing" },
       {
         property: "og:description",
         content: "Every module and lesson in the Webcam Boxing course.",
@@ -34,8 +34,8 @@ function Curriculum() {
         <p className="text-xs uppercase tracking-widest text-primary">The course</p>
         <h1 className="mt-2 font-display text-5xl">Curriculum</h1>
         <p className="mt-3 max-w-2xl text-muted-foreground">
-          Twenty-five modules, ordered so every step builds on the previous one. Click any lesson to
-          jump in. Your progress is saved in this browser.
+          25 modules, ordered so every step builds on the previous one. Click any lesson to jump in.
+          Your progress is saved in this browser.
         </p>
 
         <ol className="mt-10 space-y-8">

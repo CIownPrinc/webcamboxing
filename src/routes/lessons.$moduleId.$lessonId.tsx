@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, CheckCircle2, Circle, Clock, ExternalLink } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BlockView } from "@/components/LessonBlocks";
@@ -46,12 +46,43 @@ function LessonPage() {
   const { module: mod, lesson, prev, next } = data;
   const hydrated = useHydrated();
   const { completed, isDone, toggle, setLastVisited } = useProgress();
+  const router = useRouter();
   const key = lessonKey(mod.id, lesson.id);
   const done = hydrated && isDone(key);
 
   useEffect(() => {
     if (hydrated) setLastVisited(mod.id, lesson.id);
   }, [hydrated, mod.id, lesson.id, setLastVisited]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Avoid triggering when user is typing in an input or textarea
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      if (e.shiftKey && (e.key === "ArrowRight" || e.key.toLowerCase() === "j")) {
+        if (next) {
+          e.preventDefault();
+          router.navigate({
+            to: "/lessons/$moduleId/$lessonId",
+            params: { moduleId: next.module.id, lessonId: next.lesson.id },
+          });
+        }
+      } else if (e.shiftKey && (e.key === "ArrowLeft" || e.key.toLowerCase() === "k")) {
+        if (prev) {
+          e.preventDefault();
+          router.navigate({
+            to: "/lessons/$moduleId/$lessonId",
+            params: { moduleId: prev.module.id, lessonId: prev.lesson.id },
+          });
+        }
+      } else if (e.shiftKey && e.key.toLowerCase() === "c") {
+        e.preventDefault();
+        toggle(key);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [next, prev, router, toggle, key]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -114,6 +145,7 @@ function LessonPage() {
             </span>
             <button
               onClick={() => toggle(key)}
+              title="Shift+C to complete · Shift+→ next lesson"
               className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 transition-colors ${done ? "border-primary bg-primary text-primary-foreground" : "border-border hover:bg-accent"}`}
             >
               {done ? <CheckCircle2 className="h-3 w-3" /> : <Circle className="h-3 w-3" />}

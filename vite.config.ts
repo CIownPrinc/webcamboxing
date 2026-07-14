@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 // @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
 // or the app will break with duplicate plugins:
 //   - TanStack devtools (dev-only, first), tanstackStart, viteReact, tailwindcss, tsConfigPaths,
@@ -25,7 +26,7 @@ export default defineConfig({
         filename: "sw.js",
         devOptions: { enabled: false },
         manifest: {
-          name: "Webcam Boxing — Course",
+          name: "Webcam Boxing | Course",
           short_name: "WB Course",
           description:
             "A beginner-friendly course that teaches you to build a webcam boxing game from zero.",
@@ -73,5 +74,5 @@ export default defineConfig({
         },
       }),
     ],
-  },
+  } as unknown as Record<string, unknown>,
 });

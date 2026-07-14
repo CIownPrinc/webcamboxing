@@ -193,10 +193,10 @@ class GameRenderer:
     filename: "settings.py",
     role: "Centralized Configuration",
     responsibility:
-      "Stores all game tuning constants, calibration thresholds (`PUNCH_SPEED_MIN`), frame resolutions, and UI color tokens in one clean place.",
+      "Stores all game tuning constants, calibration thresholds (`PUNCH_SPEED_MIN`), frame resolutions, and UI color tokens in 1 clean place.",
     keyFunctions: [],
     imports: [],
-    codeSkeleton: `# settings.py — Single source of truth for game constants
+    codeSkeleton: `# settings.py | Single source of truth for game constants
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 TARGET_FPS = 60

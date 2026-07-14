@@ -13,7 +13,7 @@ import { ProjectArchitectureViewer } from "@/components/ProjectArchitectureViewe
 export const Route = createFileRoute("/architecture")({
   head: () => ({
     meta: [
-      { title: "Project Architecture & Modularity — Webcam Boxing" },
+      { title: "Project Architecture & Modularity | Webcam Boxing" },
       {
         name: "description",
         content:
@@ -37,7 +37,7 @@ function ArchitecturePage() {
             Project Architecture
           </h1>
           <p className="mt-3 max-w-2xl text-muted-foreground text-base">
-            Instead of writing everything inside one giant `main.py` script, real-world engineering
+            Instead of writing everything inside 1 giant `main.py` script, real-world engineering
             separates responsibilities into clean, orthogonal modules (`camera.py`, `tracker.py`,
             `player.py`, etc.). Click any file below to inspect its exact role and code skeleton.
           </p>

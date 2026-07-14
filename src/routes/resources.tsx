@@ -6,12 +6,12 @@ import { globalResources } from "@/data/course";
 export const Route = createFileRoute("/resources")({
   head: () => ({
     meta: [
-      { title: "Resources — Webcam Boxing" },
+      { title: "Resources | Webcam Boxing" },
       {
         name: "description",
         content: "Handpicked docs, articles and reference repos for the course.",
       },
-      { property: "og:title", content: "Resources — Webcam Boxing" },
+      { property: "og:title", content: "Resources | Webcam Boxing" },
       {
         property: "og:description",
         content: "The best places to go deeper on Python, OpenCV, MediaPipe, and Pygame.",
@@ -29,8 +29,8 @@ function Resources() {
         <p className="text-xs uppercase tracking-widest text-primary">Beyond the course</p>
         <h1 className="mt-2 font-display text-5xl">Resources</h1>
         <p className="mt-3 text-muted-foreground">
-          A short, opinionated list. We'd rather point you at ten great things than a hundred
-          mediocre ones.
+          A short, opinionated list. We'd rather point you at 10 great things than 100 mediocre
+          ones.
         </p>
 
         {globalResources.map((section) => (

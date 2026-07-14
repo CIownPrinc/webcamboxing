@@ -42,9 +42,9 @@ export type Module = {
   lessons: Lesson[];
 };
 
-/* -------------------------------------------------------------------------- */
+/*: ------------------------------------------------------------------------ */
 /*  SVG diagram helpers                                                        */
-/* -------------------------------------------------------------------------- */
+/*: ------------------------------------------------------------------------ */
 
 const gameLoopSvg = `
 <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Game loop">
@@ -113,7 +113,7 @@ const handLandmarksSvg = `
     <path d="M180 220 L205 142 L212 95 L215 68 L218 48"/>
     <path d="M180 220 L230 155 L245 115 L252 90 L258 72"/>
   </g>
-  <g fill="currentColor" stroke="var(--color-background)" stroke-width="1.5">
+  <g fill="currentColor" stroke="var(: color-background)" stroke-width="1.5">
     <circle cx="180" cy="220" r="7"/><text x="180" y="242" font-family="Inter" font-size="11" text-anchor="middle" font-weight="bold">0: Wrist (Anchor)</text>
     <circle cx="95" cy="70" r="5"/><text x="75" y="68" font-family="Inter" font-size="10">4: Thumb</text>
     <circle cx="138" cy="45" r="5"/><text x="138" y="35" font-family="Inter" font-size="10" text-anchor="middle">8: Index</text>
@@ -129,7 +129,7 @@ const velocitySmoothingSvg = `
   <path d="M40 170 Q70 60 90 160 T140 50 T190 170 T240 40 T290 160 T340 70 T390 150" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.7"/>
   <path d="M40 170 Q90 130 140 110 T240 95 T340 100 T390 110" fill="none" stroke="#22c55e" stroke-width="3"/>
   <g font-family="Inter" font-size="11" fill="currentColor">
-    <text x="50" y="45" fill="#ef4444" font-weight="600">-- Raw Noisy Speed (Motion Blur / Jitter)</text>
+    <text x="50" y="45" fill="#ef4444" font-weight="600">: Raw Noisy Speed (Motion Blur / Jitter)</text>
     <text x="50" y="65" fill="#22c55e" font-weight="600">── Exponential Smoothed Velocity (α = 0.35)</text>
     <text x="220" y="190" text-anchor="middle" opacity="0.8">Time (Frames @ 60 FPS)</text>
   </g>
@@ -146,9 +146,9 @@ const hitboxCollisionSvg = `
   <text x="210" y="115" font-family="Inter" font-size="13" fill="#ef4444" font-weight="bold" text-anchor="middle">💥 INTERSECTION DETECTED!</text>
 </svg>`;
 
-/* -------------------------------------------------------------------------- */
+/*: ------------------------------------------------------------------------ */
 /*  Helpers                                                                    */
-/* -------------------------------------------------------------------------- */
+/*: ------------------------------------------------------------------------ */
 
 const p = (text: string): Block => ({ type: "p", text });
 const h = (text: string, level: 2 | 3 = 2): Block => ({ type: "h", text, level });
@@ -180,9 +180,9 @@ const warn = (text: string, title = "Watch out"): Block => ({
 const tip = (text: string, title = "Tip"): Block => ({ type: "callout", kind: "tip", title, text });
 const analogy = (text: string): Block => ({ type: "analogy", text });
 
-/* -------------------------------------------------------------------------- */
+/*: ------------------------------------------------------------------------ */
 /*  Modules                                                                    */
-/* -------------------------------------------------------------------------- */
+/*: ------------------------------------------------------------------------ */
 
 export const modules: Module[] = [
   {
@@ -198,14 +198,14 @@ export const modules: Module[] = [
         minutes: 8,
         difficulty: "Beginner",
         objectives: [
-          "Understand what you'll build by the end of the course",
+          "Understand what you build during the course",
           "Know the shape of every lesson so you can pace yourself",
           "Set realistic expectations for what a webcam can and cannot see",
         ],
         blocks: [
           h("What we're building"),
           p(
-            "By the last module you'll have a small arcade boxing game — inspired by Punch-Out!! — that watches you through your webcam. You'll throw left and right punches by moving your fists toward the camera, raise both hands to block, and an animated opponent will attack, recover, and take damage on a health bar.",
+            "By the last module you'll have a small arcade boxing game: inspired by Punch-Out!! - that watches you through your webcam. You'll throw left and right punches by moving your fists toward the camera, raise both hands to block, and an animated opponent will attack, recover, and take damage on a health bar.",
           ),
           p(
             "This is a game, not a fitness tracker. We design around what a normal webcam can reliably see, and we lean on classic game design (state machines, cooldowns, hitboxes) to turn noisy sensor data into satisfying gameplay.",
@@ -221,7 +221,7 @@ export const modules: Module[] = [
             "A recap and a link to the next lesson",
           ]),
           why(
-            "Every lesson ends with something running. Even if you close the tab after ten minutes, you'll leave with a working, small result — that's the freeCodeCamp / Odin Project spirit we're aiming for.",
+            "Every lesson ends with something running. Even if you close the tab after 10 minutes, you'll leave with a working, small result: that's the freeCodeCamp / Odin Project spirit we're aiming for.",
           ),
           h("Set expectations for the webcam"),
           p(
@@ -235,7 +235,7 @@ export const modules: Module[] = [
         ],
         resources: [
           {
-            title: "MediaPipe — Hand Landmarker",
+            title: "MediaPipe: Hand Landmarker",
             url: "https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker",
             kind: "docs",
           },
@@ -254,14 +254,14 @@ export const modules: Module[] = [
         objectives: [
           "Name the three biggest limits of a consumer webcam for game input",
           "Explain why we don't try to measure real punch force",
-          "List the signals we WILL rely on instead",
+          "List the signals you rely on instead",
         ],
         blocks: [
           h("Three things a webcam is bad at"),
           list([
             "Depth. A single lens can't tell how far your fist is; it only sees a 2D projection.",
             "Speed under motion blur. Fast motion smears across a frame, so pixels lie about position.",
-            "Absolute scale. If you sit closer, your fist gets bigger — the camera can't distinguish 'closer' from 'moved forward'.",
+            "Absolute scale. If you sit closer, your fist gets bigger: the camera can't distinguish 'closer' from 'moved forward'.",
           ]),
           analogy(
             "Imagine tracing a moving car onto a foggy window with a marker. You can tell it's moving and roughly where, but you can't tell how fast in miles per hour or how far away it is.",
@@ -272,7 +272,7 @@ export const modules: Module[] = [
           h("Signals we CAN trust"),
           list([
             "Wrist position on screen (from pose or hand landmarks)",
-            "Change in wrist position across frames — velocity",
+            "Change in wrist position across frames: velocity",
             "Direction of motion (forward vs sideways)",
             "Body pose (are hands up? both up = block)",
             "Time in a state (has the punch cooled down yet?)",
@@ -292,7 +292,7 @@ export const modules: Module[] = [
             ],
             answer: 2,
             explain:
-              "A single lens has no way to recover mass, acceleration, or distance in meters — so 'force in newtons' is a made-up number. The other three are shapes/positions the camera can actually see, which is what we'll build the game around.",
+              "A single lens has no way to recover mass, acceleration, or distance in meters: so 'force in newtons' is a made-up number. The other three are shapes/positions the camera can actually see, which is what we'll build the game around.",
           },
         ],
         recap: [
@@ -317,13 +317,13 @@ export const modules: Module[] = [
         difficulty: "Beginner",
         objectives: [
           "Install Python 3.11 or newer on your operating system",
-          "Open a terminal and confirm `python --version` works",
+          "Open a terminal and confirm `python: version` works",
           "Understand what `pip` is",
         ],
         blocks: [
           h("Why a specific version"),
           p(
-            "MediaPipe and OpenCV don't support every Python release equally. Python 3.11 or 3.12 is the sweet spot at the time of writing — new enough to be supported everywhere, old enough that every library has wheels for it.",
+            "MediaPipe and OpenCV don't support every Python release equally. Python 3.11 or 3.12 is the sweet spot at the time of writing: new enough to be supported everywhere, old enough that every library has wheels for it.",
           ),
           h("Install"),
           list(
@@ -337,23 +337,23 @@ export const modules: Module[] = [
           h("Verify"),
           code(
             "bash",
-            `python --version
+            `python: version
 # or
-python3 --version
+python3: version
 
-pip --version`,
+pip: version`,
           ),
           p(
-            "If you see something like `Python 3.12.3`, you're set. `pip` is the tool that downloads libraries like OpenCV and MediaPipe — we'll use it in Module 4.",
+            "If you see something like `Python 3.12.3`, you're set. `pip` is the tool that downloads libraries like OpenCV and MediaPipe: we'll use it in Module 4.",
           ),
         ],
         mistakes: [
-          "Installing Python from the Microsoft Store on Windows without checking PATH — the terminal then can't find it.",
+          "Installing Python from the Microsoft Store on Windows without checking PATH: the terminal then can't find it.",
           "Assuming `python` and `python3` are the same command. On macOS/Linux they often aren't.",
         ],
         recap: [
           "Install Python 3.11 or 3.12.",
-          "`python --version` should print your Python version.",
+          "`python: version` should print your Python version.",
           "`pip` is the package installer, and it comes with Python.",
         ],
         resources: [
@@ -386,14 +386,14 @@ pip --version`,
           list([
             "Python (by Microsoft)",
             "Pylance (comes with Python)",
-            "Ruff (linting) — optional but recommended",
+            "Ruff (linting): optional but recommended",
           ]),
           h("Open your project folder"),
           p(
             "File → Open Folder → create an empty folder called `webcam-boxing`. Everything you write in this course will live under that folder.",
           ),
           tip(
-            "The keyboard shortcut Ctrl+` (backtick) opens VS Code's integrated terminal. Get used to it — you'll live there.",
+            "The keyboard shortcut Ctrl+` (backtick) opens VS Code's integrated terminal. Get used to it: you'll live there.",
           ),
         ],
         recap: [
@@ -425,7 +425,7 @@ pip --version`,
             "A virtual environment is a copy of Python's package folder that belongs only to this project. If two projects need different versions of the same library, they don't have to fight.",
           ),
           analogy(
-            "Think of a venv like a lunchbox. Everyone at the picnic brings their own lunchbox instead of sharing one giant plate — nobody ends up eating someone else's sandwich.",
+            "Think of a venv like a lunchbox. Everyone at the picnic brings their own lunchbox instead of sharing 1 giant plate (nobody ends up eating someone else's sandwich).",
           ),
           h("Create and activate"),
           code(
@@ -445,7 +445,7 @@ source .venv/bin/activate
           h("Install the stack"),
           code(
             "bash",
-            `pip install --upgrade pip
+            `pip install: upgrade pip
 pip install opencv-python mediapipe pygame numpy`,
           ),
           warn(
@@ -484,7 +484,7 @@ pip install opencv-python mediapipe pygame numpy`,
     id: "python-basics",
     number: 5,
     title: "Python basics you'll actually use",
-    summary: "The subset of Python you need for this project — no fluff.",
+    summary: "The subset of Python you need for this project: no fluff.",
     lessons: [
       {
         id: "essentials",
@@ -521,7 +521,7 @@ settings = {"window_w": 1280, "window_h": 720, "fps": 60}
 for i in range(3):
     print("round", i)
 
-# Classes — we'll use these for Player, Enemy, etc.
+# Classes: we'll use these for Player, Enemy, etc.
 class Player:
     def __init__(self, health=100):
         self.health = health
@@ -535,7 +535,7 @@ print(p.health)  # 80
 `,
           ),
           info(
-            "BGR vs RGB: OpenCV stores colors as (Blue, Green, Red) — the opposite of what most tools use. This will bite you at least once.",
+            "BGR vs RGB: OpenCV stores colors as (Blue, Green, Red): the opposite of what most tools use. This will bite you at least once.",
           ),
           {
             type: "quiz",
@@ -543,11 +543,11 @@ print(p.health)  # 80
             options: ["Pure blue", "Pure green", "Pure red", "Transparent"],
             answer: 2,
             explain:
-              "OpenCV stores colors as (Blue, Green, Red). The last channel is red, so (0, 0, 255) is pure red. Every other Python library you meet will use RGB — remember to convert when you leave OpenCV.",
+              "OpenCV stores colors as (Blue, Green, Red). The last channel is red, so (0, 0, 255) is pure red. Every other Python library you meet will use RGB: remember to convert when you leave OpenCV.",
           },
         ],
         mistakes: [
-          "Using `=` when you mean `==` in an `if` (Python will refuse to run — good).",
+          "Using `=` when you mean `==` in an `if` (Python will refuse to run: good).",
           "Forgetting `self` as the first argument of a method.",
           "Modifying a list while iterating over it.",
         ],
@@ -562,17 +562,17 @@ print(p.health)  # 80
     id: "opencv-intro",
     number: 6,
     title: "Using OpenCV",
-    summary: "What OpenCV actually is, and the four functions you'll use constantly.",
+    summary: "What OpenCV actually is, and the 4 functions you'll use constantly.",
     lessons: [
       {
         id: "what-is-opencv",
         title: "What is OpenCV?",
         minutes: 8,
         difficulty: "Beginner",
-        objectives: ["Know what OpenCV does", "Know the four functions we'll use constantly"],
+        objectives: ["Know what OpenCV does", "Know the 4 functions we'll use constantly"],
         blocks: [
           p(
-            "OpenCV is a huge computer-vision library originally written in C++. The `opencv-python` package wraps it so you can call it from Python. For this project we only need four functions.",
+            "OpenCV is a huge computer-vision library originally written in C++. The `opencv-python` package wraps it so you can call it from Python. For this project we only need 4 functions.",
           ),
           code(
             "python",
@@ -584,7 +584,7 @@ cv2.waitKey(1)        # give the OS 1 ms to update the window
 cv2.destroyAllWindows()  # close windows when done`,
           ),
           why(
-            "We're not building an image processing pipeline — we're using OpenCV as a camera driver and a debug window. That's it. MediaPipe does the heavy vision work.",
+            "We're not building an image processing pipeline: we're using OpenCV as a camera driver and a debug window. That's it. MediaPipe does the heavy vision work.",
           ),
         ],
         recap: [
@@ -625,7 +625,7 @@ cv2.destroyAllWindows()  # close windows when done`,
           h("The code"),
           code(
             "python",
-            `# camera.py — first working webcam window
+            `# camera.py: first working webcam window
 import cv2
 
 def main():
@@ -668,19 +668,19 @@ if __name__ == "__main__":
           list([
             "`cv2.VideoCapture(0)` grabs the first camera the OS reports.",
             "`cap.read()` returns `(ok, frame)`. `ok` is False when the camera is disconnected.",
-            "`cv2.flip(frame, 1)` mirrors the image left-to-right — matches how you expect a mirror to behave.",
+            "`cv2.flip(frame, 1)` mirrors the image left-to-right: matches how you expect a mirror to behave.",
             "`cv2.waitKey(1) & 0xFF` is a portable trick for reading a single key across OSes.",
             "The `finally:` block guarantees we release the camera even if we crash.",
           ]),
         ],
         mistakes: [
-          "Forgetting `cap.release()` — the camera stays 'busy' until you close your terminal.",
-          "Using `waitKey(0)` — that waits forever, so the window looks frozen.",
-          "Skipping `cv2.flip` — you throw a punch and the enemy hits the wrong glove.",
+          "Forgetting `cap.release()`: the camera stays 'busy' until you close your terminal.",
+          "Using `waitKey(0)`: that waits forever, so the window looks frozen.",
+          "Skipping `cv2.flip`: you throw a punch and the enemy hits the wrong glove.",
         ],
         debugging: [
-          "Black window? Some laptops need permission — check camera privacy settings.",
-          "'Could not open webcam' — another app (Zoom, browser) might be holding it. Close it.",
+          "Black window? Some laptops need permission: check camera privacy settings.",
+          "'Could not open webcam': another app (Zoom, browser) might be holding it. Close it.",
           "Very low FPS? We fix that in Module 11 with a proper FPS counter.",
         ],
         challenge: {
@@ -728,11 +728,11 @@ cv2.circle(frame, (w // 2, h // 2), 40, (0, 0, 255), 3)`,
         ],
         blocks: [
           why(
-            "MediaPipe gives us 21 named points per hand for free. Doing this ourselves would be a whole graduate degree — instead we call `hands.process(frame)` and read the answer.",
+            "MediaPipe gives us 21 named points per hand for free. Doing this ourselves would be a whole graduate degree: instead we call `hands.process(frame)` and read the answer.",
           ),
           code(
             "python",
-            `# tracker.py — first hand-tracking demo
+            `# tracker.py: first hand-tracking demo
 import cv2
 import mediapipe as mp
 
@@ -743,7 +743,7 @@ def main():
     cap = cv2.VideoCapture(0)
 
     # max_num_hands=2 → track both hands
-    # min_detection_confidence — throw out weak guesses
+    # min_detection_confidence: throw out weak guesses
     with mp_hands.Hands(
         max_num_hands=2,
         min_detection_confidence=0.6,
@@ -783,14 +783,14 @@ if __name__ == "__main__":
           ),
           {
             type: "diagram",
-            title: "MediaPipe's 21 Hand Landmarks — 0 is the Wrist Anchor",
+            title: "MediaPipe's 21 Hand Landmarks: 0 is the Wrist Anchor",
             svg: handLandmarksSvg,
           },
           h("What MediaPipe returned"),
           list([
-            "`results.multi_hand_landmarks` — a list of hands (0, 1, or 2 items)",
+            "`results.multi_hand_landmarks`: a list of hands (0, 1, or 2 items)",
             "Each hand has 21 landmarks with `.x`, `.y`, `.z` in [0, 1] normalized coordinates",
-            "`results.multi_handedness` — is this the Left or Right hand?",
+            "`results.multi_handedness`: is this the Left or Right hand?",
           ]),
           {
             type: "quiz",
@@ -804,12 +804,12 @@ if __name__ == "__main__":
             ],
             answer: 1,
             explain:
-              "MediaPipe was trained on RGB images. Passing BGR still 'works' but the tracker sees swapped channels — detection quality drops silently. Always convert before .process().",
+              "MediaPipe was trained on RGB images. Passing BGR still 'works' but the tracker sees swapped channels: detection quality drops silently. Always convert before .process().",
           },
         ],
         mistakes: [
-          "Passing BGR frames to MediaPipe — the tracker will still 'work' but get worse over time.",
-          "Creating a fresh `Hands()` inside the loop — extremely slow, and unnecessary.",
+          "Passing BGR frames to MediaPipe: the tracker will still 'work' but get worse over time.",
+          "Creating a fresh `Hands()` inside the loop: extremely slow, and unnecessary.",
         ],
         recap: [
           "MediaPipe consumes RGB frames and returns landmark lists.",
@@ -879,7 +879,7 @@ if __name__ == "__main__":
     id: "wrist-tracking",
     number: 10,
     title: "Tracking wrist positions",
-    summary: "Extract only the two wrists per frame, in pixel coordinates, and remember them.",
+    summary: "Extract only the 2 wrists per frame, in pixel coordinates, and remember them.",
     lessons: [
       {
         id: "extract-wrists",
@@ -925,13 +925,13 @@ def process(frame, results):
 `,
           ),
           info(
-            "Because we mirrored the frame, MediaPipe's 'Left' is your on-screen left — your right hand. If that's confusing, we'll swap labels in the game code.",
+            "When you mirror the frame, MediaPipe's 'Left' becomes your on-screen left (your right hand). If that's confusing, we'll swap labels in the game code.",
           ),
         ],
         recap: [
           "Multiply normalized x, y by width, height to get pixels.",
           "Use `multi_handedness` to tell left from right.",
-          "Keep a small history — `collections.deque(maxlen=N)` is perfect.",
+          "Keep a small history: `collections.deque(maxlen=N)` is perfect.",
         ],
       },
     ],
@@ -980,7 +980,7 @@ class WristVelocity:
     def update(self, pos):
         """Feed one new wrist position, return the smoothed speed."""
         if pos is None:
-            # Hand not detected this frame — decay toward zero.
+            # Hand not detected this frame: decay toward zero.
             self._smoothed *= (1 - self.alpha)
             return self._smoothed
 
@@ -993,7 +993,7 @@ class WristVelocity:
         delta = np.array(pos) - np.array(self._prev_pos)
         raw = float(np.linalg.norm(delta) / dt)
 
-        # Exponential moving average — the speedometer-needle trick.
+        # Exponential moving average: the speedometer-needle trick.
         self._smoothed = self.alpha * raw + (1 - self.alpha) * self._smoothed
         self._prev_pos, self._prev_t = pos, now
         return self._smoothed
@@ -1004,7 +1004,7 @@ class WristVelocity:
             "Smoothing matters because MediaPipe wobbles by a few pixels even when your hand is still. Without smoothing, a stationary wrist looks like it's moving 300 px/s and randomly triggers punches.",
           ),
           analogy(
-            "Smoothing is like a car's speedometer needle — it lags a fraction of a second so it doesn't twitch on every bump.",
+            "Smoothing is like a car's speedometer needle (it lags a fraction of a second so it doesn't twitch on every bump).",
           ),
           {
             type: "diagram",
@@ -1012,7 +1012,7 @@ class WristVelocity:
             svg: velocitySmoothingSvg,
           },
           info(
-            "Because it's a class, we create TWO of them — one per wrist — so left and right don't share state. Module 12 will import `WristVelocity` and use it exactly like that.",
+            "Because it's a class, we create TWO of them: one per wrist - so left and right don't share state. Module 12 will import `WristVelocity` and use it exactly like that.",
           ),
           {
             type: "quiz",
@@ -1026,14 +1026,14 @@ class WristVelocity:
             ],
             answer: 1,
             explain:
-              "Two wrists share the module if we use globals — the left wrist's speed would overwrite the right wrist's previous position every frame. One instance per wrist keeps the state isolated.",
+              "2 wrists share the module if we use globals: the left wrist's speed would overwrite the right wrist's previous position every frame. 1 instance per wrist keeps the state isolated.",
           },
         ],
         recap: [
           "Speed = distance / time, done per frame with NumPy.",
           "Use `time.perf_counter()` for high-resolution timing.",
           "Exponential smoothing tames pixel jitter.",
-          "One WristVelocity instance per wrist — never share state.",
+          "One WristVelocity instance per wrist: never share state.",
         ],
       },
     ],
@@ -1053,11 +1053,11 @@ class WristVelocity:
         objectives: ["Explain why we detect gesture shape rather than measure force"],
         blocks: [
           why(
-            "Force in newtons requires mass, acceleration, and a reference frame. We have none of those. A gesture — 'wrist moved forward fast' — is a shape we can recognize with cheap math.",
+            "Force in newtons requires mass, acceleration, and a reference frame. We have none of those. A gesture: 'wrist moved forward fast' - is a shape we can recognize with cheap math.",
           ),
           list([
             "A punch is a movement, not a measurement.",
-            "Games have used gesture recognition since the Wii — it's a well-trodden path.",
+            "Games have used gesture recognition since the Wii: it's a well-trodden path.",
             "Gestures fail gracefully: worst case you miss a punch, you don't get a weird '3.7 newton' value.",
           ]),
         ],
@@ -1075,10 +1075,10 @@ class WristVelocity:
         blocks: [
           code(
             "python",
-            `# punch_naive.py — first attempt, uses WristVelocity from Module 11
+            `# punch_naive.py: first attempt, uses WristVelocity from Module 11
 from velocity import WristVelocity
 
-PUNCH_THRESHOLD = 1200  # pixels per second — we'll calibrate this in Module 14
+PUNCH_THRESHOLD = 1200  # pixels per second: we'll calibrate this in Module 14
 
 left_vel  = WristVelocity()
 right_vel = WristVelocity()
@@ -1092,7 +1092,7 @@ def maybe_punch(side: str, wrist_pos):
 `,
           ),
           warn(
-            "Run this and wave your hand around — you'll trigger 10 punches per second. That's the setup for the next lesson.",
+            "Run this and wave your hand around: you'll trigger 10 punches per second. That's the setup for the next lesson.",
           ),
           {
             type: "quiz",
@@ -1100,13 +1100,13 @@ def maybe_punch(side: str, wrist_pos):
               "You wave your hand slowly across the frame and the console prints 'punch!' six times in a row. Why?",
             options: [
               "MediaPipe misdetected your finger as a hand.",
-              "There's no state — every frame speed > threshold is a fresh 'punch'.",
+              "There's no state: every frame speed > threshold is a fresh 'punch'.",
               "OpenCV is running too fast.",
               "You forgot to install numpy.",
             ],
             answer: 1,
             explain:
-              "The check has no memory. As long as speed stays above the threshold, every frame is a new punch. Module 13 fixes this by turning the detector into a state machine so one gesture fires exactly one event.",
+              "The check has no memory. As long as speed stays above the threshold, every frame is a new punch. Module 13 fixes this by turning the detector into a state machine so 1 gesture fires exactly 1 event.",
           },
         ],
         recap: ["Threshold alone spams events.", "We need a state machine to gate the trigger."],
@@ -1117,7 +1117,7 @@ def maybe_punch(side: str, wrist_pos):
     id: "fsm",
     number: 13,
     title: "Using a finite state machine",
-    summary: "Wrap the detector in a state machine so a single punch fires exactly one event.",
+    summary: "Wrap the detector in a state machine so a single punch fires exactly 1 event.",
     lessons: [
       {
         id: "punch-fsm",
@@ -1132,15 +1132,15 @@ def maybe_punch(side: str, wrist_pos):
         blocks: [
           { type: "diagram", title: "Punch state machine", svg: punchFsmSvg },
           p(
-            "The diagram above is the full five-state model. In practice we can ship a very solid version with only three of those states — IDLE, LAUNCH, and COOLDOWN — and add CHAMBER and EXTEND as stretch goals. Here's what each of the three does:",
+            "The diagram above is the full five-state model. In practice we can ship a very solid version with only three of those states: IDLE, LAUNCH, and COOLDOWN - and add CHAMBER and EXTEND as stretch goals. Here's what each of the three does:",
           ),
           list([
-            "IDLE — wrist is still or moving slowly; we watch for the threshold.",
-            "LAUNCH — speed crossed the threshold; we track the peak speed until the punch slows down.",
-            "COOLDOWN — one gesture already fired; ignore new triggers for ~250 ms.",
+            "IDLE: wrist is still or moving slowly; we watch for the threshold.",
+            "LAUNCH: speed crossed the threshold; we track the peak speed until the punch slows down.",
+            "COOLDOWN: 1 gesture already fired; ignore new triggers for ~250 ms.",
           ]),
           info(
-            "CHAMBER (a 'wind-up' where the wrist first pulls back) and EXTEND (holding the peak reach) are pattern refinements you can add later — the recap links to them under Module 25 extensions.",
+            "CHAMBER (a 'wind-up' where the wrist first pulls back) and EXTEND (holding the peak reach) are pattern refinements you can add later: the recap links to them under Module 25 extensions.",
           ),
           code(
             "python",
@@ -1185,7 +1185,7 @@ class PunchDetector:
 `,
           ),
           why(
-            "Firing on entry to LAUNCH would fire many times as speed hovers near the threshold. Firing when the wrist slows down (LAUNCH → COOLDOWN) captures 'one punch, one event' cleanly. And the peak speed becomes our damage input.",
+            "Firing on entry to LAUNCH would fire many times as speed hovers near the threshold. Firing when the wrist slows down (LAUNCH → COOLDOWN) captures 'one punch, 1 event' cleanly. And the peak speed becomes our damage input.",
           ),
           {
             type: "quiz",
@@ -1199,16 +1199,16 @@ class PunchDetector:
             ],
             answer: 2,
             explain:
-              "Emitting on IDLE → LAUNCH would fire multiple times as speed hovers near the threshold. Emitting when speed drops back below 60% of threshold means we've seen a full 'up-and-down' hump — one gesture, one event — and we've captured the peak speed to use as damage.",
+              "Emitting on IDLE → LAUNCH would fire multiple times as speed hovers near the threshold. Emitting when speed drops back below 60% of threshold means we've seen a full 'up-and-down' hump: 1 gesture, 1 event - and we've captured the peak speed to use as damage.",
           },
         ],
         mistakes: [
-          "Firing the event every frame speed > threshold — you get 20 punches per second.",
-          "Forgetting the cooldown — one gesture triggers two hits back-to-back.",
-          "Using system clock (`time.time()`) instead of `time.perf_counter()` — less precise.",
+          "Firing the event every frame speed > threshold: you get 20 punches per second.",
+          "Forgetting the cooldown: 1 gesture triggers two hits back-to-back.",
+          "Using system clock (`time.time()`) instead of `time.perf_counter()`: less precise.",
         ],
         recap: [
-          "States give us a clean 'one gesture = one event' contract.",
+          "States give us a clean '1 gesture = 1 event' contract.",
           "Peak speed inside LAUNCH becomes damage input.",
         ],
       },
@@ -1232,7 +1232,7 @@ class PunchDetector:
         ],
         blocks: [
           why(
-            "A '1200 px/s' threshold is meaningless. A tall person close to the camera moves 3× more pixels than a short person across the room. Calibrating is the difference between 'works for you' and 'works for one specific developer at their desk'.",
+            "A '1200 px/s' threshold is meaningless. A tall person close to the camera moves 3x more pixels than a short person across the room. Calibrating is the difference between 'works for you' and 'works for one specific developer at their desk'.",
           ),
           code(
             "python",
@@ -1251,7 +1251,7 @@ def calibrate(get_speed, seconds=5, fps=60):
           ),
         ],
         recap: [
-          "Threshold is not a constant — it's a per-player, per-setup value.",
+          "Threshold is not a constant: it's a per-player, per-setup value.",
           "Sample your own motion, take a percentile.",
         ],
       },
@@ -1364,7 +1364,7 @@ def draw_enemy(screen, x, y, size=120, hit=False):
     lessons: [
       {
         id: "enemy",
-        title: "Model the enemy as four states",
+        title: "Model the enemy as 4 states",
         minutes: 25,
         difficulty: "Intermediate",
         objectives: [
@@ -1415,7 +1415,7 @@ class Enemy:
           ),
         ],
         recap: [
-          "Four states are enough for a fun arcade enemy.",
+          "4 states are enough for a fun arcade enemy.",
           "Telegraphs make the game feel fair.",
         ],
       },
@@ -1443,7 +1443,7 @@ class Enemy:
 `,
           ),
           why(
-            "Circles are direction-independent and cheap: one subtraction per axis, one comparison, no square root. Perfect for 2D arcade fights.",
+            "Circles are direction-independent and cheap: 1 subtraction per axis, 1 comparison, no square root. Perfect for 2D arcade fights.",
           ),
           {
             type: "diagram",
@@ -1544,7 +1544,7 @@ class Enemy:
           ),
           code(
             "python",
-            `# main.py — abridged
+            `# main.py: abridged
 import pygame, cv2, time
 from tracker import Tracker
 from player import Player
@@ -1597,7 +1597,7 @@ pygame.quit()
             "This is the shape of a complete game. The rest of the course polishes what happens inside each line.",
           ),
         ],
-        recap: ["main.py orchestrates modules — it should stay small."],
+        recap: ["main.py orchestrates modules: it should stay small."],
       },
     ],
   },
@@ -1659,7 +1659,7 @@ def on_hit(): hit.play()
             "Free sound sources: freesound.org (CC-licensed), or generate short retro punches with sfxr / jsfxr.",
           ),
         ],
-        recap: ["Sounds are objects you `.play()` — no channels required for a small game."],
+        recap: ["Sounds are objects you `.play()`: no channels required for a small game."],
       },
     ],
   },
@@ -1722,7 +1722,7 @@ def apply_shake(screen_pos):
               "Multiple enemies with different telegraph timings",
               "Boss fights with multi-phase FSMs",
               "Dodge left/right using body pose (MediaPipe Pose)",
-              "Combo detection — three fast lefts in a row = a special",
+              "Combo detection: three fast lefts in a row = a special",
               "On-screen mirrored webcam behind the ring",
               "Sprite animation instead of circles",
               "Save high scores to a JSON file",
@@ -1775,7 +1775,7 @@ export const glossary: { term: string; def: string }[] = [
   },
   {
     term: "Cooldown",
-    def: "A minimum time between two occurrences of the same event, used to prevent one gesture from firing twice.",
+    def: "A minimum time between two occurrences of the same event, used to prevent 1 gesture from firing twice.",
   },
   {
     term: "Delta time",
@@ -1795,7 +1795,7 @@ export const glossary: { term: string; def: string }[] = [
   },
   {
     term: "Handedness",
-    def: "MediaPipe's Left/Right label for a detected hand — helpful, but flipped once you mirror the frame.",
+    def: "MediaPipe's Left/Right label for a detected hand: helpful, but flipped once you mirror the frame.",
   },
   {
     term: "Game loop",
@@ -1826,17 +1826,17 @@ export const globalResources: { section: string; items: Resource[] }[] = [
     section: "Deeper reading",
     items: [
       {
-        title: "Game Programming Patterns — State",
+        title: "Game Programming Patterns: State",
         url: "https://gameprogrammingpatterns.com/state.html",
         kind: "article",
       },
       {
-        title: "Game Programming Patterns — Game Loop",
+        title: "Game Programming Patterns: Game Loop",
         url: "https://gameprogrammingpatterns.com/game-loop.html",
         kind: "article",
       },
       {
-        title: "MDN — Coordinate systems",
+        title: "MDN: Coordinate systems",
         url: "https://developer.mozilla.org/en-US/docs/Web/CSS/CSSOM_view/Coordinate_systems",
         kind: "article",
       },

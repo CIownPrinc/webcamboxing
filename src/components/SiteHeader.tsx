@@ -61,14 +61,29 @@ export function SiteHeader() {
           <GlobalSearchDialog />
           <CompletionBadgesDialog />
 
-          <div className="hidden items-center gap-2 lg:flex" aria-label={`${pct}% complete`}>
-            <div className="h-1.5 w-24 overflow-hidden rounded-full bg-muted">
-              <div className="h-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+          <div
+            className="hidden items-center gap-2 rounded-full border border-border/80 bg-muted/30 px-2.5 py-1 sm:flex"
+            aria-label={`${done} of ${totalLessons} lessons complete (${pct}%)`}
+            title={`${done} of ${totalLessons} lessons complete (${pct}%)`}
+          >
+            <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full bg-primary transition-all duration-300"
+                style={{ width: `${pct}%` }}
+              />
             </div>
-            <span className="tabular-nums text-xs text-muted-foreground">{pct}%</span>
+            <span className="tabular-nums text-[11px] font-medium text-muted-foreground">
+              <span className="text-foreground">{done}</span>/{totalLessons}
+            </span>
           </div>
           <ThemeToggle />
         </div>
+      </div>
+      <div className="h-[2px] w-full bg-border/40">
+        <div
+          className="h-full bg-primary shadow-[0_0_8px_rgba(220,38,38,0.6)] transition-all duration-500 ease-out"
+          style={{ width: `${pct}%` }}
+        />
       </div>
     </header>
   );

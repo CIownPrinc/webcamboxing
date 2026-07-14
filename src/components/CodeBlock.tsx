@@ -1,4 +1,4 @@
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, Download } from "lucide-react";
 import { useState } from "react";
 
 // Minimal, dependency-free Python/bash highlighter. Not perfect — good enough
@@ -71,6 +71,23 @@ const CLASS: Record<string, string> = {
   kw: "text-primary font-medium",
 };
 
+function getDownloadFilename(code: string, caption?: string, lang: string = "python"): string {
+  if (caption) {
+    const raw = caption.split(":")[0].trim();
+    if (/\.(py|js|ts|sh|json|css|html|txt)$/i.test(raw)) return raw;
+  }
+  const firstLine = code.split("\n")[0].trim();
+  if (firstLine.startsWith("#")) {
+    const raw = firstLine
+      .replace(/^#+\s*/, "")
+      .split(":")[0]
+      .trim();
+    if (/\.(py|js|ts|sh|json|css|html|txt)$/i.test(raw)) return raw;
+  }
+  const ext = lang === "python" ? "py" : lang === "bash" ? "sh" : "txt";
+  return `snippet.${ext}`;
+}
+
 export function CodeBlock({
   code,
   lang = "python",
@@ -81,12 +98,28 @@ export function CodeBlock({
   caption?: string;
 }) {
   const [copied, setCopied] = useState(false);
+  const [downloaded, setDownloaded] = useState(false);
   const tokens = tokenize(code, lang);
+  const filename = getDownloadFilename(code, caption, lang);
 
   const copy = async () => {
     await navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 1200);
+  };
+
+  const download = () => {
+    const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setDownloaded(true);
+    setTimeout(() => setDownloaded(false), 1200);
   };
 
   return (
@@ -95,14 +128,29 @@ export function CodeBlock({
         <span className="font-mono uppercase tracking-wide text-muted-foreground">
           {caption ?? lang}
         </span>
-        <button
-          onClick={copy}
-          className="inline-flex items-center gap-1 rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          aria-label="Copy code"
-        >
-          {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-          {copied ? "Copied" : "Copy"}
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={download}
+            className="inline-flex items-center gap-1 rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            aria-label={`Download ${filename}`}
+            title={`Download as ${filename}`}
+          >
+            {downloaded ? (
+              <Check className="h-3 w-3 text-primary" />
+            ) : (
+              <Download className="h-3 w-3" />
+            )}
+            <span>{downloaded ? "Saved" : filename}</span>
+          </button>
+          <button
+            onClick={copy}
+            className="inline-flex items-center gap-1 rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            aria-label="Copy code"
+          >
+            {copied ? <Check className="h-3 w-3 text-primary" /> : <Copy className="h-3 w-3" />}
+            <span>{copied ? "Copied" : "Copy"}</span>
+          </button>
+        </div>
       </div>
       <pre className="overflow-x-auto p-4 text-[13.5px] leading-relaxed">
         <code>

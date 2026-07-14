@@ -7,9 +7,9 @@ import { glossary } from "@/data/course";
 export const Route = createFileRoute("/glossary")({
   head: () => ({
     meta: [
-      { title: "Glossary — Webcam Boxing" },
+      { title: "Glossary | Webcam Boxing" },
       { name: "description", content: "Every term used in the course, defined in plain language." },
-      { property: "og:title", content: "Glossary — Webcam Boxing" },
+      { property: "og:title", content: "Glossary | Webcam Boxing" },
       {
         property: "og:description",
         content: "Definitions for landmarks, FSMs, delta time, and more.",

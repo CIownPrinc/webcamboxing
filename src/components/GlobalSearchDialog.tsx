@@ -45,10 +45,13 @@ export function GlobalSearchDialog() {
         const blockMatch = lesson.blocks.some((b) => {
           if (b.type === "p" || b.type === "h" || b.type === "analogy")
             return b.text.toLowerCase().includes(q);
-          if (b.type === "callout" || b.type === "hint")
+          if (b.type === "callout")
             return (
-              b.text.toLowerCase().includes(q) || (b.title && b.title.toLowerCase().includes(q))
+              b.text.toLowerCase().includes(q) ||
+              (b.title ? b.title.toLowerCase().includes(q) : false)
             );
+          if (b.type === "hint")
+            return b.text.toLowerCase().includes(q) || b.label.toLowerCase().includes(q);
           if (b.type === "code")
             return (
               b.code.toLowerCase().includes(q) || (b.caption && b.caption.toLowerCase().includes(q))
