@@ -71,11 +71,54 @@ function Index() {
     },
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Do I need any Python or computer vision experience before starting?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "None at all. We start from zero by installing Python together and writing your first lines of code. Every concept is explained step by step before we build it.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do I need a fancy graphics card or expensive webcam?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Nope. Any built-in laptop webcam or standard USB camera works fine. MediaPipe is designed to run smoothly on normal CPU hardware without needing an expensive GPU.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Is this course really 100% free?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes, completely free and open. No signups, no paywalls, and no hidden subscriptions. You can build the entire game from start to finish right now in your browser and terminal.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What will I actually have built by the end of Module 25?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "You will build a complete arcade boxing game inspired by classics like Punch-Out!!. It tracks your real left and right jabs through your webcam using computer vision, features smooth hitboxes and sound effects, and includes an intelligent AI opponent controlled by a finite state machine.",
+        },
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <SiteHeader />
 
@@ -187,10 +230,62 @@ function Index() {
             </li>
           ))}
         </ol>
+
+        <h2 className="mt-20 font-display text-3xl">Frequently asked questions</h2>
+        <p className="mt-2 max-w-2xl text-muted-foreground">
+          Common questions about hardware, Python, and how the course works.
+        </p>
+        <div className="mt-6 grid gap-3 max-w-3xl">
+          <FaqItem
+            question="Do I need any Python or computer vision experience before starting?"
+            answer="None at all. We start from zero by installing Python together and writing your first lines of code. Every concept is explained step by step before we build it."
+          />
+          <FaqItem
+            question="Do I need a fancy graphics card or expensive webcam?"
+            answer="Nope. Any built-in laptop webcam or standard USB camera works fine. MediaPipe is designed to run smoothly on normal CPU hardware without needing an expensive GPU."
+          />
+          <FaqItem
+            question="Is this course really 100% free?"
+            answer="Yes, completely free and open. No signups, no paywalls, and no hidden subscriptions. You can build the entire game from start to finish right now in your browser and terminal."
+          />
+          <FaqItem
+            question="What will I actually have built by the end of Module 25?"
+            answer="You will build a complete arcade boxing game inspired by classics like Punch-Out!!. It tracks your real left and right jabs through your webcam using computer vision, features smooth hitboxes and sound effects, and includes an intelligent AI opponent controlled by a finite state machine."
+          />
+        </div>
       </section>
 
-      <footer className="mt-16 border-t border-border py-10 text-center text-sm text-muted-foreground">
-        Built for anyone who wants to see their code punch back.
+      <section className="mx-auto max-w-4xl px-4 py-12 text-center">
+        <div className="rounded-xl border border-border bg-card p-8 shadow-sm md:p-10">
+          <h2 className="font-display text-2xl md:text-3xl">Ready to step into the ring?</h2>
+          <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
+            No gloves required. Grab your webcam, fire up Python, and let&apos;s build something you
+            can actually play.
+          </p>
+          <div className="mt-6 flex justify-center">
+            {resume ? (
+              <Link
+                to="/lessons/$moduleId/$lessonId"
+                params={{ moduleId: resume.module.id, lessonId: resume.lesson.id }}
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow transition-transform hover:-translate-y-0.5"
+              >
+                <PlayCircle className="h-4 w-4" /> Resume: {resume.lesson.title}
+              </Link>
+            ) : (
+              <Link
+                to="/lessons/$moduleId/$lessonId"
+                params={{ moduleId: modules[0].id, lessonId: first.id }}
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow transition-transform hover:-translate-y-0.5"
+              >
+                Start Module 1 <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-border py-10 text-center text-sm text-muted-foreground">
+        Why debug with print statements when you can debug with a left hook?
       </footer>
     </div>
   );
@@ -214,5 +309,21 @@ function Feature({ icon, title, body }: { icon: React.ReactNode; title: string; 
       <h3 className="font-display text-lg">{title}</h3>
       <p className="mt-1 text-sm text-muted-foreground">{body}</p>
     </div>
+  );
+}
+
+function FaqItem({ question, answer }: { question: string; answer: string }) {
+  return (
+    <details className="group rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary/40">
+      <summary className="cursor-pointer font-display text-base font-semibold list-none flex items-center justify-between">
+        <span>{question}</span>
+        <span className="ml-4 text-xs text-muted-foreground group-open:rotate-180 transition-transform">
+          ▼
+        </span>
+      </summary>
+      <p className="mt-3 text-sm text-muted-foreground leading-relaxed border-t border-border pt-3">
+        {answer}
+      </p>
+    </details>
   );
 }
