@@ -835,13 +835,36 @@ class WristVelocity:
           "Feel why a raw threshold isn't enough",
         ],
         blocks: [
-          code("python", `PUNCH_THRESHOLD = 1200  # pixels per second, tune later
+          code("python", `# punch_naive.py — first attempt, uses WristVelocity from Module 11
+from velocity import WristVelocity
 
-def maybe_punch(side, speed):
+PUNCH_THRESHOLD = 1200  # pixels per second — we'll calibrate this in Module 14
+
+left_vel  = WristVelocity()
+right_vel = WristVelocity()
+
+def maybe_punch(side: str, wrist_pos):
+    """Call once per frame with the current wrist (x, y) or None."""
+    vel = left_vel if side == "left" else right_vel
+    speed = vel.update(wrist_pos)
     if speed > PUNCH_THRESHOLD:
-        print(f"{side} punch! speed={speed:.0f}")
+        print(f"{side} punch! speed={speed:.0f} px/s")
 `),
           warn("Run this and wave your hand around — you'll trigger 10 punches per second. That's the setup for the next lesson."),
+          {
+            type: "quiz",
+            question:
+              "You wave your hand slowly across the frame and the console prints 'punch!' six times in a row. Why?",
+            options: [
+              "MediaPipe misdetected your finger as a hand.",
+              "There's no state — every frame speed > threshold is a fresh 'punch'.",
+              "OpenCV is running too fast.",
+              "You forgot to install numpy.",
+            ],
+            answer: 1,
+            explain:
+              "The check has no memory. As long as speed stays above the threshold, every frame is a new punch. Module 13 fixes this by turning the detector into a state machine so one gesture fires exactly one event.",
+          },
         ],
         recap: ["Threshold alone spams events.", "We need a state machine to gate the trigger."],
       },
