@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 export function BoxerEasterEgg({
   onImpact,
@@ -37,7 +38,7 @@ export function BoxerEasterEgg({
     return () => v.removeEventListener("ended", handleEnded);
   }, [onImpact, onComplete]);
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center overflow-hidden">
       {/* Background dimming */}
       <div
@@ -50,20 +51,21 @@ export function BoxerEasterEgg({
         src="/boxer-punch.mp4"
         className={`relative z-10 w-full max-w-4xl max-h-screen object-contain transition-opacity duration-300 ${showGlass ? "opacity-0" : "opacity-100"}`}
         playsInline
-        muted // Muted to ensure autoplay works, unless user wants sound from the video itself.
       />
 
       {/* Cracked Glass Overlay */}
       {showGlass && (
         <div
-          className="absolute inset-0 z-20 mix-blend-screen pointer-events-none animate-in fade-in duration-100"
+          className="absolute z-20 mix-blend-screen pointer-events-none animate-in fade-in duration-100 w-96 h-96 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           style={{
             backgroundImage: "url('/cracked-glass.png')",
-            backgroundSize: "cover",
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
           }}
         />
       )}
-    </div>
+    </div>,
+    document.body,
   );
 }
