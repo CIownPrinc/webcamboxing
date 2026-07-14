@@ -14,7 +14,25 @@ import { allLessons, glossary } from "@/data/course";
 export function GlobalSearchDialog() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [deviceShortcut, setDeviceShortcut] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const ua = navigator.userAgent || "";
+      const platform = navigator.platform || "";
+      const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ||
+        ("ontouchstart" in window && window.innerWidth < 768);
+      if (isMobile) {
+        setDeviceShortcut("Search");
+      } else if (/Mac|iPod|iPhone|iPad/.test(platform || ua)) {
+        setDeviceShortcut("⌘K");
+      } else {
+        setDeviceShortcut("Ctrl+K");
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -94,15 +112,20 @@ export function GlobalSearchDialog() {
         <Search className="h-3.5 w-3.5" />
         <span className="hidden sm:inline">Search course...</span>
         <kbd className="hidden rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground sm:inline-block">
-          ⌘K
+          {deviceShortcut ?? "Ctrl/⌘+K"}
         </kbd>
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 px-4 pt-16 backdrop-blur-sm sm:pt-24">
-          <div className="relative w-full max-w-xl overflow-hidden rounded-xl border border-border bg-card shadow-2xl">
-            <div className="flex items-center border-b border-border px-4 py-3">
-              <Search className="h-4 w-4 text-muted-foreground" />
+        <div
+          className="fixed inset-x-0 bottom-0 top-[59px] z-30 flex items-start justify-center overflow-y-auto bg-background/60 px-4 pt-4 backdrop-blur-sm sm:pt-8"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setOpen(false);
+          }}
+        >
+          <div className="relative flex max-h-[calc(100vh-100px)] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-border bg-card shadow-2xl">
+            <div className="flex shrink-0 items-center border-b border-border px-4 py-3 sm:px-5 sm:py-3.5">
+              <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
               <input
                 type="text"
                 value={query}
@@ -116,13 +139,14 @@ export function GlobalSearchDialog() {
                   setOpen(false);
                   setQuery("");
                 }}
-                className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+                className="rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                aria-label="Close search"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="max-h-96 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5">
               {!query || query.trim().length < 2 ? (
                 <p className="py-8 text-center text-xs text-muted-foreground">
                   Type at least 2 characters to search across all lessons and terms.
@@ -192,8 +216,8 @@ export function GlobalSearchDialog() {
               )}
             </div>
 
-            <div className="flex items-center justify-between border-t border-border bg-muted/40 px-4 py-2 text-[11px] text-muted-foreground">
-              <span>Use ESC to close</span>
+            <div className="flex shrink-0 items-center justify-between border-t border-border bg-muted/40 px-4 py-2 text-[11px] text-muted-foreground sm:px-5">
+              <span>Use ESC or click backdrop to close</span>
               <span>Webcam Boxing Course Search</span>
             </div>
           </div>
