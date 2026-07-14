@@ -600,6 +600,19 @@ if __name__ == "__main__":
             "Each hand has 21 landmarks with `.x`, `.y`, `.z` in [0, 1] normalized coordinates",
             "`results.multi_handedness` — is this the Left or Right hand?",
           ]),
+          {
+            type: "quiz",
+            question: "Why do we call cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) before hands.process(rgb)?",
+            options: [
+              "It makes the picture look prettier on screen.",
+              "MediaPipe expects RGB input; OpenCV gives us BGR.",
+              "It's required for cv2.imshow to display the frame.",
+              "It's just faster than passing BGR.",
+            ],
+            answer: 1,
+            explain:
+              "MediaPipe was trained on RGB images. Passing BGR still 'works' but the tracker sees swapped channels — detection quality drops silently. Always convert before .process().",
+          },
         ],
         mistakes: [
           "Passing BGR frames to MediaPipe — the tracker will still 'work' but get worse over time.",
