@@ -63,11 +63,11 @@ function LessonPage() {
         origin: { y: 0.6 },
         zIndex: 9999,
       });
-      new Audio("/party-blower.wav")
+      new Audio("/tada.ogg")
         .play()
         .catch((e) => console.error("Audio playback blocked", e));
       setTimeout(() => {
-        new Audio("/clapping.wav").play().catch((e) => console.error("Audio playback blocked", e));
+        new Audio("/clapping.ogg").play().catch((e) => console.error("Audio playback blocked", e));
       }, 500);
     }
   };
