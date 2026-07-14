@@ -386,6 +386,14 @@ p.take_damage(20)
 print(p.health)  # 80
 `),
           info("BGR vs RGB: OpenCV stores colors as (Blue, Green, Red) — the opposite of what most tools use. This will bite you at least once."),
+          {
+            type: "quiz",
+            question: "In OpenCV, what does the tuple (0, 0, 255) usually mean?",
+            options: ["Pure blue", "Pure green", "Pure red", "Transparent"],
+            answer: 2,
+            explain:
+              "OpenCV stores colors as (Blue, Green, Red). The last channel is red, so (0, 0, 255) is pure red. Every other Python library you meet will use RGB — remember to convert when you leave OpenCV.",
+          },
         ],
         mistakes: [
           "Using `=` when you mean `==` in an `if` (Python will refuse to run — good).",
