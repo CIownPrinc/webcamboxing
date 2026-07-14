@@ -63,12 +63,25 @@ function LessonPage() {
         origin: { y: 0.6 },
         zIndex: 9999,
       });
-      new Audio("/tada.ogg")
+      const cheer = new Audio("/clapping.ogg");
+      cheer
         .play()
+        .then(() => {
+          // Fade out the cheer after 2.5 seconds so it doesn't last too long
+          setTimeout(() => {
+            let vol = 1.0;
+            const fade = setInterval(() => {
+              vol -= 0.1;
+              if (vol <= 0) {
+                cheer.pause();
+                clearInterval(fade);
+              } else {
+                cheer.volume = vol;
+              }
+            }, 50);
+          }, 2500);
+        })
         .catch((e) => console.error("Audio playback blocked", e));
-      setTimeout(() => {
-        new Audio("/clapping.ogg").play().catch((e) => console.error("Audio playback blocked", e));
-      }, 500);
     }
   };
 
