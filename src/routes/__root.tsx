@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { registerAppServiceWorker } from "../lib/register-sw";
+import { useProgress } from "../lib/progress";
 
 function NotFoundComponent() {
   return (
@@ -169,9 +170,19 @@ import { BackgroundLayer } from "../components/BackgroundLayer";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { theme } = useProgress();
+
   useEffect(() => {
     registerAppServiceWorker();
   }, []);
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
 
   return (
     <QueryClientProvider client={queryClient}>
