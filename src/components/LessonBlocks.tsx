@@ -5,10 +5,26 @@ import { CodeBlock } from "./CodeBlock";
 
 function Callout({ kind, title, text }: Extract<Block, { type: "callout" }>) {
   const styles: Record<string, { ring: string; icon: ReactNode; label: string }> = {
-    info: { ring: "border-l-primary/70", icon: <Info className="h-4 w-4 text-primary" />, label: title ?? "Note" },
-    why: { ring: "border-l-primary", icon: <Sparkles className="h-4 w-4 text-primary" />, label: title ?? "Why we do this" },
-    tip: { ring: "border-l-emerald-500", icon: <Lightbulb className="h-4 w-4 text-emerald-500" />, label: title ?? "Tip" },
-    warn: { ring: "border-l-amber-500", icon: <AlertTriangle className="h-4 w-4 text-amber-500" />, label: title ?? "Watch out" },
+    info: {
+      ring: "border-l-primary/70",
+      icon: <Info className="h-4 w-4 text-primary" />,
+      label: title ?? "Note",
+    },
+    why: {
+      ring: "border-l-primary",
+      icon: <Sparkles className="h-4 w-4 text-primary" />,
+      label: title ?? "Why we do this",
+    },
+    tip: {
+      ring: "border-l-emerald-500",
+      icon: <Lightbulb className="h-4 w-4 text-emerald-500" />,
+      label: title ?? "Tip",
+    },
+    warn: {
+      ring: "border-l-amber-500",
+      icon: <AlertTriangle className="h-4 w-4 text-amber-500" />,
+      label: title ?? "Watch out",
+    },
   };
   const s = styles[kind];
   return (
@@ -48,7 +64,9 @@ export function BlockView({ b }: { b: Block }) {
     case "list": {
       const Tag = b.ordered ? "ol" : "ul";
       return (
-        <Tag className={`my-4 space-y-1.5 pl-6 text-[16px] ${b.ordered ? "list-decimal" : "list-disc"}`}>
+        <Tag
+          className={`my-4 space-y-1.5 pl-6 text-[16px] ${b.ordered ? "list-decimal" : "list-disc"}`}
+        >
           {b.items.map((it, i) => (
             <li key={i} className="marker:text-primary">
               {it}
@@ -90,7 +108,9 @@ function ExpandableHint({ label, text }: { label: string; text: string }) {
         <span>{label}</span>
         <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
-      {open && <p className="border-t border-border px-4 py-3 text-sm text-muted-foreground">{text}</p>}
+      {open && (
+        <p className="border-t border-border px-4 py-3 text-sm text-muted-foreground">{text}</p>
+      )}
     </div>
   );
 }
@@ -103,7 +123,13 @@ function Quiz({ question, options, answer, explain }: Extract<Block, { type: "qu
       <ul className="space-y-1.5">
         {options.map((opt, i) => {
           const state =
-            picked === null ? "" : i === answer ? "border-emerald-500 bg-emerald-500/10" : i === picked ? "border-destructive bg-destructive/10" : "";
+            picked === null
+              ? ""
+              : i === answer
+                ? "border-emerald-500 bg-emerald-500/10"
+                : i === picked
+                  ? "border-destructive bg-destructive/10"
+                  : "";
           return (
             <li key={i}>
               <button

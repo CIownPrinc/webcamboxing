@@ -10,7 +10,10 @@ export const Route = createFileRoute("/glossary")({
       { title: "Glossary — Webcam Boxing" },
       { name: "description", content: "Every term used in the course, defined in plain language." },
       { property: "og:title", content: "Glossary — Webcam Boxing" },
-      { property: "og:description", content: "Definitions for landmarks, FSMs, delta time, and more." },
+      {
+        property: "og:description",
+        content: "Definitions for landmarks, FSMs, delta time, and more.",
+      },
     ],
   }),
   component: Glossary,
@@ -19,7 +22,9 @@ export const Route = createFileRoute("/glossary")({
 function Glossary() {
   const [q, setQ] = useState("");
   const list = glossary.filter(
-    (g) => g.term.toLowerCase().includes(q.toLowerCase()) || g.def.toLowerCase().includes(q.toLowerCase()),
+    (g) =>
+      g.term.toLowerCase().includes(q.toLowerCase()) ||
+      g.def.toLowerCase().includes(q.toLowerCase()),
   );
   return (
     <div className="min-h-screen bg-background text-foreground">

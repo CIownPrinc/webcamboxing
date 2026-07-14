@@ -1,5 +1,12 @@
+/**
+ * @license MIT
+ * LEGAL NOTICE:
+ * This software is provided "as is", without warranty of any kind.
+ */
+
 import { Moon, Sun } from "lucide-react";
 import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import { useHydrated, useProgress } from "@/lib/progress";
 
 export function ThemeToggle() {
@@ -7,17 +14,20 @@ export function ThemeToggle() {
   const { theme, setTheme } = useProgress();
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated) {
+      return;
+    }
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme, hydrated]);
 
   return (
-    <button
+    <Button
+      variant="outline"
+      size="icon"
       aria-label="Toggle theme"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-foreground transition-colors hover:bg-accent"
     >
       {hydrated && theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
+    </Button>
   );
 }

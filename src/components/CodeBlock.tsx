@@ -6,7 +6,9 @@ import { useState } from "react";
 // hit from prism/shiki.
 
 const PY_KEYWORDS = new Set(
-  "False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield self".split(" ")
+  "False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield self".split(
+    " ",
+  ),
 );
 
 function tokenize(code: string, lang: string): { t: string; c?: string }[] {
@@ -69,7 +71,15 @@ const CLASS: Record<string, string> = {
   kw: "text-primary font-medium",
 };
 
-export function CodeBlock({ code, lang = "python", caption }: { code: string; lang?: string; caption?: string }) {
+export function CodeBlock({
+  code,
+  lang = "python",
+  caption,
+}: {
+  code: string;
+  lang?: string;
+  caption?: string;
+}) {
   const [copied, setCopied] = useState(false);
   const tokens = tokenize(code, lang);
 
@@ -82,7 +92,9 @@ export function CodeBlock({ code, lang = "python", caption }: { code: string; la
   return (
     <figure className="my-6 overflow-hidden rounded-lg border border-border bg-card">
       <div className="flex items-center justify-between border-b border-border bg-muted/50 px-3 py-1.5 text-xs">
-        <span className="font-mono uppercase tracking-wide text-muted-foreground">{caption ?? lang}</span>
+        <span className="font-mono uppercase tracking-wide text-muted-foreground">
+          {caption ?? lang}
+        </span>
         <button
           onClick={copy}
           className="inline-flex items-center gap-1 rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"

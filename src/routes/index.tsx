@@ -21,7 +21,8 @@ function Index() {
       <SiteHeader />
 
       <section className="relative overflow-hidden border-b border-border">
-        <div className="pointer-events-none absolute inset-0 opacity-[0.09]"
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.09]"
           style={{
             backgroundImage:
               "radial-gradient(circle at 20% 20%, var(--color-primary) 0, transparent 40%), radial-gradient(circle at 80% 70%, var(--color-primary) 0, transparent 45%)",
@@ -37,9 +38,9 @@ function Index() {
             <span className="marker-red">boxing game</span> from zero.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
-            A step-by-step course that teaches Python, computer vision, and game design by
-            building an arcade boxing game — inspired by Punch-Out!! — that watches you
-            through your own webcam.
+            A step-by-step course that teaches Python, computer vision, and game design by building
+            an arcade boxing game — inspired by Punch-Out!! — that watches you through your own
+            webcam.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             {resume ? (
@@ -61,8 +62,8 @@ function Index() {
             )}
             {resume && (
               <Link
-              to="/lessons/$moduleId/$lessonId"
-              params={{ moduleId: modules[0].id, lessonId: first.id }}
+                to="/lessons/$moduleId/$lessonId"
+                params={{ moduleId: modules[0].id, lessonId: first.id }}
                 className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-5 py-3 text-sm font-semibold transition-colors hover:bg-accent"
               >
                 Start from Module 1 <ArrowRight className="h-4 w-4" />
@@ -105,8 +106,8 @@ function Index() {
 
         <h2 className="mt-16 font-display text-3xl">The roadmap</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          Twenty-five modules take you from installing Python to a polished arcade boxing
-          game with menus, sound, and a state-machine driven opponent.
+          Twenty-five modules take you from installing Python to a polished arcade boxing game with
+          menus, sound, and a state-machine driven opponent.
         </p>
         <ol className="mt-8 grid gap-3 md:grid-cols-2">
           {modules.map((m) => (

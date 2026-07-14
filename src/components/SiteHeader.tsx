@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ThemeToggle } from "./ThemeToggle";
+import { GlobalSearchDialog } from "./GlobalSearchDialog";
+import { CompletionBadgesDialog } from "./CompletionBadgesDialog";
 import { useHydrated, useProgress } from "@/lib/progress";
 import { totalLessons } from "@/data/course";
 
@@ -25,20 +27,42 @@ export function SiteHeader() {
         </Link>
 
         <nav className="ml-6 hidden gap-5 text-sm text-muted-foreground md:flex">
-          <Link to="/curriculum" className="transition-colors hover:text-foreground" activeProps={{ className: "text-foreground" }}>
+          <Link
+            to="/curriculum"
+            className="transition-colors hover:text-foreground"
+            activeProps={{ className: "text-foreground font-medium" }}
+          >
             Curriculum
           </Link>
-          <Link to="/glossary" className="transition-colors hover:text-foreground" activeProps={{ className: "text-foreground" }}>
+          <Link
+            to="/architecture"
+            className="transition-colors hover:text-foreground"
+            activeProps={{ className: "text-foreground font-medium" }}
+          >
+            Architecture
+          </Link>
+          <Link
+            to="/glossary"
+            className="transition-colors hover:text-foreground"
+            activeProps={{ className: "text-foreground font-medium" }}
+          >
             Glossary
           </Link>
-          <Link to="/resources" className="transition-colors hover:text-foreground" activeProps={{ className: "text-foreground" }}>
+          <Link
+            to="/resources"
+            className="transition-colors hover:text-foreground"
+            activeProps={{ className: "text-foreground font-medium" }}
+          >
             Resources
           </Link>
         </nav>
 
-        <div className="ml-auto flex items-center gap-3">
-          <div className="hidden items-center gap-2 sm:flex" aria-label={`${pct}% complete`}>
-            <div className="h-1.5 w-32 overflow-hidden rounded-full bg-muted">
+        <div className="ml-auto flex items-center gap-2.5">
+          <GlobalSearchDialog />
+          <CompletionBadgesDialog />
+
+          <div className="hidden items-center gap-2 lg:flex" aria-label={`${pct}% complete`}>
+            <div className="h-1.5 w-24 overflow-hidden rounded-full bg-muted">
               <div className="h-full bg-primary transition-all" style={{ width: `${pct}%` }} />
             </div>
             <span className="tabular-nums text-xs text-muted-foreground">{pct}%</span>

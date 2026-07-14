@@ -8,7 +8,9 @@ import { lessonKey, useHydrated, useProgress } from "@/lib/progress";
 import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/lessons/$moduleId/$lessonId")({
-  loader: ({ params }): {
+  loader: ({
+    params,
+  }): {
     module: Module;
     lesson: Lesson;
     prev: { module: Module; lesson: Lesson } | null;
@@ -63,7 +65,9 @@ function LessonPage() {
               return (
                 <li key={m.id}>
                   <details open={isCurrent} className="group">
-                    <summary className={`cursor-pointer list-none rounded px-2 py-1.5 hover:bg-accent ${isCurrent ? "bg-accent font-medium" : "text-muted-foreground"}`}>
+                    <summary
+                      className={`cursor-pointer list-none rounded px-2 py-1.5 hover:bg-accent ${isCurrent ? "bg-accent font-medium" : "text-muted-foreground"}`}
+                    >
                       <span className="mr-2 tabular-nums">{String(m.number).padStart(2, "0")}</span>
                       {m.title}
                     </summary>
@@ -105,7 +109,9 @@ function LessonPage() {
             <span className="inline-flex items-center gap-1">
               <Clock className="h-3 w-3" /> ~{lesson.minutes} min
             </span>
-            <span className="rounded-full border border-border px-2 py-0.5">{lesson.difficulty}</span>
+            <span className="rounded-full border border-border px-2 py-0.5">
+              {lesson.difficulty}
+            </span>
             <button
               onClick={() => toggle(key)}
               className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 transition-colors ${done ? "border-primary bg-primary text-primary-foreground" : "border-border hover:bg-accent"}`}
@@ -238,10 +244,14 @@ function LessonPage() {
   );
 }
 
-function ChallengeBlock({ challenge }: { challenge: NonNullable<ReturnType<typeof findLesson>>["lesson"]["challenge"] }) {
-  if (!challenge) return null;
+function ChallengeBlock({
+  challenge,
+}: {
+  challenge: NonNullable<ReturnType<typeof findLesson>>["lesson"]["challenge"];
+}) {
   const [showSolution, setShowSolution] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  if (!challenge) return null;
   return (
     <section className="mt-10 rounded-lg border border-border bg-card p-5">
       <h2 className="text-sm font-semibold uppercase tracking-wider text-primary">
@@ -271,7 +281,11 @@ function ChallengeBlock({ challenge }: { challenge: NonNullable<ReturnType<typeo
       )}
       {showSolution && (
         <div className="mt-3">
-          <CodeBlock code={challenge.solution.code} lang={challenge.solution.lang} caption="Solution" />
+          <CodeBlock
+            code={challenge.solution.code}
+            lang={challenge.solution.lang}
+            caption="Solution"
+          />
           {challenge.solution.explain && (
             <p className="mt-1 text-sm text-muted-foreground">{challenge.solution.explain}</p>
           )}
