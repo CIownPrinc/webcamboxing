@@ -187,7 +187,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <BackgroundLayer />
-      <Outlet />
+      <div className="flex min-h-screen flex-col">
+        <div className="flex-1">
+          <Outlet />
+        </div>
+        <footer className="py-6 text-center text-xs font-semibold tracking-wider text-muted-foreground/60 transition-colors hover:text-muted-foreground uppercase">
+          <Link to="/about">built by aarit</Link>
+        </footer>
+      </div>
     </QueryClientProvider>
   );
 }
