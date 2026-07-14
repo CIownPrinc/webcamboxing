@@ -78,31 +78,31 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Webcam Boxing — Learn Python Game Development & Computer Vision from Zero" },
+      { title: "Webcam Boxing — Free Python Game Development & Computer Vision Course" },
       {
         name: "description",
         content:
-          "A free, step-by-step course teaching Python game development, OpenCV, MediaPipe, and Pygame by building a webcam-controlled arcade boxing game from scratch.",
+          "Learn Python, OpenCV, MediaPipe, and Pygame from scratch by building a webcam-controlled arcade boxing game. 25 step-by-step interactive modules, 100% free.",
       },
       {
         property: "og:title",
-        content: "Webcam Boxing — Learn Python Game Development & Computer Vision from Zero",
+        content: "Webcam Boxing — Free Python Game Development & Computer Vision Course",
       },
       {
         property: "og:description",
         content:
-          "A free, step-by-step course teaching Python game development, OpenCV, MediaPipe, and Pygame by building a webcam-controlled arcade boxing game from scratch.",
+          "Learn Python, OpenCV, MediaPipe, and Pygame from scratch by building a webcam-controlled arcade boxing game. 25 step-by-step interactive modules, 100% free.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "Webcam Boxing — Learn Python Game Development & Computer Vision from Zero",
+        content: "Webcam Boxing — Free Python Game Development & Computer Vision Course",
       },
       {
         name: "twitter:description",
         content:
-          "A free, step-by-step course teaching Python game development, OpenCV, MediaPipe, and Pygame by building a webcam-controlled arcade boxing game from scratch.",
+          "Learn Python, OpenCV, MediaPipe, and Pygame from scratch by building a webcam-controlled arcade boxing game. 25 step-by-step interactive modules, 100% free.",
       },
       {
         property: "og:image",
@@ -120,8 +120,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "manifest", href: "/manifest.webmanifest" },
-      { rel: "icon", href: "/icon-192.png", type: "image/png" },
-      { rel: "shortcut icon", href: "/icon-192.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/icon-192.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
