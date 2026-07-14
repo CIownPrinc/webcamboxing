@@ -12,9 +12,14 @@ export function SettingsDialog() {
 
   if (!hydrated) {
     return (
-      <Button variant="outline" size="icon" aria-label="Settings" disabled>
-        <Settings className="h-4 w-4" />
-      </Button>
+      <button
+        type="button"
+        disabled
+        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border/80 bg-card/60 px-2.5 py-1.5 text-xs font-semibold text-muted-foreground opacity-50 backdrop-blur"
+      >
+        <Settings className="h-3.5 w-3.5" />
+        <span className="hidden sm:inline">Settings</span>
+      </button>
     );
   }
 
@@ -34,24 +39,23 @@ export function SettingsDialog() {
 
   return (
     <>
-      <Button
-        variant="outline"
-        size="icon"
-        aria-label="Appearance & Settings"
+      <button
+        type="button"
         onClick={() => setOpen(true)}
+        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border/80 bg-card/60 px-2.5 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur transition-all hover:border-primary/50 hover:bg-card hover:text-foreground shadow-sm"
+        aria-label="Appearance & Settings"
+        title="Appearance & Settings"
       >
-        <Settings className="h-4 w-4" />
-      </Button>
+        <Settings className="h-3.5 w-3.5" />
+        <span className="hidden sm:inline">Settings</span>
+      </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-          <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
-            onClick={() => setOpen(false)}
-          />
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-6">
+          <div className="fixed inset-0 -z-10" onClick={() => setOpen(false)} />
 
-          <div className="glass-panel relative z-10 w-full max-w-lg overflow-hidden rounded-2xl p-6 shadow-2xl transition-all sm:p-8">
-            <div className="flex items-center justify-between border-b border-border/60 pb-4">
+          <div className="glass-panel relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl shadow-2xl">
+            <div className="flex shrink-0 items-center justify-between border-b border-border/60 p-4 sm:p-6">
               <div>
                 <h2 className="font-display text-xl font-semibold tracking-tight">
                   Appearance & Settings
@@ -69,7 +73,7 @@ export function SettingsDialog() {
               </button>
             </div>
 
-            <div className="mt-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
               {/* Theme Mode Selection */}
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -204,7 +208,7 @@ export function SettingsDialog() {
               </div>
             </div>
 
-            <div className="mt-8 flex justify-end border-t border-border/60 pt-4">
+            <div className="flex shrink-0 justify-end border-t border-border/60 p-4 sm:p-5">
               <Button onClick={() => setOpen(false)} className="rounded-xl px-6 font-semibold">
                 Done
               </Button>

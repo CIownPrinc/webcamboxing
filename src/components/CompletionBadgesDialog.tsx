@@ -95,55 +95,57 @@ export function CompletionBadgesDialog() {
   return (
     <>
       <button
+        type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border/80 bg-card/60 px-2.5 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur transition-all hover:border-primary/50 hover:bg-card hover:text-foreground shadow-sm"
         aria-label="View achievements and completion badges"
+        title="Trophy Room & Badges"
       >
         <Trophy
           className={`h-3.5 w-3.5 ${earnedBadges.length > 0 ? "text-amber-500" : "text-muted-foreground"}`}
         />
-        <span className="hidden md:inline">Badges</span>
-        <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[10px] font-bold text-primary">
+        <span className="hidden sm:inline">Badges</span>
+        <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[10px] font-bold text-primary tabular-nums">
           {earnedBadges.length}/{courseBadges.length}
         </span>
       </button>
 
       {open && (
-        <div
-          className="fixed inset-x-0 bottom-0 top-[59px] z-30 flex items-center justify-center overflow-y-auto bg-background/60 px-4 py-6 backdrop-blur-sm"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setOpen(false);
-          }}
-        >
-          <div className="glass-panel relative flex max-h-[calc(100vh-110px)] w-full max-w-lg flex-col overflow-hidden rounded-2xl shadow-2xl">
-            <div className="flex shrink-0 items-center justify-between border-b border-border/60 p-4 sm:p-5">
-              <div className="flex items-center gap-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-6">
+          <div className="fixed inset-0 -z-10" onClick={() => setOpen(false)} />
+
+          <div className="glass-panel relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl shadow-2xl">
+            <div className="flex shrink-0 items-center justify-between border-b border-border/60 p-4 sm:p-6">
+              <div className="flex items-center gap-2.5">
                 <Trophy className="h-5 w-5 text-amber-500" />
-                <h2 className="font-display text-xl leading-none">Trophy Room & Badges</h2>
+                <div>
+                  <h2 className="font-display text-xl font-semibold tracking-tight">
+                    Trophy Room & Badges
+                  </h2>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    Earn interactive badges across the 25-module roadmap.
+                  </p>
+                </div>
               </div>
               <button
+                type="button"
                 onClick={() => setOpen(false)}
-                className="rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 aria-label="Close dialog"
               >
-                <X className="h-4 w-4" />
+                ✕
               </button>
             </div>
 
-            <p className="shrink-0 px-4 pt-3 text-xs text-muted-foreground sm:px-5">
-              Earn interactive badges by completing modules and hitting milestones across the
-              25-module roadmap.
-            </p>
-
-            <div className="mt-4 flex-1 space-y-3 overflow-y-auto px-4 pb-2 sm:px-5">
+            <div className="flex-1 space-y-3 overflow-y-auto p-4 sm:p-6">
               {courseBadges.map((b) => {
                 const isEarned = earnedBadges.some((e) => e.id === b.id);
                 return (
                   <div
                     key={b.id}
-                    className={`flex items-start gap-3.5 rounded-lg border p-3 transition-all sm:p-3.5 ${
+                    className={`flex items-start gap-3.5 rounded-xl border p-3.5 transition-all ${
                       isEarned
-                        ? "border-amber-500/50 bg-amber-500/10"
+                        ? "border-amber-500/50 bg-amber-500/10 shadow-sm"
                         : "border-border/60 bg-muted/20 opacity-60"
                     }`}
                   >
@@ -166,10 +168,11 @@ export function CompletionBadgesDialog() {
               })}
             </div>
 
-            <div className="mt-3 shrink-0 border-t border-border p-4 text-center sm:p-5">
+            <div className="flex shrink-0 justify-end border-t border-border/60 p-4 sm:p-5">
               <button
+                type="button"
                 onClick={() => setOpen(false)}
-                className="rounded-md bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground shadow transition-transform hover:-translate-y-0.5"
+                className="neo-btn rounded-xl bg-primary px-6 py-2 text-xs font-semibold text-primary-foreground shadow"
               >
                 Continue Learning
               </button>

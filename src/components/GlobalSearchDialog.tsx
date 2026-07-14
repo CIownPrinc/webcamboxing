@@ -105,48 +105,48 @@ export function GlobalSearchDialog() {
   return (
     <>
       <button
+        type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border/80 bg-card/60 px-2.5 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur transition-all hover:border-primary/50 hover:bg-card hover:text-foreground shadow-sm"
         aria-label="Search course content"
+        title="Search course content"
       >
         <Search className="h-3.5 w-3.5" />
-        <span className="hidden sm:inline">Search course...</span>
-        <kbd className="hidden rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground sm:inline-block">
+        <span className="hidden sm:inline">Search...</span>
+        <kbd className="hidden rounded bg-muted/80 px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground lg:inline-block">
           {deviceShortcut ?? "Ctrl/⌘+K"}
         </kbd>
       </button>
 
       {open && (
-        <div
-          className="fixed inset-x-0 bottom-0 top-[59px] z-30 flex items-start justify-center overflow-y-auto bg-background/60 px-4 pt-4 backdrop-blur-sm sm:pt-8"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setOpen(false);
-          }}
-        >
-          <div className="glass-panel relative flex max-h-[calc(100vh-100px)] w-full max-w-xl flex-col overflow-hidden rounded-2xl shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-6">
+          <div className="fixed inset-0 -z-10" onClick={() => setOpen(false)} />
+
+          <div className="glass-panel relative my-auto flex max-h-[85vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl shadow-2xl">
             <div className="flex shrink-0 items-center border-b border-border/60 bg-background/40 px-4 py-3 sm:px-5 sm:py-3.5">
-              <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+              <Search className="h-4 w-4 shrink-0 text-muted-foreground mr-2.5" />
               <input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search 25 modules, code, or glossary terms..."
-                className="w-full bg-transparent px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                className="w-full bg-transparent px-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
                 autoFocus
               />
               <button
+                type="button"
                 onClick={() => {
                   setOpen(false);
                   setQuery("");
                 }}
-                className="rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 aria-label="Close search"
               >
-                <X className="h-4 w-4" />
+                ✕
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
               {!query || query.trim().length < 2 ? (
                 <p className="py-8 text-center text-xs text-muted-foreground">
                   Type at least 2 characters to search across all lessons and terms.
@@ -166,8 +166,9 @@ export function GlobalSearchDialog() {
                         {results.lessons.map(({ module, lesson }) => (
                           <li key={`${module.id}-${lesson.id}`}>
                             <button
+                              type="button"
                               onClick={() => handleSelectLesson(module.id, lesson.id)}
-                              className="group flex w-full items-center justify-between rounded-lg border border-border/60 bg-background/50 px-3 py-2.5 text-left transition-colors hover:border-primary hover:bg-accent"
+                              className="group flex w-full items-center justify-between rounded-xl border border-border/60 bg-background/50 px-3.5 py-2.5 text-left transition-colors hover:border-primary hover:bg-accent"
                             >
                               <div className="min-w-0 flex-1">
                                 <span className="block text-[11px] font-medium uppercase tracking-wider text-primary">
@@ -194,8 +195,9 @@ export function GlobalSearchDialog() {
                         {results.glossaryTerms.map((g) => (
                           <li key={g.term}>
                             <button
+                              type="button"
                               onClick={handleSelectGlossary}
-                              className="group flex w-full items-start gap-3 rounded-lg border border-border/60 bg-background/50 p-3 text-left transition-colors hover:border-primary hover:bg-accent"
+                              className="group flex w-full items-start gap-3 rounded-xl border border-border/60 bg-background/50 p-3.5 text-left transition-colors hover:border-primary hover:bg-accent"
                             >
                               <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                               <div>
@@ -216,9 +218,9 @@ export function GlobalSearchDialog() {
               )}
             </div>
 
-            <div className="flex shrink-0 items-center justify-between border-t border-border bg-muted/40 px-4 py-2 text-[11px] text-muted-foreground sm:px-5">
+            <div className="flex shrink-0 items-center justify-between border-t border-border/60 bg-muted/20 px-4 py-2.5 text-[11px] text-muted-foreground sm:px-6">
               <span>Use ESC or click backdrop to close</span>
-              <span>Webcam Boxing Course Search</span>
+              <span>Course Search</span>
             </div>
           </div>
         </div>

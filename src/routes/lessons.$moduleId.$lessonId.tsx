@@ -219,6 +219,24 @@ function LessonPage() {
             </button>
           </div>
 
+          {lesson.prerequisites && lesson.prerequisites.length > 0 && (
+            <section className="mt-6 neo-inset rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 backdrop-blur">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                Prerequisites
+              </h2>
+              <ul className="mt-2 flex flex-wrap gap-2 text-xs font-medium text-foreground">
+                {lesson.prerequisites.map((p, i) => (
+                  <li
+                    key={i}
+                    className="rounded-md border border-amber-500/20 bg-amber-500/10 px-2.5 py-1"
+                  >
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <section className="mt-8 neo-inset rounded-xl border border-border/80 bg-background/50 p-5 backdrop-blur">
             <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Learning objectives
@@ -233,53 +251,39 @@ function LessonPage() {
             </ul>
           </section>
 
-          <section className="mt-8">
-            <h2 className="font-display text-2xl font-bold tracking-tight">The concepts</h2>
-            <div className="mt-3 space-y-3.5 text-base leading-relaxed text-muted-foreground">
-              {lesson.concept.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-          </section>
+          <div className="mt-8 space-y-6">
+            {lesson.blocks.map((block, idx) => (
+              <BlockView key={idx} b={block} />
+            ))}
+          </div>
 
-          {lesson.codeSnippets && lesson.codeSnippets.length > 0 && (
-            <section className="mt-10 space-y-6">
-              <h2 className="font-display text-2xl font-bold tracking-tight">Walkthrough</h2>
-              {lesson.codeSnippets.map((s, idx) => (
-                <div key={idx} className="space-y-2.5">
-                  {s.title && (
-                    <h3 className="font-display text-lg font-semibold text-foreground">
-                      {s.title}
-                    </h3>
-                  )}
-                  {s.explanation && (
-                    <p className="text-sm leading-relaxed text-muted-foreground">{s.explanation}</p>
-                  )}
-                  <CodeBlock code={s.code} lang={s.lang} caption={s.caption ?? s.title} />
-                </div>
-              ))}
+          {lesson.mistakes && lesson.mistakes.length > 0 && (
+            <section className="mt-10 glass-panel rounded-xl border-l-4 border-l-destructive p-5 shadow-sm">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-destructive">
+                Common mistakes
+              </h2>
+              <ul className="mt-2.5 list-disc space-y-1.5 pl-5 text-[15px] leading-relaxed text-muted-foreground">
+                {lesson.mistakes.map((m, i) => (
+                  <li key={i}>
+                    <span className="text-foreground">{m}</span>
+                  </li>
+                ))}
+              </ul>
             </section>
           )}
 
-          {lesson.fullCode && (
-            <section className="mt-12">
-              <h2 className="font-display text-2xl font-bold tracking-tight">
-                Working lesson code
+          {lesson.debugging && lesson.debugging.length > 0 && (
+            <section className="mt-8 neo-inset rounded-xl border border-border/80 bg-background/50 p-5 backdrop-blur">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Debugging checklist
               </h2>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                Copy this directly into a file (for example{" "}
-                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-                  lesson_{lesson.id}.py
-                </code>
-                ) and run it:
-              </p>
-              <div className="mt-3">
-                <CodeBlock
-                  code={lesson.fullCode}
-                  lang="python"
-                  caption={`Complete script — ${lesson.title}`}
-                />
-              </div>
+              <ul className="mt-2.5 list-disc space-y-1.5 pl-5 text-[15px] leading-relaxed text-muted-foreground">
+                {lesson.debugging.map((d, i) => (
+                  <li key={i}>
+                    <span className="text-foreground">{d}</span>
+                  </li>
+                ))}
+              </ul>
             </section>
           )}
 
