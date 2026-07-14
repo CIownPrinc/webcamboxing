@@ -119,108 +119,104 @@ export function GlobalSearchDialog() {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-6">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 p-4 sm:p-6 backdrop-blur-sm">
           <div className="fixed inset-0 -z-10" onClick={() => setOpen(false)} />
 
-          <div className="glass-panel relative my-auto flex max-h-[85vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl shadow-2xl">
-            <div className="flex shrink-0 items-center border-b border-border/60 bg-background/40 px-4 py-3 sm:px-5 sm:py-3.5">
-              <Search className="h-4 w-4 shrink-0 text-muted-foreground mr-2.5" />
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search 25 modules, code, or glossary terms..."
-                className="w-full bg-transparent px-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-                autoFocus
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  setQuery("");
-                }}
-                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                aria-label="Close search"
-              >
-                ✕
-              </button>
-            </div>
+          <div className="flex min-h-full items-center justify-center py-6 sm:py-12 pointer-events-none">
+            <div className="glass-panel relative flex max-h-[calc(100vh-3rem)] sm:max-h-[80vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl shadow-2xl pointer-events-auto">
+              <div className="flex shrink-0 items-center border-b border-border/60 bg-background/40 px-4 py-3 sm:px-5 sm:py-3.5">
+                <Search className="h-4 w-4 shrink-0 text-muted-foreground mr-2.5" />
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search 25 modules, code, or glossary terms..."
+                  className="w-full bg-transparent px-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    setQuery("");
+                  }}
+                  className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  aria-label="Close search"
+                >
+                  ✕
+                </button>
+              </div>
 
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-              {!query || query.trim().length < 2 ? (
-                <p className="py-8 text-center text-xs text-muted-foreground">
-                  Type at least 2 characters to search across all lessons and terms.
-                </p>
-              ) : results.lessons.length === 0 && results.glossaryTerms.length === 0 ? (
-                <p className="py-8 text-center text-xs text-muted-foreground">
-                  No matches found for "{query}". Try searching "FSM", "MediaPipe", or "velocity".
-                </p>
-              ) : (
-                <div className="space-y-4">
-                  {results.lessons.length > 0 && (
-                    <div>
-                      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Lessons & Modules ({results.lessons.length})
-                      </h3>
-                      <ul className="space-y-1.5">
-                        {results.lessons.map(({ module, lesson }) => (
-                          <li key={`${module.id}-${lesson.id}`}>
-                            <button
-                              type="button"
-                              onClick={() => handleSelectLesson(module.id, lesson.id)}
-                              className="group flex w-full items-center justify-between rounded-xl border border-border/60 bg-background/50 px-3.5 py-2.5 text-left transition-colors hover:border-primary hover:bg-accent"
-                            >
-                              <div className="min-w-0 flex-1">
-                                <span className="block text-[11px] font-medium uppercase tracking-wider text-primary">
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+                {!query || query.trim().length < 2 ? (
+                  <p className="py-8 text-center text-xs text-muted-foreground">
+                    Type at least 2 characters to search across all lessons and terms.
+                  </p>
+                ) : results.lessons.length === 0 && results.glossaryTerms.length === 0 ? (
+                  <p className="py-8 text-center text-xs text-muted-foreground">
+                    No matches found for "{query}". Try searching "FSM", "MediaPipe", or "velocity".
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {results.lessons.length > 0 && (
+                      <div>
+                        <h3 className="mb-2 font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                          Matching Lessons ({results.lessons.length})
+                        </h3>
+                        <ul className="space-y-2">
+                          {results.lessons.map(({ module, lesson }) => (
+                            <li key={lesson.id}>
+                              <button
+                                type="button"
+                                onClick={() => handleSelectLesson(module.id, lesson.id)}
+                                className="group flex w-full flex-col items-start rounded-xl border border-border/60 bg-muted/20 p-3 text-left transition-all hover:border-primary/50 hover:bg-card hover:shadow-sm"
+                              >
+                                <span className="text-[11px] font-semibold text-primary">
                                   Module {module.number}: {module.title}
                                 </span>
-                                <span className="block truncate text-sm font-semibold text-foreground group-hover:text-primary">
+                                <span className="mt-0.5 text-sm font-semibold text-foreground group-hover:text-primary">
                                   {lesson.title}
                                 </span>
-                              </div>
-                              <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground group-hover:text-primary" />
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
-                  {results.glossaryTerms.length > 0 && (
-                    <div>
-                      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Glossary Terms ({results.glossaryTerms.length})
-                      </h3>
-                      <ul className="space-y-1.5">
-                        {results.glossaryTerms.map((g) => (
-                          <li key={g.term}>
-                            <button
-                              type="button"
-                              onClick={handleSelectGlossary}
-                              className="group flex w-full items-start gap-3 rounded-xl border border-border/60 bg-background/50 p-3.5 text-left transition-colors hover:border-primary hover:bg-accent"
-                            >
-                              <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                              <div>
-                                <span className="block text-sm font-semibold text-foreground group-hover:text-primary">
+                    {results.glossaryTerms.length > 0 && (
+                      <div>
+                        <h3 className="mb-2 font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                          Glossary Terms ({results.glossaryTerms.length})
+                        </h3>
+                        <ul className="space-y-2">
+                          {results.glossaryTerms.map((g) => (
+                            <li key={g.term}>
+                              <button
+                                type="button"
+                                onClick={handleSelectGlossary}
+                                className="group flex w-full flex-col items-start rounded-xl border border-border/60 bg-muted/20 p-3 text-left transition-all hover:border-primary/50 hover:bg-card hover:shadow-sm"
+                              >
+                                <span className="text-sm font-semibold text-foreground group-hover:text-primary">
                                   {g.term}
                                 </span>
-                                <span className="line-clamp-2 text-xs text-muted-foreground">
+                                <span className="mt-1 text-xs leading-relaxed text-muted-foreground line-clamp-2">
                                   {g.def}
                                 </span>
-                              </div>
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
-            <div className="flex shrink-0 items-center justify-between border-t border-border/60 bg-muted/20 px-4 py-2.5 text-[11px] text-muted-foreground sm:px-6">
-              <span>Use ESC or click backdrop to close</span>
-              <span>Course Search</span>
+              <div className="flex shrink-0 items-center justify-between border-t border-border/60 bg-muted/20 px-4 py-2.5 text-[11px] text-muted-foreground sm:px-6">
+                <span>Use ESC or click backdrop to close</span>
+                <span>Course Search</span>
+              </div>
             </div>
           </div>
         </div>

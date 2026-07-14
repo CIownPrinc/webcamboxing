@@ -129,8 +129,8 @@ function Index() {
               <Sparkles className="h-3.5 w-3.5 text-primary" /> A hands-on programming course
             </p>
             <h1 className="font-display text-4xl font-bold leading-[1.02] tracking-tight sm:text-6xl md:text-7xl">
-              Learn Python game development and <span className="marker-red">computer vision</span>{" "}
-              from scratch.
+              Learn Python game development and{" "}
+              <span className="text-primary">computer vision</span> from scratch.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
               Write clean code that tracks your hands with your webcam and powers a live arcade

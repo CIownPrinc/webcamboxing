@@ -95,7 +95,13 @@ function Resources() {
                     rel="noreferrer"
                     className="glass-panel group flex items-center gap-3.5 rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md"
                   >
-                    <span className="rounded-md border border-border/60 bg-muted/30 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <span
+                      className={`rounded-md border px-2 py-1 font-mono text-[10px] uppercase tracking-widest ${
+                        r.kind === "video"
+                          ? "border-primary/40 bg-primary/15 font-bold text-primary"
+                          : "border-border/60 bg-muted/30 text-muted-foreground"
+                      }`}
+                    >
                       {r.kind ?? "link"}
                     </span>
                     <span className="flex-1 font-medium text-sm sm:text-base">{r.title}</span>

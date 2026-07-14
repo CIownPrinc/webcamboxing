@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { ChevronDown, Info, Lightbulb, AlertTriangle, Sparkles } from "lucide-react";
+import { ChevronDown, Info, Lightbulb, AlertTriangle, Sparkles, Play, Video } from "lucide-react";
 import type { Block } from "@/data/course";
 import { CodeBlock } from "./CodeBlock";
 
@@ -54,6 +54,75 @@ function Diagram({ title, svg }: Extract<Block, { type: "diagram" }>) {
   );
 }
 
+function VideoBlock({
+  title,
+  youtubeId,
+  caption,
+  startSeconds,
+}: Extract<Block, { type: "video" }>) {
+  const [playing, setPlaying] = useState(false);
+  const [imgSrc, setImgSrc] = useState(`https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`);
+
+  return (
+    <figure className="glass-panel my-8 overflow-hidden rounded-2xl border border-border/80 shadow-lg transition-all hover:border-primary/40">
+      <div className="flex items-center justify-between border-b border-border/60 bg-muted/30 px-4 py-2.5 text-xs text-muted-foreground sm:px-5">
+        <div className="flex items-center gap-2 font-semibold">
+          <Video className="h-3.5 w-3.5 text-primary" />
+          <span>Recommended Visual Walkthrough</span>
+        </div>
+        <span className="font-mono text-[10px] uppercase tracking-wider opacity-75">
+          YouTube Video
+        </span>
+      </div>
+
+      <div className="relative aspect-video w-full bg-black/80">
+        {playing ? (
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1${startSeconds ? `&start=${startSeconds}` : ""}`}
+            title={title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="absolute inset-0 h-full w-full border-0"
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => setPlaying(true)}
+            className="group absolute inset-0 flex h-full w-full cursor-pointer flex-col items-center justify-center overflow-hidden text-left"
+            aria-label={`Play video: ${title}`}
+          >
+            <img
+              src={imgSrc}
+              alt={title}
+              onError={() => setImgSrc(`https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`)}
+              className="absolute inset-0 h-full w-full object-cover opacity-85 transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+            <div className="relative z-10 flex flex-col items-center justify-center p-6 text-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/90 text-primary-foreground shadow-[0_0_20px_rgba(220,38,38,0.6)] transition-all duration-300 group-hover:scale-110 group-hover:bg-primary">
+                <Play className="ml-1 h-7 w-7 fill-current" />
+              </div>
+              <h3 className="mt-4 max-w-lg font-display text-lg font-bold tracking-tight text-white sm:text-xl drop-shadow-md">
+                {title}
+              </h3>
+              <p className="mt-1.5 text-xs font-medium text-white/80">
+                Click to play high-definition video lesson
+              </p>
+            </div>
+          </button>
+        )}
+      </div>
+
+      {caption && (
+        <figcaption className="border-t border-border/60 bg-background/50 px-4 py-3 text-xs leading-relaxed text-muted-foreground sm:px-5">
+          <span className="font-semibold text-foreground">Why this video:</span> {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
 export function BlockView({ b }: { b: Block }) {
   switch (b.type) {
     case "h": {
@@ -95,6 +164,8 @@ export function BlockView({ b }: { b: Block }) {
       );
     case "diagram":
       return <Diagram {...b} />;
+    case "video":
+      return <VideoBlock {...b} />;
     case "hint":
       return <ExpandableHint label={b.label} text={b.text} />;
     case "quiz":

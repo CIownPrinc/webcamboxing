@@ -111,71 +111,73 @@ export function CompletionBadgesDialog() {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:p-6">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 p-4 sm:p-6 backdrop-blur-sm">
           <div className="fixed inset-0 -z-10" onClick={() => setOpen(false)} />
 
-          <div className="glass-panel relative my-auto flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl shadow-2xl">
-            <div className="flex shrink-0 items-center justify-between border-b border-border/60 p-4 sm:p-6">
-              <div className="flex items-center gap-2.5">
-                <Trophy className="h-5 w-5 text-amber-500" />
-                <div>
-                  <h2 className="font-display text-xl font-semibold tracking-tight">
-                    Trophy Room & Badges
-                  </h2>
-                  <p className="mt-0.5 text-xs text-muted-foreground">
-                    Earn interactive badges across the 25-module roadmap.
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                aria-label="Close dialog"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="flex-1 space-y-3 overflow-y-auto p-4 sm:p-6">
-              {courseBadges.map((b) => {
-                const isEarned = earnedBadges.some((e) => e.id === b.id);
-                return (
-                  <div
-                    key={b.id}
-                    className={`flex items-start gap-3.5 rounded-xl border p-3.5 transition-all ${
-                      isEarned
-                        ? "border-amber-500/50 bg-amber-500/10 shadow-sm"
-                        : "border-border/60 bg-muted/20 opacity-60"
-                    }`}
-                  >
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-background text-2xl shadow-sm">
-                      {isEarned ? b.icon : <Lock className="h-4 w-4 text-muted-foreground" />}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-sm font-bold text-foreground">{b.title}</h3>
-                        {isEarned && (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400">
-                            <Sparkles className="h-2.5 w-2.5" /> Unlocked
-                          </span>
-                        )}
-                      </div>
-                      <p className="mt-0.5 text-xs text-muted-foreground">{b.description}</p>
-                    </div>
+          <div className="flex min-h-full items-center justify-center py-6 sm:py-12 pointer-events-none">
+            <div className="glass-panel relative flex max-h-[calc(100vh-3rem)] sm:max-h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl shadow-2xl pointer-events-auto">
+              <div className="flex shrink-0 items-center justify-between border-b border-border/60 p-4 sm:p-6">
+                <div className="flex items-center gap-2.5">
+                  <Trophy className="h-5 w-5 text-amber-500" />
+                  <div>
+                    <h2 className="font-display text-xl font-semibold tracking-tight">
+                      Trophy Room & Badges
+                    </h2>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      Earn interactive badges across the 25-module roadmap.
+                    </p>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  aria-label="Close dialog"
+                >
+                  ✕
+                </button>
+              </div>
 
-            <div className="flex shrink-0 justify-end border-t border-border/60 p-4 sm:p-5">
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="neo-btn rounded-xl bg-primary px-6 py-2 text-xs font-semibold text-primary-foreground shadow"
-              >
-                Continue Learning
-              </button>
+              <div className="flex-1 space-y-3 overflow-y-auto p-4 sm:p-6">
+                {courseBadges.map((b) => {
+                  const isEarned = earnedBadges.some((e) => e.id === b.id);
+                  return (
+                    <div
+                      key={b.id}
+                      className={`flex items-start gap-3.5 rounded-xl border p-3.5 transition-all ${
+                        isEarned
+                          ? "border-amber-500/50 bg-amber-500/10 shadow-sm"
+                          : "border-border/60 bg-muted/20 opacity-60"
+                      }`}
+                    >
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-background text-2xl shadow-sm">
+                        {isEarned ? b.icon : <Lock className="h-4 w-4 text-muted-foreground" />}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="text-sm font-bold text-foreground">{b.title}</h3>
+                          {isEarned && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400">
+                              <Sparkles className="h-2.5 w-2.5" /> Unlocked
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-0.5 text-xs text-muted-foreground">{b.description}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="flex shrink-0 justify-end border-t border-border/60 p-4 sm:p-5">
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="neo-btn rounded-xl bg-primary px-6 py-2 text-xs font-semibold text-primary-foreground shadow"
+                >
+                  Continue Learning
+                </button>
+              </div>
             </div>
           </div>
         </div>

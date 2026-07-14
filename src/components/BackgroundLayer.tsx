@@ -38,7 +38,7 @@ export function BackgroundLayer() {
         style={{ backgroundImage: `url("${activeUrl}")` }}
       />
       {/* Calibrated atmosphere scrim ensuring WCAG AA+ high contrast for all text above */}
-      <div className="absolute inset-0 bg-background/85 dark:bg-[#0f1117]/88 backdrop-blur-[2px] transition-colors duration-500" />
+      <div className="absolute inset-0 bg-background/82 dark:bg-[#0f1117]/84 backdrop-blur-[1px] transition-colors duration-500" />
     </div>
   );
 }

@@ -10,6 +10,7 @@ export type Block =
   | { type: "callout"; kind: "info" | "warn" | "tip" | "why"; title?: string; text: string }
   | { type: "analogy"; text: string }
   | { type: "diagram"; title?: string; svg: string }
+  | { type: "video"; title: string; youtubeId: string; caption?: string; startSeconds?: number }
   | { type: "hint"; label: string; text: string }
   | { type: "quiz"; question: string; options: string[]; answer: number; explain: string };
 
@@ -179,6 +180,18 @@ const warn = (text: string, title = "Watch out"): Block => ({
 });
 const tip = (text: string, title = "Tip"): Block => ({ type: "callout", kind: "tip", title, text });
 const analogy = (text: string): Block => ({ type: "analogy", text });
+const video = (
+  title: string,
+  youtubeId: string,
+  caption?: string,
+  startSeconds?: number,
+): Block => ({
+  type: "video",
+  title,
+  youtubeId,
+  caption,
+  startSeconds,
+});
 
 /*: ------------------------------------------------------------------------ */
 /*  Modules                                                                    */
@@ -333,6 +346,11 @@ export const modules: Module[] = [
               "Linux: `sudo apt install python3.12 python3.12-venv` on Debian/Ubuntu",
             ],
             true,
+          ),
+          video(
+            "Python Setup & Terminal Setup for Beginners",
+            "_uQrJ0TkZlc",
+            "If you have never installed Python or opened a terminal before, this canonical step-by-step walkthrough shows you exactly which checkboxes to click (specifically 'Add Python to PATH' on Windows) so commands work cleanly.",
           ),
           h("Verify"),
           code(
@@ -622,6 +640,12 @@ cv2.destroyAllWindows()  # close windows when done`,
             ],
             true,
           ),
+          video(
+            "OpenCV Python Camera Stream & Frame Loop Essentials",
+            "oXlwWbU8l2o",
+            "Watch how cv2.VideoCapture accesses hardware streams and converts live USB sensor input into numpy RGB arrays 30 times a second.",
+            340,
+          ),
           h("The code"),
           code(
             "python",
@@ -729,6 +753,11 @@ cv2.circle(frame, (w // 2, h // 2), 40, (0, 0, 255), 3)`,
         blocks: [
           why(
             "MediaPipe gives us 21 named points per hand for free. Doing this ourselves would be a whole graduate degree: instead we call `hands.process(frame)` and read the answer.",
+          ),
+          video(
+            "AI Hand Tracking with MediaPipe & Python (21 Landmarks Walkthrough)",
+            "vQZ1CWWuSOw",
+            "Nicholas Renotte's canonical step-by-step tutorial explaining how MediaPipe's deep neural network extracts 3D joint coordinates from live RGB video.",
           ),
           code(
             "python",
@@ -1276,6 +1305,11 @@ def calibrate(get_speed, seconds=5, fps=60):
         ],
         blocks: [
           { type: "diagram", title: "The game loop", svg: gameLoopSvg },
+          video(
+            "The Ultimate Introduction to Pygame (Game Loops & Surfaces)",
+            "AY9MnQ4x3wt",
+            "Clear Code's gold-standard visual guide demonstrating how Pygame's 60 FPS event loop, display surfaces, and delta-time calculations operate under the hood.",
+          ),
           code(
             "python",
             `import pygame, sys
@@ -1804,6 +1838,36 @@ export const glossary: { term: string; def: string }[] = [
 ];
 
 export const globalResources: { section: string; items: Resource[] }[] = [
+  {
+    section: "Essential Video Tutorials & Walkthroughs",
+    items: [
+      {
+        title: "Programming with Mosh: Python Tutorial for Beginners (Installation & Terminal)",
+        url: "https://www.youtube.com/watch?v=_uQrJ0TkZlc",
+        kind: "video",
+      },
+      {
+        title: "freeCodeCamp: OpenCV Course - Full Tutorial with Python (Webcam & Color Spaces)",
+        url: "https://www.youtube.com/watch?v=oXlwWbU8l2o",
+        kind: "video",
+      },
+      {
+        title: "Nicholas Renotte: AI Hand Tracking with MediaPipe & Python (21 Landmarks)",
+        url: "https://www.youtube.com/watch?v=vQZ1CWWuSOw",
+        kind: "video",
+      },
+      {
+        title: "Clear Code: The Ultimate Introduction to Pygame (Game Loops & Surfaces)",
+        url: "https://www.youtube.com/watch?v=AY9MnQ4x3wt",
+        kind: "video",
+      },
+      {
+        title: "GDQuest: Finite State Machines in Game Development",
+        url: "https://www.youtube.com/watch?v=E45v2dD3IQU",
+        kind: "video",
+      },
+    ],
+  },
   {
     section: "Official docs",
     items: [
