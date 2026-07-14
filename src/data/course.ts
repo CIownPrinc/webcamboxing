@@ -739,37 +739,66 @@ def process(frame, results):
         blocks: [
           h("The math"),
           p("Velocity is (current position − previous position) divided by the time between them. For a 2D point we get a vector; its length is the speed."),
-          code("python", `import numpy as np
+          code("python", `# velocity.py
 import time
+import numpy as np
 
-_prev_pos = None
-_prev_time = None
-_smoothed = 0.0
-ALPHA = 0.4  # 0 = no smoothing, 1 = ignore new data
+class WristVelocity:
+    """Turn a stream of (x, y) wrist positions into a smoothed speed in px/s.
 
-def wrist_speed(pos):
-    """Return smoothed speed in pixels per second."""
-    global _prev_pos, _prev_time, _smoothed
-    now = time.perf_counter()
-    if _prev_pos is None:
-        _prev_pos, _prev_time = pos, now
-        return 0.0
-    dt = max(now - _prev_time, 1e-3)
-    delta = np.array(pos) - np.array(_prev_pos)
-    raw = float(np.linalg.norm(delta) / dt)
-    # Exponential moving average: trust the past a bit, so single jittery
-    # frames don't spike the value.
-    _smoothed = ALPHA * raw + (1 - ALPHA) * _smoothed
-    _prev_pos, _prev_time = pos, now
-    return _smoothed
-`),
+    Each wrist (left, right) gets its own instance so their state can't collide.
+    """
+
+    def __init__(self, alpha: float = 0.4):
+        # alpha = 0 → no smoothing.  alpha = 1 → ignore new data entirely.
+        self.alpha = alpha
+        self._prev_pos = None
+        self._prev_t = None
+        self._smoothed = 0.0
+
+    def update(self, pos):
+        """Feed one new wrist position, return the smoothed speed."""
+        if pos is None:
+            # Hand not detected this frame — decay toward zero.
+            self._smoothed *= (1 - self.alpha)
+            return self._smoothed
+
+        now = time.perf_counter()
+        if self._prev_pos is None:
+            self._prev_pos, self._prev_t = pos, now
+            return 0.0
+
+        dt = max(now - self._prev_t, 1e-3)  # avoid divide-by-zero on fast frames
+        delta = np.array(pos) - np.array(self._prev_pos)
+        raw = float(np.linalg.norm(delta) / dt)
+
+        # Exponential moving average — the speedometer-needle trick.
+        self._smoothed = self.alpha * raw + (1 - self.alpha) * self._smoothed
+        self._prev_pos, self._prev_t = pos, now
+        return self._smoothed
+`, "velocity.py"),
           why("Smoothing matters because MediaPipe wobbles by a few pixels even when your hand is still. Without smoothing, a stationary wrist looks like it's moving 300 px/s and randomly triggers punches."),
           analogy("Smoothing is like a car's speedometer needle — it lags a fraction of a second so it doesn't twitch on every bump."),
+          info("Because it's a class, we create TWO of them — one per wrist — so left and right don't share state. Module 12 will import `WristVelocity` and use it exactly like that."),
+          {
+            type: "quiz",
+            question: "Why did we turn the velocity code into a class instead of using module-level globals?",
+            options: [
+              "Classes always run faster in Python.",
+              "So each wrist can keep its own history without them clobbering each other.",
+              "Because MediaPipe requires it.",
+              "To avoid importing numpy.",
+            ],
+            answer: 1,
+            explain:
+              "Two wrists share the module if we use globals — the left wrist's speed would overwrite the right wrist's previous position every frame. One instance per wrist keeps the state isolated.",
+          },
         ],
         recap: [
           "Speed = distance / time, done per frame with NumPy.",
           "Use `time.perf_counter()` for high-resolution timing.",
           "Exponential smoothing tames pixel jitter.",
+          "One WristVelocity instance per wrist — never share state.",
         ],
       },
     ],
