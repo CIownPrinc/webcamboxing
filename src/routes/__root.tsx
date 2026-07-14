@@ -78,38 +78,43 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "how to build a boxing game" },
+      { title: "Webcam Boxing — Learn Python Game Development & Computer Vision from Zero" },
       {
         name: "description",
         content:
-          "A free, beginner-friendly course that teaches you to build a webcam-driven boxing game from zero (and have fun)\nusing Python, OpenCV, MediaPipe, and Pygame.",
+          "A free, step-by-step course teaching Python game development, OpenCV, MediaPipe, and Pygame by building a webcam-controlled arcade boxing game from scratch.",
       },
-      { property: "og:title", content: "how to build a boxing game" },
+      {
+        property: "og:title",
+        content: "Webcam Boxing — Learn Python Game Development & Computer Vision from Zero",
+      },
       {
         property: "og:description",
         content:
-          "A free, beginner-friendly course that teaches you to build a webcam-driven boxing game from zero (and have fun)\nusing Python, OpenCV, MediaPipe, and Pygame.",
+          "A free, step-by-step course teaching Python game development, OpenCV, MediaPipe, and Pygame by building a webcam-controlled arcade boxing game from scratch.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "how to build a boxing game" },
+      {
+        name: "twitter:title",
+        content: "Webcam Boxing — Learn Python Game Development & Computer Vision from Zero",
+      },
       {
         name: "twitter:description",
         content:
-          "A free, beginner-friendly course that teaches you to build a webcam-driven boxing game from zero (and have fun)\nusing Python, OpenCV, MediaPipe, and Pygame.",
+          "A free, step-by-step course teaching Python game development, OpenCV, MediaPipe, and Pygame by building a webcam-controlled arcade boxing game from scratch.",
       },
       {
         property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b1612560-3631-4a80-b9e3-40010cfdd1de/id-preview-55d20118--56c2721b-f283-466f-8de8-0b831fbbab72.lovable.app-1783940110197.png",
+        content: "/icon-512.png",
       },
       {
         name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b1612560-3631-4a80-b9e3-40010cfdd1de/id-preview-55d20118--56c2721b-f283-466f-8de8-0b831fbbab72.lovable.app-1783940110197.png",
+        content: "/icon-512.png",
       },
     ],
     links: [
+      { rel: "canonical", href: "https://webcamboxing.com" },
       {
         rel: "stylesheet",
         href: appCss,

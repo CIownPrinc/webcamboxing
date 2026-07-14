@@ -22,15 +22,18 @@ export const Route = createFileRoute("/lessons/$moduleId/$lessonId")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Lesson not found — Webcam Boxing" }] };
-    const t = `${loaderData.lesson.title} — Module ${loaderData.module.number} · Webcam Boxing`;
-    const d = loaderData.lesson.objectives.join(" · ");
+    const t = `${loaderData.lesson.title} — Module ${loaderData.module.number}: ${loaderData.module.title} | Python & CV Course`;
+    const d = `Learn ${loaderData.lesson.title} in Module ${loaderData.module.number} of Webcam Boxing. Objectives: ${loaderData.lesson.objectives.join(" · ")}`;
+    const url = `https://webcamboxing.com/lessons/${loaderData.module.id}/${loaderData.lesson.id}`;
     return {
       meta: [
         { title: t },
         { name: "description", content: d },
         { property: "og:title", content: t },
         { property: "og:description", content: d },
+        { property: "og:url", content: url },
       ],
+      links: [{ rel: "canonical", href: url }],
     };
   },
   component: LessonPage,
@@ -84,8 +87,65 @@ function LessonPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [next, prev, router, toggle, key]);
 
+  const lessonSchema = {
+    "@context": "https://schema.org",
+    "@type": "LearningResource",
+    name: lesson.title,
+    description: lesson.objectives.join(" · "),
+    learningResourceType: "Tutorial",
+    educationalLevel: "Beginner",
+    inLanguage: "en",
+    isAccessibleForFree: true,
+    teaches: lesson.objectives,
+    isPartOf: {
+      "@type": "Course",
+      name: "Webcam Boxing: Learn Python Game Development & Computer Vision",
+      url: "https://webcamboxing.com/",
+    },
+    url: `https://webcamboxing.com/lessons/${mod.id}/${lesson.id}`,
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://webcamboxing.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Curriculum",
+        item: "https://webcamboxing.com/curriculum",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `Module ${mod.number}: ${mod.title}`,
+        item: `https://webcamboxing.com/lessons/${mod.id}/${mod.lessons[0].id}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: lesson.title,
+        item: `https://webcamboxing.com/lessons/${mod.id}/${lesson.id}`,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(lessonSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <SiteHeader />
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 lg:grid-cols-[240px_1fr]">
         <aside className="lg:sticky lg:top-20 lg:h-[calc(100vh-6rem)] lg:overflow-y-auto">

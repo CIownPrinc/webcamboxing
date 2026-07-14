@@ -7,18 +7,24 @@ import { lessonKey, useHydrated, useProgress } from "@/lib/progress";
 export const Route = createFileRoute("/curriculum")({
   head: () => ({
     meta: [
-      { title: "Curriculum | Webcam Boxing" },
+      { title: "Python Game Development & Computer Vision Curriculum | Webcam Boxing" },
       {
         name: "description",
         content:
-          "The full 25-module roadmap: from installing Python to a polished webcam boxing game.",
+          "Explore the complete 25-module Python game development and computer vision curriculum. Master OpenCV, MediaPipe tracking, and Pygame from first principles.",
       },
-      { property: "og:title", content: "Curriculum | Webcam Boxing" },
+      {
+        property: "og:title",
+        content: "Python Game Development & Computer Vision Curriculum | Webcam Boxing",
+      },
       {
         property: "og:description",
-        content: "Every module and lesson in the Webcam Boxing course.",
+        content:
+          "Explore the complete 25-module Python game development and computer vision curriculum. Master OpenCV, MediaPipe tracking, and Pygame from first principles.",
       },
+      { property: "og:url", content: "https://webcamboxing.com/curriculum" },
     ],
+    links: [{ rel: "canonical", href: "https://webcamboxing.com/curriculum" }],
   }),
   component: Curriculum,
 });
@@ -27,8 +33,31 @@ function Curriculum() {
   const hydrated = useHydrated();
   const { completed } = useProgress();
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://webcamboxing.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Curriculum",
+        item: "https://webcamboxing.com/curriculum",
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <SiteHeader />
       <main className="mx-auto max-w-4xl px-4 py-12">
         <p className="text-xs uppercase tracking-widest text-primary">The course</p>

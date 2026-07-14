@@ -7,14 +7,24 @@ import { glossary } from "@/data/course";
 export const Route = createFileRoute("/glossary")({
   head: () => ({
     meta: [
-      { title: "Glossary | Webcam Boxing" },
-      { name: "description", content: "Every term used in the course, defined in plain language." },
-      { property: "og:title", content: "Glossary | Webcam Boxing" },
+      { title: "Python & Computer Vision Game Development Glossary | Webcam Boxing" },
+      {
+        name: "description",
+        content:
+          "Plain-language definitions for computer vision, Python programming, and game development terms: landmarks, FSMs, delta time, OpenCV, and MediaPipe.",
+      },
+      {
+        property: "og:title",
+        content: "Python & Computer Vision Game Development Glossary | Webcam Boxing",
+      },
       {
         property: "og:description",
-        content: "Definitions for landmarks, FSMs, delta time, and more.",
+        content:
+          "Plain-language definitions for computer vision, Python programming, and game development terms: landmarks, FSMs, delta time, OpenCV, and MediaPipe.",
       },
+      { property: "og:url", content: "https://webcamboxing.com/glossary" },
     ],
+    links: [{ rel: "canonical", href: "https://webcamboxing.com/glossary" }],
   }),
   component: Glossary,
 });
@@ -26,8 +36,48 @@ function Glossary() {
       g.term.toLowerCase().includes(q.toLowerCase()) ||
       g.def.toLowerCase().includes(q.toLowerCase()),
   );
+
+  const glossarySchema = {
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    name: "Webcam Boxing Python & Computer Vision Glossary",
+    description: "Definitions for game development, computer vision, and Python terms.",
+    hasDefinedTerm: glossary.map((item) => ({
+      "@type": "DefinedTerm",
+      name: item.term,
+      description: item.def,
+    })),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://webcamboxing.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Glossary",
+        item: "https://webcamboxing.com/glossary",
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(glossarySchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-12">
         <p className="text-xs uppercase tracking-widest text-primary">Reference</p>

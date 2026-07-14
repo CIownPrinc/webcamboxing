@@ -6,6 +6,29 @@ import { findLesson, modules, totalLessons, totalMinutes } from "@/data/course";
 import { useHydrated, useProgress } from "@/lib/progress";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      {
+        title: "Webcam Boxing — Free Python Game Development & Computer Vision Course",
+      },
+      {
+        name: "description",
+        content:
+          "Learn Python, OpenCV, MediaPipe, and Pygame from scratch by building a webcam-controlled arcade boxing game. 25 step-by-step interactive modules, 100% free.",
+      },
+      {
+        property: "og:title",
+        content: "Webcam Boxing — Free Python Game Development & Computer Vision Course",
+      },
+      {
+        property: "og:description",
+        content:
+          "Learn Python, OpenCV, MediaPipe, and Pygame from scratch by building a webcam-controlled arcade boxing game. 25 step-by-step interactive modules, 100% free.",
+      },
+      { property: "og:url", content: "https://webcamboxing.com/" },
+    ],
+    links: [{ rel: "canonical", href: "https://webcamboxing.com/" }],
+  }),
   component: Index,
 });
 
@@ -16,8 +39,44 @@ function Index() {
   const { lastVisited } = useProgress();
   const resume =
     hydrated && lastVisited ? findLesson(lastVisited.moduleId, lastVisited.lessonId) : null;
+
+  const courseSchema = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: "Webcam Boxing: Learn Python Game Development & Computer Vision",
+    description:
+      "A free, beginner-friendly 25-module interactive course teaching Python programming, OpenCV computer vision, MediaPipe hand tracking, and Pygame arcade game architecture by building a webcam-controlled boxing game.",
+    provider: {
+      "@type": "Organization",
+      name: "Webcam Boxing",
+      sameAs: "https://webcamboxing.com/",
+    },
+    isAccessibleForFree: true,
+    inLanguage: "en",
+    timeRequired: `PT${totalHours}H`,
+    educationalLevel: "Beginner",
+    about: [
+      "Python programming",
+      "Computer Vision",
+      "OpenCV",
+      "MediaPipe",
+      "Game Development",
+      "Pygame",
+      "Finite State Machines",
+    ],
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: "online",
+      courseWorkload: `${totalHours} hours`,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
+      />
       <SiteHeader />
 
       <section className="relative overflow-hidden border-b border-border">

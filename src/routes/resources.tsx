@@ -6,24 +6,72 @@ import { globalResources } from "@/data/course";
 export const Route = createFileRoute("/resources")({
   head: () => ({
     meta: [
-      { title: "Resources | Webcam Boxing" },
+      { title: "Python, OpenCV & MediaPipe Game Development Resources | Webcam Boxing" },
       {
         name: "description",
-        content: "Handpicked docs, articles and reference repos for the course.",
+        content:
+          "Curated documentation, tutorials, and reference code for Python game development, OpenCV computer vision, MediaPipe hand tracking, and Pygame.",
       },
-      { property: "og:title", content: "Resources | Webcam Boxing" },
+      {
+        property: "og:title",
+        content: "Python, OpenCV & MediaPipe Game Development Resources | Webcam Boxing",
+      },
       {
         property: "og:description",
-        content: "The best places to go deeper on Python, OpenCV, MediaPipe, and Pygame.",
+        content:
+          "Curated documentation, tutorials, and reference code for Python game development, OpenCV computer vision, MediaPipe hand tracking, and Pygame.",
       },
+      { property: "og:url", content: "https://webcamboxing.com/resources" },
     ],
+    links: [{ rel: "canonical", href: "https://webcamboxing.com/resources" }],
   }),
   component: Resources,
 });
 
 function Resources() {
+  const allResourceItems = globalResources.flatMap((g) => g.items);
+  const resourceListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Webcam Boxing Recommended Python & CV Resources",
+    description: "Curated learning resources and docs for Python, OpenCV, MediaPipe, and Pygame.",
+    itemListElement: allResourceItems.map((res, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: res.title,
+      url: res.url,
+    })),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://webcamboxing.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Resources",
+        item: "https://webcamboxing.com/resources",
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(resourceListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-12">
         <p className="text-xs uppercase tracking-widest text-primary">Beyond the course</p>
