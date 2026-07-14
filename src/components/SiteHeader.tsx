@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ThemeToggle } from "./ThemeToggle";
 import { GlobalSearchDialog } from "./GlobalSearchDialog";
 import { CompletionBadgesDialog } from "./CompletionBadgesDialog";
+import { SettingsDialog } from "./SettingsDialog";
 import { useHydrated, useProgress } from "@/lib/progress";
 import { totalLessons } from "@/data/course";
 
@@ -12,7 +13,7 @@ export function SiteHeader() {
   const pct = Math.round((done / totalLessons) * 100);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-md transition-colors duration-300">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
         <Link to="/" className="group flex items-center gap-2.5">
           <img
@@ -75,6 +76,7 @@ export function SiteHeader() {
               <span className="text-foreground">{done}</span>/{totalLessons}
             </span>
           </div>
+          <SettingsDialog />
           <ThemeToggle />
         </div>
       </div>

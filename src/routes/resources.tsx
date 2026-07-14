@@ -63,7 +63,7 @@ function Resources() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-transparent text-foreground">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(resourceListSchema) }}
@@ -74,30 +74,32 @@ function Resources() {
       />
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-12">
-        <p className="text-xs uppercase tracking-widest text-primary">Beyond the course</p>
-        <h1 className="mt-2 font-display text-5xl">Resources</h1>
-        <p className="mt-3 text-muted-foreground">
-          A short, opinionated list. We'd rather point you at 10 great things than 100 mediocre
+        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+          Beyond the course
+        </p>
+        <h1 className="mt-2 font-display text-4xl font-bold sm:text-5xl">Resources</h1>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          A short, opinionated list. We&apos;d rather point you at 10 great things than 100 mediocre
           ones.
         </p>
 
         {globalResources.map((section) => (
           <section key={section.section} className="mt-10">
-            <h2 className="font-display text-2xl">{section.section}</h2>
-            <ul className="mt-4 space-y-3">
+            <h2 className="font-display text-2xl font-bold tracking-tight">{section.section}</h2>
+            <ul className="mt-4 space-y-3.5">
               {section.items.map((r) => (
                 <li key={r.url}>
                   <a
                     href={r.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex items-start gap-3 rounded-md border border-border bg-card p-3 transition-colors hover:border-primary/50"
+                    className="glass-panel group flex items-center gap-3.5 rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md"
                   >
-                    <span className="mt-0.5 rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <span className="rounded-md border border-border/60 bg-muted/30 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                       {r.kind ?? "link"}
                     </span>
-                    <span className="flex-1">{r.title}</span>
-                    <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                    <span className="flex-1 font-medium text-sm sm:text-base">{r.title}</span>
+                    <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
                   </a>
                 </li>
               ))}

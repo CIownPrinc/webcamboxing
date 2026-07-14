@@ -123,15 +123,15 @@ export function CodeBlock({
   };
 
   return (
-    <figure className="my-6 overflow-hidden rounded-lg border border-border bg-card">
-      <div className="flex items-center justify-between border-b border-border bg-muted/50 px-3 py-1.5 text-xs">
-        <span className="font-mono uppercase tracking-wide text-muted-foreground">
+    <figure className="neo-inset my-6 overflow-hidden rounded-xl border border-border/80 bg-background/70 backdrop-blur">
+      <div className="flex items-center justify-between border-b border-border/60 bg-muted/40 px-3.5 py-2 text-xs">
+        <span className="font-mono font-semibold uppercase tracking-wide text-muted-foreground">
           {caption ?? lang}
         </span>
         <div className="flex items-center gap-1.5">
           <button
             onClick={download}
-            className="inline-flex items-center gap-1 rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-card/60 px-2.5 py-1 font-medium text-muted-foreground shadow-sm transition-all hover:bg-card hover:text-foreground"
             aria-label={`Download ${filename}`}
             title={`Download as ${filename}`}
           >
@@ -144,7 +144,7 @@ export function CodeBlock({
           </button>
           <button
             onClick={copy}
-            className="inline-flex items-center gap-1 rounded px-2 py-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-card/60 px-2.5 py-1 font-medium text-muted-foreground shadow-sm transition-all hover:bg-card hover:text-foreground"
             aria-label="Copy code"
           >
             {copied ? <Check className="h-3 w-3 text-primary" /> : <Copy className="h-3 w-3" />}

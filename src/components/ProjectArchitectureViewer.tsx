@@ -213,38 +213,38 @@ export function ProjectArchitectureViewer() {
   const [selectedFile, setSelectedFile] = useState<FileResponsibility>(projectFiles[0]);
 
   return (
-    <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between border-b border-border pb-4">
+    <div className="glass-panel rounded-2xl p-7 shadow-xl">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between border-b border-border/60 pb-5">
         <div>
-          <h2 className="font-display text-2xl tracking-tight text-foreground flex items-center gap-2">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground flex items-center gap-2.5">
             <Layers className="h-6 w-6 text-primary" /> Project Architecture & File Directory
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
             Learn why professional games divide code across modular files and inspect the exact
             responsibility of every script.
           </p>
         </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/40 px-3 py-1 text-xs font-semibold text-muted-foreground">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-muted/40 px-3.5 py-1 text-xs font-semibold text-muted-foreground backdrop-blur">
           <FileCode className="h-3.5 w-3.5 text-primary" /> 8 Core Modules
         </span>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[280px_1fr]">
-        <div className="space-y-1 rounded-lg border border-border/80 bg-background/60 p-3">
+      <div className="mt-7 grid gap-6 lg:grid-cols-[280px_1fr]">
+        <div className="space-y-1 rounded-xl border border-border/80 bg-background/50 backdrop-blur p-3.5">
           <div className="flex items-center gap-2 px-2 py-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground">
             <Folder className="h-3.5 w-3.5 text-amber-500" /> project/
           </div>
-          <div className="space-y-1 pl-4 border-l border-border ml-2">
+          <div className="space-y-1 pl-4 border-l border-border/60 ml-2">
             {projectFiles.map((f) => {
               const active = selectedFile.filename === f.filename;
               return (
                 <button
                   key={f.filename}
                   onClick={() => setSelectedFile(f)}
-                  className={`flex w-full items-center justify-between rounded-md px-2.5 py-2 text-left text-xs transition-colors ${
+                  className={`flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-xs transition-colors ${
                     active
                       ? "bg-primary font-semibold text-primary-foreground shadow-sm"
-                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                      : "text-muted-foreground hover:bg-accent/70 hover:text-foreground"
                   }`}
                 >
                   <span className="flex items-center gap-2">
@@ -261,9 +261,9 @@ export function ProjectArchitectureViewer() {
           </div>
         </div>
 
-        <div className="min-w-0 space-y-5 rounded-lg border border-border bg-background p-5">
-          <div className="border-b border-border pb-3">
-            <span className="text-xs uppercase tracking-widest text-primary font-bold">
+        <div className="min-w-0 space-y-5 rounded-xl border border-border/80 bg-background/60 backdrop-blur p-6">
+          <div className="border-b border-border/60 pb-4">
+            <span className="text-xs font-semibold uppercase tracking-widest text-primary">
               {selectedFile.role}
             </span>
             <h3 className="mt-1 font-display text-2xl font-bold font-mono text-foreground">

@@ -156,6 +156,8 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+import { BackgroundLayer } from "../components/BackgroundLayer";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   useEffect(() => {
@@ -164,6 +166,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <BackgroundLayer />
       <Outlet />
     </QueryClientProvider>
   );

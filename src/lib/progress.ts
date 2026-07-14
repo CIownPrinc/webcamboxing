@@ -21,6 +21,8 @@ const ProgressStateSchema = z.object({
   completed: z.record(z.string(), z.literal(true)).default({}),
   theme: z.enum(["light", "dark"]).default(APP_CONFIG.ui.defaultTheme),
   lastVisited: LastVisitedSchema.nullable().default(null),
+  wallpaper: z.string().default("mountain"),
+  customWallpaper: z.string().nullable().default(null),
 });
 
 export type LastVisited = z.infer<typeof LastVisitedSchema>;
@@ -29,10 +31,14 @@ export type State = z.infer<typeof ProgressStateSchema>;
 export interface ProgressServiceResult {
   readonly completed: Record<string, true>;
   readonly theme: "light" | "dark";
+  readonly wallpaper: string;
+  readonly customWallpaper: string | null;
   readonly lastVisited: LastVisited | null;
   readonly isDone: (key: string) => boolean;
   readonly toggle: (key: string) => void;
   readonly setTheme: (newTheme: "light" | "dark") => void;
+  readonly setWallpaper: (newWallpaper: string) => void;
+  readonly setCustomWallpaper: (dataUrl: string | null) => void;
   readonly setLastVisited: (moduleId: string, lessonId: string) => void;
 }
 
@@ -45,6 +51,8 @@ const DEFAULT_STATE: State = {
   completed: {},
   theme: APP_CONFIG.ui.defaultTheme,
   lastVisited: null,
+  wallpaper: "mountain",
+  customWallpaper: null,
 };
 
 function read(): State {
@@ -99,6 +107,8 @@ export function useProgress(): ProgressServiceResult {
   return {
     completed: currentStore.completed,
     theme: currentStore.theme,
+    wallpaper: currentStore.wallpaper,
+    customWallpaper: currentStore.customWallpaper,
     lastVisited: currentStore.lastVisited,
     isDone: (key: string): boolean => Boolean(currentStore.completed[key]),
     toggle: (key: string): void => {
@@ -112,6 +122,16 @@ export function useProgress(): ProgressServiceResult {
     },
     setTheme: (newTheme: "light" | "dark"): void => {
       write({ ...currentStore, theme: newTheme });
+    },
+    setWallpaper: (newWallpaper: string): void => {
+      write({ ...currentStore, wallpaper: newWallpaper });
+    },
+    setCustomWallpaper: (dataUrl: string | null): void => {
+      write({
+        ...currentStore,
+        customWallpaper: dataUrl,
+        wallpaper: dataUrl ? "custom" : "mountain",
+      });
     },
     setLastVisited: (moduleId: string, lessonId: string): void => {
       const prev = currentStore.lastVisited;

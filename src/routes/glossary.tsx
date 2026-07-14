@@ -69,7 +69,7 @@ function Glossary() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-transparent text-foreground">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(glossarySchema) }}
@@ -80,30 +80,32 @@ function Glossary() {
       />
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-12">
-        <p className="text-xs uppercase tracking-widest text-primary">Reference</p>
-        <h1 className="mt-2 font-display text-5xl">Glossary</h1>
-        <p className="mt-3 text-muted-foreground">
+        <p className="text-xs font-semibold uppercase tracking-widest text-primary">Reference</p>
+        <h1 className="mt-2 font-display text-4xl font-bold sm:text-5xl">Glossary</h1>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
           The vocabulary of computer vision and simple game development, defined without jargon.
         </p>
 
         <label className="relative mt-8 block">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search terms…"
-            className="w-full rounded-md border border-border bg-card py-2.5 pl-9 pr-3 text-sm outline-none ring-primary/40 focus:ring-2"
+            className="neo-inset w-full rounded-xl border border-border/80 bg-background/60 py-3 pl-10 pr-4 text-sm outline-none backdrop-blur-md transition-colors focus:border-primary"
           />
         </label>
 
         <dl className="mt-8 space-y-4">
           {list.map((g) => (
-            <div key={g.term} className="rounded-lg border border-border bg-card p-4">
-              <dt className="font-display text-lg">{g.term}</dt>
-              <dd className="mt-1 text-[15px] text-muted-foreground">{g.def}</dd>
+            <div key={g.term} className="glass-panel rounded-xl p-5 shadow-sm">
+              <dt className="font-display text-lg font-semibold">{g.term}</dt>
+              <dd className="mt-1.5 text-[15px] text-muted-foreground leading-relaxed">{g.def}</dd>
             </div>
           ))}
-          {list.length === 0 && <p className="text-sm text-muted-foreground">No matches.</p>}
+          {list.length === 0 && (
+            <p className="text-sm text-muted-foreground italic">No matches found.</p>
+          )}
         </dl>
       </main>
     </div>

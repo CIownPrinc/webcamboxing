@@ -123,8 +123,8 @@ export function GlobalSearchDialog() {
             if (e.target === e.currentTarget) setOpen(false);
           }}
         >
-          <div className="relative flex max-h-[calc(100vh-100px)] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-border bg-card shadow-2xl">
-            <div className="flex shrink-0 items-center border-b border-border px-4 py-3 sm:px-5 sm:py-3.5">
+          <div className="glass-panel relative flex max-h-[calc(100vh-100px)] w-full max-w-xl flex-col overflow-hidden rounded-2xl shadow-2xl">
+            <div className="flex shrink-0 items-center border-b border-border/60 bg-background/40 px-4 py-3 sm:px-5 sm:py-3.5">
               <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
               <input
                 type="text"
