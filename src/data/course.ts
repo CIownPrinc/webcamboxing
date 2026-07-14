@@ -197,6 +197,7 @@ export const modules: Module[] = [
           "We trade 'measure force' for 'detect a gesture'.",
           "The reliable signals are position, velocity, direction, pose, and time.",
         ],
+        blocks_extra_quiz: undefined as never, // (unused; blocks below extended)
       },
     ],
   },
