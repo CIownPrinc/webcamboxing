@@ -88,7 +88,7 @@ export function CompletionBadgesDialog() {
     if (b.requiredModuleNumber !== undefined) {
       const targetMod = modules.find((m) => m.number === b.requiredModuleNumber);
       if (!targetMod) return false;
-      return targetMod.lessons.every((l) => completed[`${targetMod.id}:${l.id}`]);
+      return targetMod.lessons.every((l) => completed[`${targetMod.id}/${l.id}`]);
     }
     return false;
   });
