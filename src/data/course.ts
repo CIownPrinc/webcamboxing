@@ -888,13 +888,13 @@ def maybe_punch(side: str, wrist_pos):
         ],
         blocks: [
           { type: "diagram", title: "Punch state machine", svg: punchFsmSvg },
+          p("The diagram above is the full five-state model. In practice we can ship a very solid version with only three of those states — IDLE, LAUNCH, and COOLDOWN — and add CHAMBER and EXTEND as stretch goals. Here's what each of the three does:"),
           list([
-            "IDLE — wrist is still or moving slowly",
-            "CHAMBER — wrist pulled back / lowered (optional but improves detection)",
-            "LAUNCH — speed just crossed the threshold",
-            "EXTEND — wrist continues forward; we lock in the punch strength here",
-            "COOLDOWN — timer prevents another fire for ~250 ms",
+            "IDLE — wrist is still or moving slowly; we watch for the threshold.",
+            "LAUNCH — speed crossed the threshold; we track the peak speed until the punch slows down.",
+            "COOLDOWN — one gesture already fired; ignore new triggers for ~250 ms.",
           ]),
+          info("CHAMBER (a 'wind-up' where the wrist first pulls back) and EXTEND (holding the peak reach) are pattern refinements you can add later — the recap links to them under Module 25 extensions."),
           code("python", `from enum import Enum, auto
 import time
 
@@ -935,6 +935,20 @@ class PunchDetector:
         return event
 `),
           why("Firing on entry to LAUNCH would fire many times as speed hovers near the threshold. Firing when the wrist slows down (LAUNCH → COOLDOWN) captures 'one punch, one event' cleanly. And the peak speed becomes our damage input."),
+          {
+            type: "quiz",
+            question:
+              "In this state machine, WHEN do we actually emit the ('punch', peak_speed) event?",
+            options: [
+              "The moment speed first crosses the threshold (IDLE → LAUNCH).",
+              "Every frame we're in LAUNCH.",
+              "When we leave LAUNCH because the wrist is slowing down.",
+              "When the cooldown ends.",
+            ],
+            answer: 2,
+            explain:
+              "Emitting on IDLE → LAUNCH would fire multiple times as speed hovers near the threshold. Emitting when speed drops back below 60% of threshold means we've seen a full 'up-and-down' hump — one gesture, one event — and we've captured the peak speed to use as damage.",
+          },
         ],
         mistakes: [
           "Firing the event every frame speed > threshold — you get 20 punches per second.",
