@@ -94,7 +94,7 @@ function AboutPage() {
                   <CarouselItem>
                     <div className="aspect-[3/4] overflow-hidden rounded-xl relative">
                       <img
-                        src="/meandbro.jpg"
+                        src="/meandbro.JPG"
                         alt="Aarit and his brother"
                         className="w-full h-full object-cover"
                       />
