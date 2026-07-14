@@ -5,7 +5,7 @@ import { BlockView } from "@/components/LessonBlocks";
 import { CodeBlock } from "@/components/CodeBlock";
 import { findLesson, modules, type Lesson, type Module } from "@/data/course";
 import { lessonKey, useHydrated, useProgress } from "@/lib/progress";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/lessons/$moduleId/$lessonId")({
   loader: ({ params }): {
@@ -43,9 +43,13 @@ function LessonPage() {
   };
   const { module: mod, lesson, prev, next } = data;
   const hydrated = useHydrated();
-  const { completed, isDone, toggle } = useProgress();
+  const { completed, isDone, toggle, setLastVisited } = useProgress();
   const key = lessonKey(mod.id, lesson.id);
   const done = hydrated && isDone(key);
+
+  useEffect(() => {
+    if (hydrated) setLastVisited(mod.id, lesson.id);
+  }, [hydrated, mod.id, lesson.id, setLastVisited]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">

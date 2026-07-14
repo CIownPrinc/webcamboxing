@@ -191,6 +191,20 @@ export const modules: Module[] = [
             "Time in a state (has the punch cooled down yet?)",
           ]),
           info("You'll see this list appear again in Module 12 when we build the punch detector. Everything the game reads about the player is built from these five signals."),
+          {
+            type: "quiz",
+            question:
+              "You want your game to feel fair. Which of these is the WORST thing to base gameplay on from a single webcam?",
+            options: [
+              "The 2D position of your wrist on screen",
+              "How fast your wrist moved between two frames",
+              "The estimated force of your punch in newtons",
+              "Whether both hands are near the top of the frame",
+            ],
+            answer: 2,
+            explain:
+              "A single lens has no way to recover mass, acceleration, or distance in meters — so 'force in newtons' is a made-up number. The other three are shapes/positions the camera can actually see, which is what we'll build the game around.",
+          },
         ],
         recap: [
           "Webcams struggle with depth, motion blur, and absolute scale.",
@@ -372,6 +386,14 @@ p.take_damage(20)
 print(p.health)  # 80
 `),
           info("BGR vs RGB: OpenCV stores colors as (Blue, Green, Red) — the opposite of what most tools use. This will bite you at least once."),
+          {
+            type: "quiz",
+            question: "In OpenCV, what does the tuple (0, 0, 255) usually mean?",
+            options: ["Pure blue", "Pure green", "Pure red", "Transparent"],
+            answer: 2,
+            explain:
+              "OpenCV stores colors as (Blue, Green, Red). The last channel is red, so (0, 0, 255) is pure red. Every other Python library you meet will use RGB — remember to convert when you leave OpenCV.",
+          },
         ],
         mistakes: [
           "Using `=` when you mean `==` in an `if` (Python will refuse to run — good).",
@@ -578,6 +600,19 @@ if __name__ == "__main__":
             "Each hand has 21 landmarks with `.x`, `.y`, `.z` in [0, 1] normalized coordinates",
             "`results.multi_handedness` — is this the Left or Right hand?",
           ]),
+          {
+            type: "quiz",
+            question: "Why do we call cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) before hands.process(rgb)?",
+            options: [
+              "It makes the picture look prettier on screen.",
+              "MediaPipe expects RGB input; OpenCV gives us BGR.",
+              "It's required for cv2.imshow to display the frame.",
+              "It's just faster than passing BGR.",
+            ],
+            answer: 1,
+            explain:
+              "MediaPipe was trained on RGB images. Passing BGR still 'works' but the tracker sees swapped channels — detection quality drops silently. Always convert before .process().",
+          },
         ],
         mistakes: [
           "Passing BGR frames to MediaPipe — the tracker will still 'work' but get worse over time.",
@@ -704,37 +739,66 @@ def process(frame, results):
         blocks: [
           h("The math"),
           p("Velocity is (current position − previous position) divided by the time between them. For a 2D point we get a vector; its length is the speed."),
-          code("python", `import numpy as np
+          code("python", `# velocity.py
 import time
+import numpy as np
 
-_prev_pos = None
-_prev_time = None
-_smoothed = 0.0
-ALPHA = 0.4  # 0 = no smoothing, 1 = ignore new data
+class WristVelocity:
+    """Turn a stream of (x, y) wrist positions into a smoothed speed in px/s.
 
-def wrist_speed(pos):
-    """Return smoothed speed in pixels per second."""
-    global _prev_pos, _prev_time, _smoothed
-    now = time.perf_counter()
-    if _prev_pos is None:
-        _prev_pos, _prev_time = pos, now
-        return 0.0
-    dt = max(now - _prev_time, 1e-3)
-    delta = np.array(pos) - np.array(_prev_pos)
-    raw = float(np.linalg.norm(delta) / dt)
-    # Exponential moving average: trust the past a bit, so single jittery
-    # frames don't spike the value.
-    _smoothed = ALPHA * raw + (1 - ALPHA) * _smoothed
-    _prev_pos, _prev_time = pos, now
-    return _smoothed
-`),
+    Each wrist (left, right) gets its own instance so their state can't collide.
+    """
+
+    def __init__(self, alpha: float = 0.4):
+        # alpha = 0 → no smoothing.  alpha = 1 → ignore new data entirely.
+        self.alpha = alpha
+        self._prev_pos = None
+        self._prev_t = None
+        self._smoothed = 0.0
+
+    def update(self, pos):
+        """Feed one new wrist position, return the smoothed speed."""
+        if pos is None:
+            # Hand not detected this frame — decay toward zero.
+            self._smoothed *= (1 - self.alpha)
+            return self._smoothed
+
+        now = time.perf_counter()
+        if self._prev_pos is None:
+            self._prev_pos, self._prev_t = pos, now
+            return 0.0
+
+        dt = max(now - self._prev_t, 1e-3)  # avoid divide-by-zero on fast frames
+        delta = np.array(pos) - np.array(self._prev_pos)
+        raw = float(np.linalg.norm(delta) / dt)
+
+        # Exponential moving average — the speedometer-needle trick.
+        self._smoothed = self.alpha * raw + (1 - self.alpha) * self._smoothed
+        self._prev_pos, self._prev_t = pos, now
+        return self._smoothed
+`, "velocity.py"),
           why("Smoothing matters because MediaPipe wobbles by a few pixels even when your hand is still. Without smoothing, a stationary wrist looks like it's moving 300 px/s and randomly triggers punches."),
           analogy("Smoothing is like a car's speedometer needle — it lags a fraction of a second so it doesn't twitch on every bump."),
+          info("Because it's a class, we create TWO of them — one per wrist — so left and right don't share state. Module 12 will import `WristVelocity` and use it exactly like that."),
+          {
+            type: "quiz",
+            question: "Why did we turn the velocity code into a class instead of using module-level globals?",
+            options: [
+              "Classes always run faster in Python.",
+              "So each wrist can keep its own history without them clobbering each other.",
+              "Because MediaPipe requires it.",
+              "To avoid importing numpy.",
+            ],
+            answer: 1,
+            explain:
+              "Two wrists share the module if we use globals — the left wrist's speed would overwrite the right wrist's previous position every frame. One instance per wrist keeps the state isolated.",
+          },
         ],
         recap: [
           "Speed = distance / time, done per frame with NumPy.",
           "Use `time.perf_counter()` for high-resolution timing.",
           "Exponential smoothing tames pixel jitter.",
+          "One WristVelocity instance per wrist — never share state.",
         ],
       },
     ],
@@ -771,13 +835,36 @@ def wrist_speed(pos):
           "Feel why a raw threshold isn't enough",
         ],
         blocks: [
-          code("python", `PUNCH_THRESHOLD = 1200  # pixels per second, tune later
+          code("python", `# punch_naive.py — first attempt, uses WristVelocity from Module 11
+from velocity import WristVelocity
 
-def maybe_punch(side, speed):
+PUNCH_THRESHOLD = 1200  # pixels per second — we'll calibrate this in Module 14
+
+left_vel  = WristVelocity()
+right_vel = WristVelocity()
+
+def maybe_punch(side: str, wrist_pos):
+    """Call once per frame with the current wrist (x, y) or None."""
+    vel = left_vel if side == "left" else right_vel
+    speed = vel.update(wrist_pos)
     if speed > PUNCH_THRESHOLD:
-        print(f"{side} punch! speed={speed:.0f}")
+        print(f"{side} punch! speed={speed:.0f} px/s")
 `),
           warn("Run this and wave your hand around — you'll trigger 10 punches per second. That's the setup for the next lesson."),
+          {
+            type: "quiz",
+            question:
+              "You wave your hand slowly across the frame and the console prints 'punch!' six times in a row. Why?",
+            options: [
+              "MediaPipe misdetected your finger as a hand.",
+              "There's no state — every frame speed > threshold is a fresh 'punch'.",
+              "OpenCV is running too fast.",
+              "You forgot to install numpy.",
+            ],
+            answer: 1,
+            explain:
+              "The check has no memory. As long as speed stays above the threshold, every frame is a new punch. Module 13 fixes this by turning the detector into a state machine so one gesture fires exactly one event.",
+          },
         ],
         recap: ["Threshold alone spams events.", "We need a state machine to gate the trigger."],
       },
@@ -801,13 +888,13 @@ def maybe_punch(side, speed):
         ],
         blocks: [
           { type: "diagram", title: "Punch state machine", svg: punchFsmSvg },
+          p("The diagram above is the full five-state model. In practice we can ship a very solid version with only three of those states — IDLE, LAUNCH, and COOLDOWN — and add CHAMBER and EXTEND as stretch goals. Here's what each of the three does:"),
           list([
-            "IDLE — wrist is still or moving slowly",
-            "CHAMBER — wrist pulled back / lowered (optional but improves detection)",
-            "LAUNCH — speed just crossed the threshold",
-            "EXTEND — wrist continues forward; we lock in the punch strength here",
-            "COOLDOWN — timer prevents another fire for ~250 ms",
+            "IDLE — wrist is still or moving slowly; we watch for the threshold.",
+            "LAUNCH — speed crossed the threshold; we track the peak speed until the punch slows down.",
+            "COOLDOWN — one gesture already fired; ignore new triggers for ~250 ms.",
           ]),
+          info("CHAMBER (a 'wind-up' where the wrist first pulls back) and EXTEND (holding the peak reach) are pattern refinements you can add later — the recap links to them under Module 25 extensions."),
           code("python", `from enum import Enum, auto
 import time
 
@@ -848,6 +935,20 @@ class PunchDetector:
         return event
 `),
           why("Firing on entry to LAUNCH would fire many times as speed hovers near the threshold. Firing when the wrist slows down (LAUNCH → COOLDOWN) captures 'one punch, one event' cleanly. And the peak speed becomes our damage input."),
+          {
+            type: "quiz",
+            question:
+              "In this state machine, WHEN do we actually emit the ('punch', peak_speed) event?",
+            options: [
+              "The moment speed first crosses the threshold (IDLE → LAUNCH).",
+              "Every frame we're in LAUNCH.",
+              "When we leave LAUNCH because the wrist is slowing down.",
+              "When the cooldown ends.",
+            ],
+            answer: 2,
+            explain:
+              "Emitting on IDLE → LAUNCH would fire multiple times as speed hovers near the threshold. Emitting when speed drops back below 60% of threshold means we've seen a full 'up-and-down' hump — one gesture, one event — and we've captured the peak speed to use as damage.",
+          },
         ],
         mistakes: [
           "Firing the event every frame speed > threshold — you get 20 punches per second.",
@@ -1125,6 +1226,7 @@ class Enemy:
           "Detect win (enemy hp ≤ 0) and lose (player hp ≤ 0)",
         ],
         blocks: [
+          info("`Tracker` here is a small facade class you'll assemble from the pieces built earlier: MediaPipe hands (Mod. 8), wrist extraction (Mod. 10), a `WristVelocity` per wrist (Mod. 11), a `PunchDetector` per wrist (Mod. 13), and the `is_blocking` check (Mod. 20). `tracker.step()` reads a frame and updates all of them; `punch_left/right(threshold)` returns a small object with `.pos` and `.speed` when a punch fired this frame, else `None`."),
           code("python", `# main.py — abridged
 import pygame, cv2, time
 from tracker import Tracker

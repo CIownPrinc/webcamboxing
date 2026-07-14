@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, Sparkles, Target } from "lucide-react";
+import { ArrowRight, BookOpen, PlayCircle, Sparkles, Target } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { modules, totalLessons, totalMinutes } from "@/data/course";
+import { findLesson, modules, totalLessons, totalMinutes } from "@/data/course";
+import { useHydrated, useProgress } from "@/lib/progress";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -11,6 +12,10 @@ export const Route = createFileRoute("/")({
 function Index() {
   const first = modules[0].lessons[0];
   const totalHours = Math.round(totalMinutes / 60);
+  const hydrated = useHydrated();
+  const { lastVisited } = useProgress();
+  const resume =
+    hydrated && lastVisited ? findLesson(lastVisited.moduleId, lastVisited.lessonId) : null;
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
@@ -37,13 +42,32 @@ function Index() {
             through your own webcam.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link
+            {resume ? (
+              <Link
+                to="/lessons/$moduleId/$lessonId"
+                params={{ moduleId: resume.module.id, lessonId: resume.lesson.id }}
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow transition-transform hover:-translate-y-0.5"
+              >
+                <PlayCircle className="h-4 w-4" /> Resume: {resume.lesson.title}
+              </Link>
+            ) : (
+              <Link
+                to="/lessons/$moduleId/$lessonId"
+                params={{ moduleId: modules[0].id, lessonId: first.id }}
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow transition-transform hover:-translate-y-0.5"
+              >
+                Start Module 1 <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
+            {resume && (
+              <Link
               to="/lessons/$moduleId/$lessonId"
               params={{ moduleId: modules[0].id, lessonId: first.id }}
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow transition-transform hover:-translate-y-0.5"
-            >
-              Start Module 1 <ArrowRight className="h-4 w-4" />
-            </Link>
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-5 py-3 text-sm font-semibold transition-colors hover:bg-accent"
+              >
+                Start from Module 1 <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
             <Link
               to="/curriculum"
               className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-5 py-3 text-sm font-semibold transition-colors hover:bg-accent"

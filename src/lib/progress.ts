@@ -2,16 +2,21 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 
 const KEY = "wb.progress.v1";
 
-type State = { completed: Record<string, true>; theme: "light" | "dark" };
+type LastVisited = { moduleId: string; lessonId: string; at: number };
+type State = {
+  completed: Record<string, true>;
+  theme: "light" | "dark";
+  lastVisited: LastVisited | null;
+};
 
 function read(): State {
-  if (typeof window === "undefined") return { completed: {}, theme: "dark" };
+  if (typeof window === "undefined") return { completed: {}, theme: "dark", lastVisited: null };
   try {
     const raw = localStorage.getItem(KEY);
-    if (!raw) return { completed: {}, theme: "dark" };
-    return { completed: {}, theme: "dark", ...JSON.parse(raw) };
+    if (!raw) return { completed: {}, theme: "dark", lastVisited: null };
+    return { completed: {}, theme: "dark", lastVisited: null, ...JSON.parse(raw) };
   } catch {
-    return { completed: {}, theme: "dark" };
+    return { completed: {}, theme: "dark", lastVisited: null };
   }
 }
 
@@ -35,7 +40,7 @@ function subscribe(cb: () => void) {
 }
 
 function serverSnapshot(): State {
-  return { completed: {}, theme: "dark" };
+  return { completed: {}, theme: "dark", lastVisited: null };
 }
 
 export function useProgress() {
@@ -43,6 +48,7 @@ export function useProgress() {
   return {
     completed: s.completed,
     theme: s.theme,
+    lastVisited: s.lastVisited,
     isDone: (key: string) => Boolean(s.completed[key]),
     toggle: (key: string) => {
       const c = { ...s.completed };
@@ -51,6 +57,11 @@ export function useProgress() {
       write({ ...s, completed: c });
     },
     setTheme: (t: "light" | "dark") => write({ ...s, theme: t }),
+    setLastVisited: (moduleId: string, lessonId: string) => {
+      const prev = s.lastVisited;
+      if (prev && prev.moduleId === moduleId && prev.lessonId === lessonId) return;
+      write({ ...s, lastVisited: { moduleId, lessonId, at: Date.now() } });
+    },
   };
 }
 
