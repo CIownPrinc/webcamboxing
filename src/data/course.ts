@@ -519,7 +519,8 @@ pip install opencv-python mediapipe pygame numpy`,
           h("The 20% you'll use 80% of the time"),
           code(
             "python",
-            `# Functions
+            `# scratch.py
+# Functions
 def clamp(value, low, high):
     """Return value pinned into [low, high]."""
     if value < low:
@@ -594,7 +595,8 @@ print(p.health)  # 80
           ),
           code(
             "python",
-            `import cv2
+            `# scratch.py
+import cv2
 
 cv2.VideoCapture(0)   # open a camera
 cv2.imshow("Preview", frame)   # show an image in a window
