@@ -931,7 +931,8 @@ if __name__ == "__main__":
           },
           code(
             "python",
-            `from collections import deque
+            `# tracker.py (continued)
+from collections import deque
 
 HISTORY = 15   # keep the last ~0.25 seconds at 60 fps
 
@@ -1173,7 +1174,8 @@ def maybe_punch(side: str, wrist_pos):
           ),
           code(
             "python",
-            `from enum import Enum, auto
+            `# player.py
+from enum import Enum, auto
 import time
 
 class Punch(Enum):
@@ -1265,7 +1267,8 @@ class PunchDetector:
           ),
           code(
             "python",
-            `import numpy as np
+            `# calibration.py
+import numpy as np
 
 def calibrate(get_speed, seconds=5, fps=60):
     """Ask the user to throw a few punches, return a threshold."""
@@ -1312,7 +1315,8 @@ def calibrate(get_speed, seconds=5, fps=60):
           ),
           code(
             "python",
-            `import pygame, sys
+            `# game_window.py
+import pygame, sys
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -1411,7 +1415,8 @@ def draw_enemy(screen, x, y, size=120, hit=False):
           ),
           code(
             "python",
-            `from enum import Enum, auto
+            `# enemy.py
+from enum import Enum, auto
 import random, time
 
 class E(Enum):
@@ -1470,7 +1475,8 @@ class Enemy:
         blocks: [
           code(
             "python",
-            `def circles_hit(a, ra, b, rb):
+            `# collision.py
+def circles_hit(a, ra, b, rb):
     dx = a[0] - b[0]
     dy = a[1] - b[1]
     return (dx*dx + dy*dy) <= (ra + rb) ** 2
@@ -1507,7 +1513,8 @@ class Enemy:
         blocks: [
           code(
             "python",
-            `def speed_to_damage(peak, cal):
+            `# player.py (continued)
+def speed_to_damage(peak, cal):
     """Bucket punch strength based on the calibrated threshold."""
     if peak > cal * 1.6: return 15   # Fast
     if peak > cal * 1.2: return 10   # Medium
@@ -1540,7 +1547,8 @@ class Enemy:
         blocks: [
           code(
             "python",
-            `def is_blocking(left_wrist, right_wrist, frame_h):
+            `# player.py (continued)
+def is_blocking(left_wrist, right_wrist, frame_h):
     if left_wrist is None or right_wrist is None:
         return False
     upper = frame_h * 0.4    # top 40% of the frame
@@ -1650,7 +1658,8 @@ pygame.quit()
         blocks: [
           code(
             "python",
-            `class Scene: name = "base"
+            `# scenes.py
+class Scene: name = "base"
 class MenuScene(Scene): name = "menu"
 class PlayScene(Scene): name = "play"
 # ...
@@ -1681,7 +1690,8 @@ current = "menu"
         blocks: [
           code(
             "python",
-            `import pygame
+            `# sound.py
+import pygame
 pygame.mixer.init()
 hit = pygame.mixer.Sound("assets/sounds/hit.wav")
 block = pygame.mixer.Sound("assets/sounds/block.wav")
@@ -1716,7 +1726,8 @@ def on_hit(): hit.play()
         blocks: [
           code(
             "python",
-            `import random
+            `# effects.py
+import random
 shake = 0
 def add_shake(amount): 
     global shake; shake = max(shake, amount)

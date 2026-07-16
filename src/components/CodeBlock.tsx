@@ -1,4 +1,4 @@
-import { Check, Copy, Download } from "lucide-react";
+import { Check, Copy, Download, FileCode2, Terminal } from "lucide-react";
 import { useState } from "react";
 
 // Minimal, dependency-free Python/bash highlighter. Not perfect — good enough
@@ -101,6 +101,8 @@ export function CodeBlock({
   const [downloaded, setDownloaded] = useState(false);
   const tokens = tokenize(code, lang);
   const filename = getDownloadFilename(code, caption, lang);
+  const isSnippet = filename.startsWith("snippet.");
+  const displayLabel = !isSnippet ? filename : (caption ?? lang);
 
   const copy = async () => {
     await navigator.clipboard.writeText(code);
@@ -125,9 +127,18 @@ export function CodeBlock({
   return (
     <figure className="neo-inset my-6 overflow-hidden rounded-xl border border-border/80 bg-background/70 backdrop-blur">
       <div className="flex items-center justify-between border-b border-border/60 bg-muted/40 px-3.5 py-2 text-xs">
-        <span className="font-mono font-semibold uppercase tracking-wide text-muted-foreground">
-          {caption ?? lang}
-        </span>
+        <div className="flex items-center gap-2 text-foreground">
+          {!isSnippet ? (
+            <FileCode2 className="h-4 w-4 text-primary" />
+          ) : lang === "bash" ? (
+            <Terminal className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <FileCode2 className="h-4 w-4 text-muted-foreground" />
+          )}
+          <span className="font-mono font-bold tracking-wide">
+            {!isSnippet ? `FILE: ${displayLabel}` : displayLabel.toUpperCase()}
+          </span>
+        </div>
         <div className="flex items-center gap-1.5">
           <button
             onClick={download}
