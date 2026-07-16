@@ -520,10 +520,13 @@ pip install opencv-python mediapipe pygame numpy`,
           info(
             "The code below is just for practicing Python basics. Feel free to open a throwaway file like scratch.py, type it out, and run it to see how it works. Don't copy and paste! Typing the code manually is how you build muscle memory.",
           ),
+          h("1. Functions & Control Flow", 3),
+          p(
+            "Functions let us reuse code. Here's a handy `clamp` function we will use to make sure health never goes below 0 or above 100.",
+          ),
           code(
             "python",
             `# scratch.py
-# Functions
 def clamp(value, low, high):
     """Return value pinned into [low, high]."""
     if value < low:
@@ -531,6 +534,16 @@ def clamp(value, low, high):
     if value > high:
         return high
     return value
+`,
+          ),
+
+          h("2. Data Structures: Tuples & Dictionaries", 3),
+          p(
+            "A Tuple is just a list that you can't change, written with parentheses. We use them constantly for (x, y) coordinates. A Dictionary holds key-value pairs.",
+          ),
+          code(
+            "python",
+            `# scratch.py (continued)
 
 # Tuples: coordinates, sizes, colors
 position = (320, 240)          # (x, y)
@@ -538,23 +551,44 @@ color_red = (0, 0, 255)        # BGR in OpenCV!
 
 # Dictionaries: settings, mappings
 settings = {"window_w": 1280, "window_h": 720, "fps": 60}
+`,
+          ),
 
-# Loops
+          h("3. Loops", 3),
+          p("A simple `for` loop. We'll use these to loop over every hand detected by the camera."),
+          code(
+            "python",
+            `# scratch.py (continued)
 for i in range(3):
     print("round", i)
+`,
+          ),
 
-# Classes: we'll use these for Player, Enemy, etc.
+          h("4. Classes & Objects", 3),
+          p(
+            "Classes are blueprints. We will create a `Player` class to store our health and handle getting punched.",
+          ),
+          code(
+            "python",
+            `# scratch.py (continued)
 class Player:
     def __init__(self, health=100):
         self.health = health
 
     def take_damage(self, amount):
+        # We use our clamp function from earlier!
         self.health = clamp(self.health - amount, 0, 100)
 
 p = Player()
 p.take_damage(20)
 print(p.health)  # 80
 `,
+          ),
+
+          h("Full File Reference", 3),
+          hint(
+            "View completed scratch.py file",
+            `def clamp(value, low, high):\n    if value < low: return low\n    if value > high: return high\n    return value\n\nposition = (320, 240)\ncolor_red = (0, 0, 255)\nsettings = {"window_w": 1280, "window_h": 720, "fps": 60}\n\nfor i in range(3):\n    print("round", i)\n\nclass Player:\n    def __init__(self, health=100):\n        self.health = health\n    def take_damage(self, amount):\n        self.health = clamp(self.health - amount, 0, 100)\n\np = Player()\np.take_damage(20)\nprint(p.health)`,
           ),
           info(
             "BGR vs RGB: OpenCV stores colors as (Blue, Green, Red): the opposite of what most tools use. This will bite you at least once.",
@@ -1858,6 +1892,35 @@ export const glossary: { term: string; def: string }[] = [
   {
     term: "Game loop",
     def: "The repeating cycle of Input → Update → Render that every real-time game runs at ~60 Hz.",
+  },
+
+  {
+    term: "Tuple",
+    def: "An immutable list of items in Python, written with parentheses like (x, y). Used everywhere in OpenCV for coordinates and colors.",
+  },
+  {
+    term: "Dictionary",
+    def: "A collection of key-value pairs in Python, written with braces {}. Good for storing configurations.",
+  },
+  {
+    term: "Class",
+    def: "A blueprint for creating objects (like a Player or an Enemy). It binds data (health) and functions (take_damage) together.",
+  },
+  {
+    term: "Instance",
+    def: "A specific object created from a Class. If 'Car' is the class, 'my_honda' is the instance.",
+  },
+  {
+    term: "Function",
+    def: "A reusable block of code that takes inputs, does something, and optionally returns an output.",
+  },
+  {
+    term: "Float",
+    def: "A number with a decimal point, like 3.14 or 0.5. MediaPipe returns coordinates as floats between 0.0 and 1.0.",
+  },
+  {
+    term: "Integer",
+    def: "A whole number, like 1, 42, or -5. Pixels on a screen must be integers.",
   },
 ];
 
