@@ -127,17 +127,32 @@ export function CodeBlock({
   return (
     <figure className="neo-inset my-6 overflow-hidden rounded-xl border border-border/80 bg-background/70 backdrop-blur">
       <div className="flex items-center justify-between border-b border-border/60 bg-muted/40 px-3.5 py-2 text-xs">
-        <div className="flex items-center gap-2 text-foreground">
-          {!isSnippet ? (
-            <FileCode2 className="h-4 w-4 text-primary" />
-          ) : lang === "bash" ? (
-            <Terminal className="h-4 w-4 text-muted-foreground" />
-          ) : (
-            <FileCode2 className="h-4 w-4 text-muted-foreground" />
+        <div className="flex flex-col gap-0.5">
+          <div className="flex items-center gap-2 text-foreground">
+            {!isSnippet ? (
+              <FileCode2 className="h-4 w-4 text-primary" />
+            ) : lang === "bash" ? (
+              <Terminal className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <FileCode2 className="h-4 w-4 text-muted-foreground" />
+            )}
+            <span className="font-mono font-bold tracking-wide">
+              {!isSnippet ? `FILE: ${displayLabel}` : displayLabel.toUpperCase()}
+            </span>
+          </div>
+
+          {/* Beginner-friendly instructional text */}
+          {!isSnippet && (
+            <span className="text-[11px] text-muted-foreground font-medium ml-6">
+              Open or create <strong className="text-foreground">{displayLabel}</strong> in your
+              project folder and type this code.
+            </span>
           )}
-          <span className="font-mono font-bold tracking-wide">
-            {!isSnippet ? `FILE: ${displayLabel}` : displayLabel.toUpperCase()}
-          </span>
+          {isSnippet && lang === "bash" && (
+            <span className="text-[11px] text-muted-foreground font-medium ml-6">
+              Run this command in your VS Code terminal.
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-1.5">
           <button
