@@ -1,7 +1,37 @@
 import { useState, type ReactNode } from "react";
 import { ChevronDown, Info, Lightbulb, AlertTriangle, Sparkles, Play, Video } from "lucide-react";
 import type { Block } from "@/data/course";
+import { glossary } from "@/data/course";
 import { CodeBlock } from "./CodeBlock";
+import { GlossaryTooltip } from "./GlossaryTooltip";
+
+const sortedGlossary = [...glossary].sort((a, b) => b.term.length - a.term.length);
+const glossaryRegex = new RegExp(
+  `\\b(${sortedGlossary.map((g) => g.term.replace(/[.*+?^$\\{\\}()|[\\]\\\\]/g, "\\\\$&")).join("|")})\\b`,
+  "gi",
+);
+
+function RichText({ text }: { text: string }) {
+  if (!text) return null;
+  const parts = text.split(glossaryRegex);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (i % 2 === 0) return <span key={i}>{part}</span>;
+        const lowerPart = part.toLowerCase();
+        const match = sortedGlossary.find((g) => g.term.toLowerCase() === lowerPart);
+        if (match) {
+          return (
+            <GlossaryTooltip key={i} term={match.term} def={match.def}>
+              {part}
+            </GlossaryTooltip>
+          );
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </>
+  );
+}
 
 function Callout({ kind, title, text }: Extract<Block, { type: "callout" }>) {
   const styles: Record<string, { ring: string; icon: ReactNode; label: string }> = {
@@ -33,7 +63,9 @@ function Callout({ kind, title, text }: Extract<Block, { type: "callout" }>) {
         {s.icon}
         {s.label}
       </div>
-      <p className="text-[15px] leading-relaxed text-foreground">{text}</p>
+      <p className="text-[15px] leading-relaxed text-foreground">
+        <RichText text={text} />
+      </p>
     </aside>
   );
 }
@@ -134,7 +166,11 @@ export function BlockView({ b }: { b: Block }) {
       return <Tag className={cls}>{b.text}</Tag>;
     }
     case "p":
-      return <p className="my-4 text-[16.5px] leading-relaxed text-muted-foreground">{b.text}</p>;
+      return (
+        <p className="my-4 text-[16.5px] leading-relaxed text-muted-foreground">
+          <RichText text={b.text} />
+        </p>
+      );
     case "list": {
       const Tag = b.ordered ? "ol" : "ul";
       return (
@@ -143,7 +179,9 @@ export function BlockView({ b }: { b: Block }) {
         >
           {b.items.map((it, i) => (
             <li key={i} className="marker:text-primary">
-              <span className="text-foreground">{it}</span>
+              <span className="text-foreground">
+                <RichText text={it} />
+              </span>
             </li>
           ))}
         </Tag>
@@ -159,7 +197,9 @@ export function BlockView({ b }: { b: Block }) {
           <span className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider not-italic text-primary">
             <Sparkles className="h-3.5 w-3.5" /> Analogy
           </span>
-          <span className="text-[15.5px] leading-relaxed text-foreground">{b.text}</span>
+          <span className="text-[15.5px] leading-relaxed text-foreground">
+            <RichText text={b.text} />
+          </span>
         </blockquote>
       );
     case "diagram":

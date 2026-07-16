@@ -761,7 +761,7 @@ cv2.circle(frame, (w // 2, h // 2), 40, (0, 0, 255), 3)`,
           ),
           video(
             "AI Hand Tracking with MediaPipe & Python (21 Landmarks Walkthrough)",
-            "vQZ1CWWuSOw",
+            "01sAkU_NvOY",
             "Nicholas Renotte's canonical step-by-step tutorial explaining how MediaPipe's deep neural network extracts 3D joint coordinates from live RGB video.",
           ),
           code(
@@ -1315,7 +1315,7 @@ def calibrate(get_speed, seconds=5, fps=60):
           { type: "diagram", title: "The game loop", svg: gameLoopSvg },
           video(
             "The Ultimate Introduction to Pygame (Game Loops & Surfaces)",
-            "AY9MnQ4x3wt",
+            "8GmdCSM-v7E",
             "Clear Code's gold-standard visual guide demonstrating how Pygame's 60 FPS event loop, display surfaces, and delta-time calculations operate under the hood.",
           ),
           code(
@@ -1877,12 +1877,12 @@ export const globalResources: { section: string; items: Resource[] }[] = [
       },
       {
         title: "Nicholas Renotte: AI Hand Tracking with MediaPipe & Python (21 Landmarks)",
-        url: "https://www.youtube.com/watch?v=vQZ1CWWuSOw",
+        url: "https://www.youtube.com/watch?v=01sAkU_NvOY",
         kind: "video",
       },
       {
         title: "Clear Code: The Ultimate Introduction to Pygame (Game Loops & Surfaces)",
-        url: "https://www.youtube.com/watch?v=AY9MnQ4x3wt",
+        url: "https://www.youtube.com/watch?v=8GmdCSM-v7E",
         kind: "video",
       },
       {
