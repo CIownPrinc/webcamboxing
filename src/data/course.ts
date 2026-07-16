@@ -517,6 +517,9 @@ pip install opencv-python mediapipe pygame numpy`,
         ],
         blocks: [
           h("The 20% you'll use 80% of the time"),
+          info(
+            "The code below is just for practicing Python basics. Feel free to open a throwaway file like scratch.py, type it out, and run it to see how it works. Don't copy and paste! Typing the code manually is how you build muscle memory.",
+          ),
           code(
             "python",
             `# scratch.py
