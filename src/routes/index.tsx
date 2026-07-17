@@ -100,7 +100,7 @@ function Index() {
         name: "What will I actually have built by the end of Module 25?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "You will build a complete arcade boxing game inspired by classics like Punch-Out!!. It tracks your real left and right jabs through your webcam using computer vision, features smooth hitboxes and sound effects, and includes an intelligent AI opponent controlled by a finite state machine.",
+          text: "You will build an arcade boxing game inspired by classics like Punch-Out!!. It tracks your left and right jabs through your webcam, uses hitboxes and sound effects, and runs the opponent with a finite state machine.",
         },
       },
     ],
@@ -157,7 +157,7 @@ function Index() {
           <FeatureLead
             icon={<Target className="h-5 w-5" />}
             title="Designed for total beginners"
-            body="Every lesson explains WHY before HOW. No hand-waving, no skipping steps, and every line of Python is clearly explained."
+            body="Every lesson explains why the code exists before you type it. No skipped steps, and every line of Python gets a clear reason."
           />
           <div className="flex flex-col gap-5">
             <FeatureSecondary
@@ -175,8 +175,8 @@ function Index() {
 
         <h2 className="mt-16 font-display text-3xl font-bold tracking-tight">The roadmap</h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          25 beginner modules take you from installing Python and OpenCV to a polished arcade boxing
-          game with menus, sound effects, and an intelligent opponent.
+          25 beginner modules take you from installing Python and OpenCV to an arcade boxing game
+          with menus, sound effects, and a state-driven opponent.
         </p>
         <ol className="mt-8 grid gap-3.5 md:grid-cols-2">
           {modules.map((m) => (
@@ -221,7 +221,7 @@ function Index() {
           />
           <FaqItem
             question="What will I actually have built by the end of Module 25?"
-            answer="You will build a complete arcade boxing game inspired by classics like Punch-Out!!. It tracks your real left and right jabs through your webcam using computer vision, features smooth hitboxes and sound effects, and includes an intelligent AI opponent controlled by a finite state machine."
+            answer="You will build an arcade boxing game inspired by classics like Punch-Out!!. It tracks your left and right jabs through your webcam, uses hitboxes and sound effects, and runs the opponent with a finite state machine."
           />
         </div>
       </section>

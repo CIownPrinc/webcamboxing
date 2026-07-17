@@ -41,7 +41,7 @@ function ArchitecturePage() {
     "@type": "TechArticle",
     headline: "Python Computer Vision Game Architecture & Modularity",
     description:
-      "Explore how professional Python computer vision games organize code into clean, modular files with OpenCV, MediaPipe, and Pygame.",
+      "Explore how Python computer vision games split camera, tracking, game state, and drawing code into separate files.",
     about: ["Software Architecture", "Python programming", "Game Development", "Computer Vision"],
     author: {
       "@type": "Organization",
@@ -89,9 +89,9 @@ function ArchitecturePage() {
             Project Architecture
           </h1>
           <p className="mt-3 max-w-2xl text-muted-foreground text-base">
-            Instead of writing everything inside 1 giant `main.py` script, real-world engineering
-            separates responsibilities into clean, orthogonal modules (`camera.py`, `tracker.py`,
-            `player.py`, etc.). Click any file below to inspect its exact role and code skeleton.
+            Instead of putting everything inside 1 giant `main.py` script, this project gives each
+            job its own file (`camera.py`, `tracker.py`, `player.py`, etc.). Click any file below to
+            see what it owns and what its starter code looks like.
           </p>
         </div>
 

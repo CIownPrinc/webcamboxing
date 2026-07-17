@@ -220,8 +220,7 @@ export function ProjectArchitectureViewer() {
             <Layers className="h-6 w-6 text-primary" /> Project Architecture & File Directory
           </h2>
           <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-            Learn why professional games divide code across modular files and inspect the exact
-            responsibility of every script.
+            See why games split camera, tracking, game state, and drawing into separate files.
           </p>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-muted/40 px-3.5 py-1 text-xs font-semibold text-muted-foreground backdrop-blur">

@@ -17,7 +17,7 @@ export const Route = createFileRoute("/curriculum")({
       {
         name: "description",
         content:
-          "Explore the complete 25-module Python game development and computer vision curriculum. Master OpenCV, MediaPipe tracking, and Pygame from first principles.",
+          "Explore the 25-module Python game development and computer vision curriculum. Learn OpenCV, MediaPipe tracking, and Pygame from first principles.",
       },
       {
         property: "og:title",
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/curriculum")({
       {
         property: "og:description",
         content:
-          "Explore the complete 25-module Python game development and computer vision curriculum. Master OpenCV, MediaPipe tracking, and Pygame from first principles.",
+          "Explore the 25-module Python game development and computer vision curriculum. Learn OpenCV, MediaPipe tracking, and Pygame from first principles.",
       },
       { property: "og:url", content: "https://webcamboxing.com/curriculum" },
     ],

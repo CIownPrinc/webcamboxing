@@ -215,7 +215,7 @@ export const modules: Module[] = [
         blocks: [
           h("What we're building"),
           p(
-            "By the last module you'll have a small arcade boxing game: inspired by Punch-Out!! - that watches you through your webcam. You'll throw left and right punches by moving your fists toward the camera, raise both hands to block, and an animated opponent will attack, recover, and take damage on a health bar.",
+            "By the last module you'll have a small arcade boxing game inspired by Punch-Out!!. The webcam watches your hands. You throw left and right punches by moving your fists toward the camera, raise both hands to block, and fight an opponent with health, attack, and recovery states.",
           ),
           p(
             "This is a game, not a fitness tracker. We design around what a normal webcam can reliably see, and we lean on classic game design (state machines, cooldowns, hitboxes) to turn noisy sensor data into satisfying gameplay.",
@@ -327,7 +327,7 @@ export const modules: Module[] = [
         difficulty: "Beginner",
         objectives: [
           "Install Python 3.11 or newer on your operating system",
-          "Open a terminal and confirm `python: version` works",
+          "Open a terminal and confirm `python --version` works",
           "Understand what `uv` does for Python projects",
         ],
         blocks: [
@@ -352,11 +352,11 @@ export const modules: Module[] = [
           h("Verify"),
           code(
             "bash",
-            `python: version
+            `python --version
 # or
-python3: version
+python3 --version
 
-uv: version`,
+uv --version`,
           ),
           p(
             "If you see something like `Python 3.12.3`, Python is ready. `uv` is the tool we'll use to create environments and install libraries like OpenCV and MediaPipe.",
@@ -368,7 +368,7 @@ uv: version`,
         ],
         recap: [
           "Install Python 3.11 or 3.12.",
-          "`python: version` should print your Python version.",
+          "`python --version` should print your Python version.",
           "`uv` manages Python environments and packages for this project.",
         ],
         resources: [
@@ -460,7 +460,7 @@ source .venv/bin/activate
           h("Install the stack"),
           code("bash", `uv pip install opencv-python mediapipe pygame numpy`),
           warn(
-            "If MediaPipe fails to install, check your Python version. As of 2026 MediaPipe wheels exist for Python 3.10–3.12 on most platforms. If you're on 3.13 you may need to downgrade.",
+            "If MediaPipe fails to install, check your Python version. As of 2026 MediaPipe wheels exist for Python 3.10-3.12 on most platforms. If you're on 3.13 you may need to downgrade.",
           ),
         ],
         challenge: {
@@ -784,7 +784,7 @@ cv2.circle(frame, (w // 2, h // 2), 40, (0, 0, 255), 3)`,
         ],
         blocks: [
           why(
-            "MediaPipe gives us 21 named points per hand for free. Doing this ourselves would be a whole graduate degree: instead we call `hands.process(frame)` and read the answer.",
+            "MediaPipe gives us 21 named points per hand. Building that tracker ourselves would be a huge project, so we call `hands.process(frame)` and read the answer.",
           ),
           video(
             "AI Hand Tracking with MediaPipe & Python (21 Landmarks Walkthrough)",
@@ -1245,6 +1245,13 @@ class PunchDetector:
                 self._peak_speed = 0
 
         return event
+
+class Player:
+    def __init__(self):
+        self.health = 100
+
+    def take_damage(self, amount):
+        self.health = max(0, self.health - amount)
 `,
           ),
           why(
@@ -1507,7 +1514,7 @@ class Enemy:
         blocks: [
           code(
             "python",
-            `# collision.py
+            `# combat.py
 def circles_hit(a, ra, b, rb):
     dx = a[0] - b[0]
     dy = a[1] - b[1]
@@ -1545,7 +1552,7 @@ def circles_hit(a, ra, b, rb):
         blocks: [
           code(
             "python",
-            `# player.py (continued)
+            `# combat.py (continued)
 def speed_to_damage(peak, cal):
     """Bucket punch strength based on the calibrated threshold."""
     if peak > cal * 1.6: return 15   # Fast
@@ -1614,12 +1621,90 @@ def is_blocking(left_wrist, right_wrist, frame_h):
         ],
         blocks: [
           info(
-            "`Tracker` here is a small facade class you'll assemble from the pieces built earlier: MediaPipe hands (Mod. 8), wrist extraction (Mod. 10), a `WristVelocity` per wrist (Mod. 11), a `PunchDetector` per wrist (Mod. 13), and the `is_blocking` check (Mod. 20). `tracker.step()` reads a frame and updates all of them; `punch_left/right(threshold)` returns a small object with `.pos` and `.speed` when a punch fired this frame, else `None`.",
+            "`Tracker` is the glue file. It reads the camera, asks MediaPipe for hand landmarks, updates wrist speed, runs the punch detectors, and checks the block pose. The game loop should not know all those details.",
+          ),
+          code(
+            "python",
+            `# tracker.py: final glue class
+from types import SimpleNamespace
+import cv2
+import mediapipe as mp
+
+from player import PunchDetector, is_blocking as hands_are_blocking
+from velocity import WristVelocity
+
+mp_hands = mp.solutions.hands
+
+class Tracker:
+    def __init__(self, cam_index=0):
+        self.cap = cv2.VideoCapture(cam_index)
+        self.hands = mp_hands.Hands(
+            max_num_hands=2,
+            min_detection_confidence=0.6,
+            min_tracking_confidence=0.5,
+        )
+        self.left_wrist = None
+        self.right_wrist = None
+        self.frame_h = 720
+        self.left_velocity = WristVelocity()
+        self.right_velocity = WristVelocity()
+        self.left_detector = PunchDetector()
+        self.right_detector = PunchDetector()
+
+    def step(self):
+        ok, frame = self.cap.read()
+        if not ok:
+            self.left_wrist = None
+            self.right_wrist = None
+            return None
+
+        frame = cv2.flip(frame, 1)
+        self.frame_h, frame_w = frame.shape[:2]
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        results = self.hands.process(rgb)
+
+        self.left_wrist = None
+        self.right_wrist = None
+        if results.multi_hand_landmarks and results.multi_handedness:
+            pairs = zip(results.multi_hand_landmarks, results.multi_handedness)
+            for lm_list, handed in pairs:
+                label = handed.classification[0].label
+                wrist = lm_list.landmark[0]
+                point = (int(wrist.x * frame_w), int(wrist.y * self.frame_h))
+                if label == "Left":
+                    self.left_wrist = point
+                else:
+                    self.right_wrist = point
+
+        return frame
+
+    def punch_left(self, threshold):
+        return self._punch(self.left_detector, self.left_velocity, self.left_wrist, threshold)
+
+    def punch_right(self, threshold):
+        return self._punch(self.right_detector, self.right_velocity, self.right_wrist, threshold)
+
+    def _punch(self, detector, velocity, wrist, threshold):
+        detector.threshold = threshold
+        speed = velocity.update(wrist)
+        event = detector.update(speed)
+        if event is None or wrist is None:
+            return None
+        return SimpleNamespace(pos=wrist, speed=event[1])
+
+    def is_blocking(self):
+        return hands_are_blocking(self.left_wrist, self.right_wrist, self.frame_h)
+
+    def release(self):
+        self.cap.release()
+        self.hands.close()
+`,
+            "tracker.py",
           ),
           code(
             "python",
             `# main.py: abridged
-import pygame, cv2, time
+import pygame, time
 from tracker import Tracker
 from player import Player
 from enemy import Enemy, E
@@ -1635,40 +1720,52 @@ player  = Player()
 enemy   = Enemy()
 cal_threshold = 1200   # replace with Module 14 calibrator
 
-running = True
-while running:
-    dt  = clock.tick(60) / 1000
-    now = time.perf_counter()
+try:
+    running = True
+    while running:
+        dt = clock.tick(60) / 1000
+        now = time.perf_counter()
 
-    for ev in pygame.event.get():
-        if ev.type == pygame.QUIT: running = False
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                running = False
+            elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
+                running = False
 
-    tracker.step()
-    left_hit  = tracker.punch_left(cal_threshold)
-    right_hit = tracker.punch_right(cal_threshold)
-    blocking  = tracker.is_blocking()
+        tracker.step()
+        left_hit = tracker.punch_left(cal_threshold)
+        right_hit = tracker.punch_right(cal_threshold)
+        blocking = tracker.is_blocking()
 
-    for hit in (left_hit, right_hit):
-        if hit and circles_hit(hit.pos, 40, (640, 360), 120):
-            enemy.health -= speed_to_damage(hit.speed, cal_threshold)
+        for hit in (left_hit, right_hit):
+            if hit and circles_hit(hit.pos, 40, (640, 360), 120):
+                enemy.health -= speed_to_damage(hit.speed, cal_threshold)
 
-    enemy.update(now, on_hit_player=lambda damage:
-                 None if blocking else setattr(player, "health", player.health - damage))
+        def hit_player(damage):
+            if not blocking:
+                player.take_damage(damage)
 
-    if enemy.health <= 0: print("You win!"); running = False
-    if player.health <= 0: print("KO!"); running = False
+        enemy.update(now, on_hit_player=hit_player)
 
-    screen.fill(PAPER)
-    draw_enemy(screen, 640, 360, hit=enemy.state == E.ATTACK)
-    draw_health(screen, 40, 40, 400, 20, player.health / 100)
-    draw_health(screen, 840, 40, 400, 20, enemy.health / 100)
-    pygame.display.flip()
+        if enemy.health <= 0:
+            print("You win!")
+            running = False
+        if player.health <= 0:
+            print("KO!")
+            running = False
 
-pygame.quit()
+        screen.fill(PAPER)
+        draw_enemy(screen, 640, 360, hit=enemy.state == E.ATTACK)
+        draw_health(screen, 40, 40, 400, 20, player.health / 100)
+        draw_health(screen, 840, 40, 400, 20, enemy.health / 100)
+        pygame.display.flip()
+finally:
+    tracker.release()
+    pygame.quit()
 `,
           ),
           info(
-            "This is the shape of a complete game. The rest of the course polishes what happens inside each line.",
+            "This is the complete loop. Each frame reads the webcam, checks punches and blocks, lets the enemy act, draws health bars, then repeats.",
           ),
         ],
         recap: ["main.py orchestrates modules: it should stay small."],
