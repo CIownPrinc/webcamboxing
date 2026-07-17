@@ -8,76 +8,9 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { Trophy, CheckCircle2, Award, Sparkles, X, Lock } from "lucide-react";
+import { Trophy, Sparkles, Lock } from "lucide-react";
 import { useHydrated, useProgress } from "@/lib/progress";
-import { modules, totalLessons } from "@/data/course";
-
-export interface BadgeDefinition {
-  readonly id: string;
-  readonly title: string;
-  readonly description: string;
-  readonly icon: string;
-  readonly requiredCount?: number;
-  readonly requiredModuleNumber?: number;
-}
-
-export const courseBadges: readonly BadgeDefinition[] = [
-  {
-    id: "first_step",
-    title: "Visionary Pioneer",
-    description: "Completed your very first lesson in Webcam Boxing.",
-    icon: "🥊",
-    requiredCount: 1,
-  },
-  {
-    id: "python_setup",
-    title: "Python & CV Ready",
-    description: "Completed Module 6: Using OpenCV to open camera streams.",
-    icon: "🐍",
-    requiredModuleNumber: 6,
-  },
-  {
-    id: "mediapipe_master",
-    title: "MediaPipe Master",
-    description: "Completed Module 8: MediaPipe Hand Tracking & Landmarks.",
-    icon: "🖐️",
-    requiredModuleNumber: 8,
-  },
-  {
-    id: "punch_architect",
-    title: "Punch Detector Architect",
-    description: "Completed Module 12: Building a velocity-driven punch detector.",
-    icon: "⚡",
-    requiredModuleNumber: 12,
-  },
-  {
-    id: "fsm_tactician",
-    title: "FSM Tactician",
-    description: "Completed Module 17: Enemy state machine & AI behavior.",
-    icon: "🤖",
-    requiredModuleNumber: 17,
-  },
-  {
-    id: "arena_champion",
-    title: "Arena Champion",
-    description: "Completed Module 21: The full real-time game loop.",
-    icon: "🏆",
-    requiredModuleNumber: 21,
-  },
-  {
-    id: "grandmaster",
-    title: "Webcam Boxing Grandmaster",
-    description: "Completed all 25 modules and unlocked the full game!",
-    icon: "👑",
-    requiredCount: totalLessons,
-  },
-  {
-    id: "easter_egg",
-    title: "The Ippo Dempsey",
-    description: "You uncovered a hidden secret by rapidly clicking the logo.",
-    icon: "💨",
-  },
-];
+import { courseBadges, isModuleBadgeEarned } from "@/data/badges";
 
 export function CompletionBadgesDialog() {
   const [open, setOpen] = useState(false);
@@ -94,14 +27,8 @@ export function CompletionBadgesDialog() {
 
   const earnedBadges = visibleBadges.filter((b) => {
     if (b.id === "easter_egg") return easterEggFound;
-    if (b.requiredCount !== undefined && completedCount >= b.requiredCount) {
-      return true;
-    }
-    if (b.requiredModuleNumber !== undefined) {
-      const targetMod = modules.find((m) => m.number === b.requiredModuleNumber);
-      if (!targetMod) return false;
-      return targetMod.lessons.every((l) => completed[`${targetMod.id}/${l.id}`]);
-    }
+    if (b.requiredCount !== undefined && completedCount >= b.requiredCount) return true;
+    if (b.requiredModuleNumber !== undefined) return isModuleBadgeEarned(b, completed);
     return false;
   });
 
@@ -164,7 +91,7 @@ export function CompletionBadgesDialog() {
                             : "border-border/60 bg-muted/20 opacity-60"
                         }`}
                       >
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-background text-2xl shadow-sm">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-background text-sm font-bold shadow-sm">
                           {isEarned ? b.icon : <Lock className="h-4 w-4 text-muted-foreground" />}
                         </span>
                         <div className="min-w-0 flex-1">

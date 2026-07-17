@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { Settings, Upload, Check, Moon, Sun } from "lucide-react";
 import { useProgress, useHydrated } from "@/lib/progress";
-import { WALLPAPER_PRESETS } from "./BackgroundLayer";
+import { WALLPAPER_PRESETS } from "@/data/wallpapers";
 import { Button } from "@/components/ui/button";
 
 export function SettingsDialog() {

@@ -7,6 +7,9 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    resolve: {
+      tsconfigPaths: true,
+    },
     plugins: [
       VitePWA({
         registerType: "autoUpdate",
@@ -35,6 +38,7 @@ export default defineConfig({
           ],
         },
         workbox: {
+          globDirectory: ".output/public",
           globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
           navigateFallback: "/",
           navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],

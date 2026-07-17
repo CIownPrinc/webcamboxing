@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { CodeBlock } from "@/components/CodeBlock";
 
-export interface FileResponsibility {
+interface FileResponsibility {
   readonly filename: string;
   readonly role: string;
   readonly responsibility: string;
@@ -29,7 +29,7 @@ export interface FileResponsibility {
   readonly codeSkeleton: string;
 }
 
-export const projectFiles: readonly FileResponsibility[] = [
+const projectFiles: readonly FileResponsibility[] = [
   {
     filename: "main.py",
     role: "Application Entry & Orchestrator",

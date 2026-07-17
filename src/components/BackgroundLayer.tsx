@@ -1,31 +1,5 @@
 import { useProgress } from "@/lib/progress";
-
-export const WALLPAPER_PRESETS: Record<string, { name: string; url: string }> = {
-  glacier: {
-    name: "Glacier Ice",
-    url: "/backgrounds/glacier.jpeg",
-  },
-  lake: {
-    name: "Still Lake",
-    url: "/backgrounds/lake.JPG",
-  },
-  lake2: {
-    name: "Lake Reflection",
-    url: "/backgrounds/lake2.jpeg",
-  },
-  lush_hills: {
-    name: "Lush Hills",
-    url: "/backgrounds/lush_hills.JPG",
-  },
-  mountain: {
-    name: "Mountaintop",
-    url: "/backgrounds/mountaintop.jpeg",
-  },
-  ocean: {
-    name: "Deep Ocean",
-    url: "/backgrounds/ocean.jpeg",
-  },
-};
+import { WALLPAPER_PRESETS } from "@/data/wallpapers";
 
 export function BackgroundLayer() {
   const { wallpaper, customWallpaper } = useProgress();
