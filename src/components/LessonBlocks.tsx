@@ -6,8 +6,9 @@ import { CodeBlock } from "./CodeBlock";
 import { GlossaryTooltip } from "./GlossaryTooltip";
 
 const sortedGlossary = [...glossary].sort((a, b) => b.term.length - a.term.length);
+const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const glossaryRegex = new RegExp(
-  `\\b(${sortedGlossary.map((g) => g.term.replace(/[.*+?^$\\{\\}()|[\\]\\\\]/g, "\\\\$&")).join("|")})\\b`,
+  `\\b(${sortedGlossary.map((g) => escapeRegExp(g.term)).join("|")})\\b`,
   "gi",
 );
 
@@ -17,6 +18,7 @@ function RichText({ text }: { text: string }) {
   return (
     <>
       {parts.map((part, i) => {
+        if (typeof part !== "string" || part.length === 0) return null;
         if (i % 2 === 0) return <span key={i}>{part}</span>;
         const lowerPart = part.toLowerCase();
         const match = sortedGlossary.find((g) => g.term.toLowerCase() === lowerPart);

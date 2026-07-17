@@ -12,7 +12,7 @@ import { APP_CONFIG } from "@/config/app.config";
 test.describe("Course Navigation E2E", () => {
   test("should render the home page and navigate to curriculum route", async ({ page }) => {
     await page.goto("/");
-    await expect(page).toHaveTitle(/how to build a boxing game/i);
+    await expect(page).toHaveTitle(/webcam boxing/i);
 
     const curriculumLink = page.getByRole("link", { name: /see the curriculum/i });
     if (await curriculumLink.isVisible()) {
@@ -29,5 +29,39 @@ test.describe("Course Navigation E2E", () => {
       const isDark = await page.evaluate(() => document.documentElement.classList.contains("dark"));
       expect(typeof isDark).toBe("boolean");
     }
+  });
+
+  test("should resume into the first incomplete module without route errors", async ({ page }) => {
+    await page.addInitScript((storageKey) => {
+      window.localStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          completed: {
+            "intro/welcome": true,
+            "intro/webcam-limits": true,
+            "install-python/install": true,
+            "vscode/setup-vscode": true,
+            "venv/create-venv": true,
+          },
+          theme: "dark",
+          lastVisited: null,
+          wallpaper: "mountain",
+          customWallpaper: null,
+          easterEggFound: false,
+        }),
+      );
+    }, APP_CONFIG.course.storageKey);
+
+    await page.goto("/");
+    const resumeLink = page.getByRole("link", { exact: true, name: "Resume" });
+
+    await expect(resumeLink).toBeVisible();
+    await resumeLink.click();
+
+    await expect(page).toHaveURL(/.*\/lessons\/python-basics\/essentials/);
+    await expect(
+      page.getByRole("heading", { name: "Variables, functions, loops, classes, tuples" }),
+    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "This page didn't load" })).toHaveCount(0);
   });
 });
