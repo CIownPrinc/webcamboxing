@@ -528,6 +528,7 @@ def clamp(value, low, high):
         return high
     return value
 `,
+            "scratch.py",
           ),
 
           h("2. Data Structures: Tuples & Dictionaries", 3),
@@ -545,6 +546,7 @@ color_red = (0, 0, 255)        # BGR in OpenCV!
 # Dictionaries: settings, mappings
 settings = {"window_w": 1280, "window_h": 720, "fps": 60}
 `,
+            "scratch.py: Continue in",
           ),
 
           h("3. Loops", 3),
@@ -555,6 +557,7 @@ settings = {"window_w": 1280, "window_h": 720, "fps": 60}
 for i in range(3):
     print("round", i)
 `,
+            "scratch.py: Continue in",
           ),
 
           h("4. Classes & Objects", 3),
@@ -576,6 +579,7 @@ p = Player()
 p.take_damage(20)
 print(p.health)  # 80
 `,
+            "scratch.py: Finish in",
           ),
 
           h("Full File Reference", 3),
@@ -632,6 +636,7 @@ cv2.VideoCapture(0)   # open a camera
 cv2.imshow("Preview", frame)   # show an image in a window
 cv2.waitKey(1)        # give the OS 1 ms to update the window
 cv2.destroyAllWindows()  # close windows when done`,
+            "scratch.py",
           ),
           why(
             "We're not building an image processing pipeline: we're using OpenCV as a camera driver and a debug window. That's it. MediaPipe does the heavy vision work.",
@@ -715,6 +720,7 @@ def main():
             # Mirror horizontally so it feels like a mirror, not a video call.
             frame = cv2.flip(frame, 1)
 `,
+            "camera.py: Continue in",
           ),
           p(
             "`ok` tells us whether the camera gave us a real frame. If it did not, we skip that round of the loop and ask again.",
@@ -730,6 +736,7 @@ def main():
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
 `,
+            "camera.py: Continue in",
           ),
           p(
             "`waitKey(1)` gives the window 1 millisecond to update and checks the keyboard. Without it, the window can look frozen even though your loop is running.",
@@ -744,6 +751,7 @@ def main():
 if __name__ == "__main__":
     main()
 `,
+            "camera.py: Finish in",
           ),
           p(
             "`finally` runs even if something crashes. That matters because cameras stay busy until your code lets them go.",
@@ -827,6 +835,7 @@ import mediapipe as mp
 mp_hands = mp.solutions.hands
 mp_draw = mp.solutions.drawing_utils
 `,
+            "tracker.py",
           ),
           p(
             "`mp_hands` gives us the hand model. `mp_draw` gives us helper code that draws the 21 hand points on top of the image.",
@@ -845,6 +854,7 @@ mp_draw = mp.solutions.drawing_utils
         min_tracking_confidence=0.5,
     ) as hands:
 `,
+            "tracker.py: Continue in",
           ),
           p(
             "`with` means Python will clean up the MediaPipe tracker when this block ends. It is the same idea as closing the camera later.",
@@ -862,6 +872,7 @@ mp_draw = mp.solutions.drawing_utils
             rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             results = hands.process(rgb)
 `,
+            "tracker.py: Continue in",
           ),
           p(
             "BGR and RGB are two orders for the same 3 color channels: blue, green, and red. OpenCV uses BGR. MediaPipe expects RGB. If we skip the conversion, the tracker sees strange colors.",
@@ -877,6 +888,7 @@ mp_draw = mp.solutions.drawing_utils
                         mp_hands.HAND_CONNECTIONS,
                     )
 `,
+            "tracker.py: Continue in",
           ),
           p(
             "`results.multi_hand_landmarks` is the list of hands MediaPipe found. For each hand, we draw the points and the lines between them.",
@@ -894,6 +906,7 @@ mp_draw = mp.solutions.drawing_utils
 if __name__ == "__main__":
     main()
 `,
+            "tracker.py: Finish in",
           ),
           hint(
             "View the full tracker.py file",
@@ -1076,6 +1089,7 @@ HISTORY = 15   # keep the last ~0.25 seconds at 60 fps
 left_history = deque(maxlen=HISTORY)
 right_history = deque(maxlen=HISTORY)
 `,
+            "tracker.py: Continue in",
           ),
           h("Start the wrist extraction function", 3),
           code(
@@ -1089,6 +1103,7 @@ right_history = deque(maxlen=HISTORY)
         label = handed.classification[0].label  # "Left" or "Right"
         wrist = lm_list.landmark[0]             # landmark 0 = wrist
 `,
+            "tracker.py: Continue in",
           ),
           p(
             "`frame.shape[:2]` gives us height and width. We need those numbers because MediaPipe gives wrist positions as fractions from 0 to 1.",
@@ -1103,6 +1118,7 @@ right_history = deque(maxlen=HISTORY)
         else:
             right_history.append((px, py))
 `,
+            "tracker.py: Continue in",
           ),
           hint(
             "View the full wrist extraction code",
@@ -1199,6 +1215,7 @@ class WristVelocity:
             self._prev_pos, self._prev_t = pos, now
             return 0.0
 `,
+            "velocity.py: Continue in",
           ),
           p(
             "The first frame has no old point to compare against, so the speed is 0. If the hand disappears, we fade the old speed down instead of pretending the wrist teleported.",
@@ -1210,6 +1227,7 @@ class WristVelocity:
         delta = np.array(pos) - np.array(self._prev_pos)
         raw = float(np.linalg.norm(delta) / dt)
 `,
+            "velocity.py: Continue in",
           ),
           p(
             "`dt` is the time gap between frames. `delta` is how far the wrist moved. `np.linalg.norm(delta)` turns the sideways and up-down movement into one distance number.",
@@ -1221,6 +1239,7 @@ class WristVelocity:
         self._prev_pos, self._prev_t = pos, now
         return self._smoothed
 `,
+            "velocity.py: Finish in",
           ),
           hint(
             "View the full velocity.py file",
@@ -1343,6 +1362,7 @@ def maybe_punch(side: str, wrist_pos):
     if speed > PUNCH_THRESHOLD:
         print(f"{side} punch! speed={speed:.0f} px/s")
 `,
+            "punch_naive.py",
           ),
           warn(
             "Run this and wave your hand around: you'll trigger 10 punches per second. That's the setup for the next lesson.",
@@ -1427,6 +1447,7 @@ class Punch(Enum):
         self._t_cooldown_ends = 0
         self._peak_speed = 0
 `,
+            "player.py: Continue in",
           ),
           h("Start in IDLE and wait for speed", 3),
           code(
@@ -1440,6 +1461,7 @@ class Punch(Enum):
                 self.state = Punch.LAUNCH
                 self._peak_speed = speed
 `,
+            "player.py: Continue in",
           ),
           p(
             "IDLE means the detector is waiting. When speed crosses the threshold, the punch has started.",
@@ -1462,6 +1484,7 @@ class Punch(Enum):
 
         return event
 `,
+            "player.py: Continue in",
           ),
           p(
             "The detector fires when the wrist slows down because that means the punch shape is complete. Cooldown then blocks duplicate hits from the same movement.",
@@ -1476,6 +1499,7 @@ class Punch(Enum):
     def take_damage(self, amount):
         self.health = max(0, self.health - amount)
 `,
+            "player.py: Finish in",
           ),
           hint(
             "View the full player.py file",
@@ -1589,6 +1613,7 @@ def calibrate(get_speed, seconds=5, fps=60):
     # Threshold = 60th percentile of observed speeds during calibration.
     return float(np.percentile(samples, 60))
 `,
+            "calibration.py",
           ),
         ],
         recap: [
@@ -1635,6 +1660,7 @@ screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Webcam Boxing")
 clock = pygame.time.Clock()
 `,
+            "game_window.py",
           ),
           h("Handle close and escape", 3),
           code(
@@ -1649,6 +1675,7 @@ while running:
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             running = False
 `,
+            "game_window.py: Continue in",
           ),
           p(
             "The event loop reads messages from the window system. Closing the window and pressing Escape both turn `running` off.",
@@ -1662,6 +1689,7 @@ while running:
     pygame.draw.circle(screen, (220, 60, 60), (640, 360), 80)
     pygame.display.flip()
 `,
+            "game_window.py: Continue in",
           ),
           p(
             "`fill` paints the background. `draw.circle` draws a placeholder enemy. `display.flip()` puts the finished frame on screen.",
@@ -1672,6 +1700,7 @@ while running:
             `pygame.quit()
 sys.exit()
 `,
+            "game_window.py: Finish in",
           ),
           hint(
             "View the full game_window.py file",
@@ -1742,6 +1771,7 @@ def draw_enemy(screen, x, y, size=120, hit=False):
     color = (255, 120, 100) if hit else INK
     pygame.draw.circle(screen, color, (x, y), size)
 `,
+            "renderer.py",
           ),
           tip(
             "Every drawing function takes the surface first and returns nothing. That makes them dead simple to test and reuse.",
@@ -1787,6 +1817,7 @@ class E(Enum):
     ATTACK = auto()
     RECOVER = auto()
 `,
+            "enemy.py",
           ),
           h("Give the enemy health and a timer", 3),
           code(
@@ -1797,6 +1828,7 @@ class E(Enum):
         self.health = 100
         self.t_next = time.perf_counter() + random.uniform(1.0, 2.0)
 `,
+            "enemy.py: Continue in",
           ),
           p(
             "`t_next` means the next time the enemy is allowed to change state. Random delay keeps the fight from feeling like a metronome.",
@@ -1815,6 +1847,7 @@ class E(Enum):
             self.state = E.ATTACK
             self.t_next = now + 0.15
 `,
+            "enemy.py: Continue in",
           ),
           p(
             "TELEGRAPH is the warning state. It gives the player a short window to raise both hands and block.",
@@ -1830,6 +1863,7 @@ class E(Enum):
             self.state = E.IDLE
             self.t_next = now + random.uniform(0.8, 1.6)
 `,
+            "enemy.py: Finish in",
           ),
           hint(
             "View the full enemy.py file",
@@ -1898,6 +1932,7 @@ def circles_hit(a, ra, b, rb):
     dy = a[1] - b[1]
     return (dx*dx + dy*dy) <= (ra + rb) ** 2
 `,
+            "combat.py",
           ),
           why(
             "Circles are direction-independent and cheap: 1 subtraction per axis, 1 comparison, no square root. Perfect for 2D arcade fights.",
@@ -1939,6 +1974,7 @@ def speed_to_damage(peak, cal):
         return 10
     return 6
 `,
+            "combat.py: Continue in",
           ),
           why(
             "Three buckets is enough. Continuous damage feels random; three tiers feel like the game noticed how hard you tried.",
@@ -1973,6 +2009,7 @@ def is_blocking(left_wrist, right_wrist, frame_h):
     upper = frame_h * 0.4    # top 40% of the frame
     return left_wrist[1] < upper and right_wrist[1] < upper
 `,
+            "player.py: Continue in",
           ),
           info("Remember: y grows downward. 'Wrist above the upper region' means `y < upper`."),
         ],
@@ -2044,6 +2081,7 @@ class HitEvent:
         self.left_detector = PunchDetector()
         self.right_detector = PunchDetector()
 `,
+            "tracker.py: Continue in",
           ),
           p(
             "This constructor wires the parts together once. That keeps the frame loop from creating new trackers 60 times per second.",
@@ -2063,6 +2101,7 @@ class HitEvent:
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = self.hands.process(rgb)
 `,
+            "tracker.py: Continue in",
           ),
           h("Store the left and right wrist points", 3),
           code(
@@ -2082,6 +2121,7 @@ class HitEvent:
 
         return frame
 `,
+            "tracker.py: Continue in",
           ),
           p(
             "The game does not need all 21 hand landmarks yet. It only needs the two wrist points, so the tracker stores those.",
@@ -2103,6 +2143,7 @@ class HitEvent:
             return None
         return HitEvent(pos=wrist, speed=event[1])
 `,
+            "tracker.py: Continue in",
           ),
           p(
             "`HitEvent` gives the punch result a real name. A dataclass is a small Python tool for storing fields without writing a full class by hand.",
@@ -2117,6 +2158,7 @@ class HitEvent:
         self.cap.release()
         self.hands.close()
 `,
+            "tracker.py: Finish in",
           ),
           h("Set up the game objects", 3),
           p(
@@ -2159,6 +2201,7 @@ cal_threshold = 1200
             elif ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
                 running = False
 `,
+            "main.py: Continue in",
           ),
           p(
             "`clock.tick(60)` caps the game at about 60 frames per second. `now` is the current time, which the enemy state machine uses for timing.",
@@ -2181,6 +2224,7 @@ cal_threshold = 1200
 
         enemy.update(now, on_hit_player=hit_player)
 `,
+            "main.py: Continue in",
           ),
           h("Check win or loss, then draw", 3),
           code(
@@ -2201,6 +2245,7 @@ finally:
     tracker.release()
     pygame.quit()
 `,
+            "main.py: Finish in",
           ),
           info(
             "This is the complete loop. Each frame reads the webcam, checks punches and blocks, lets the enemy act, draws health bars, then repeats.",
@@ -2238,6 +2283,7 @@ class PlayScene(Scene):
 scenes = {"menu": MenuScene(), "play": PlayScene()}
 current = "menu"
 `,
+            "scenes.py",
           ),
           why(
             "Scenes keep unrelated code apart. Menu code doesn't need to know a thing about MediaPipe.",
@@ -2270,6 +2316,7 @@ block = pygame.mixer.Sound("assets/sounds/block.wav")
 
 def on_hit(): hit.play()
 `,
+            "sound.py",
           ),
           tip(
             "Free sound sources: freesound.org (CC-licensed), or generate short retro punches with sfxr / jsfxr.",
@@ -2316,6 +2363,7 @@ def apply_shake(screen_pos):
     shake = max(0, shake - 1)
     return (screen_pos[0] + dx, screen_pos[1] + dy)
 `,
+            "effects.py",
           ),
           why(
             "Screen shake is a tiny effect with a big feel. This demo uses one module-level value called `shake`. That is fine for a small effect, but in a larger game you would usually store effect state in a class.",

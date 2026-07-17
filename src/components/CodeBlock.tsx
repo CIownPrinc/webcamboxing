@@ -16,6 +16,11 @@ interface CodeBlockProps {
   readonly caption?: string;
 }
 
+interface CodeBlockLabel {
+  readonly filename: string;
+  readonly instruction: string | null;
+}
+
 const PY_KEYWORDS = new Set(
   "False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield self".split(
     " ",
@@ -78,10 +83,18 @@ const CLASS: Record<string, string> = {
   kw: "text-primary font-medium",
 };
 
-function getDownloadFilename(code: string, caption?: string, lang: string = "python"): string {
+function getCodeBlockLabel(
+  code: string,
+  caption?: string,
+  lang: string = "python",
+): CodeBlockLabel {
   if (caption) {
-    const raw = caption.split(":")[0].trim();
-    if (/\.(py|js|ts|sh|json|css|html|txt)$/i.test(raw)) return raw;
+    const [rawFile, ...rawInstruction] = caption.split(":");
+    const filename = rawFile.trim();
+    if (/\.(py|js|ts|sh|json|css|html|txt)$/i.test(filename)) {
+      const instruction = rawInstruction.join(":").trim();
+      return { filename, instruction: instruction.length > 0 ? instruction : null };
+    }
   }
   const firstLine = code.split("\n")[0].trim();
   if (firstLine.startsWith("#")) {
@@ -89,19 +102,22 @@ function getDownloadFilename(code: string, caption?: string, lang: string = "pyt
       .replace(/^#+\s*/, "")
       .split(":")[0]
       .trim();
-    if (/\.(py|js|ts|sh|json|css|html|txt)$/i.test(raw)) return raw;
+    if (/\.(py|js|ts|sh|json|css|html|txt)$/i.test(raw)) {
+      return { filename: raw, instruction: null };
+    }
   }
   const ext = lang === "python" ? "py" : lang === "bash" ? "sh" : "txt";
-  return `snippet.${ext}`;
+  return { filename: `snippet.${ext}`, instruction: null };
 }
 
 export function CodeBlock({ code, lang = "python", caption }: CodeBlockProps): ReactElement {
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const tokens = tokenize(code, lang);
-  const filename = getDownloadFilename(code, caption, lang);
+  const { filename, instruction } = getCodeBlockLabel(code, caption, lang);
   const isSnippet = filename.startsWith("snippet.");
   const displayLabel = !isSnippet ? filename : (caption ?? lang);
+  const fileActionLabel = instruction ? "ADD TO" : "FILE";
 
   const copy = async (): Promise<void> => {
     await navigator.clipboard.writeText(code);
@@ -136,14 +152,22 @@ export function CodeBlock({ code, lang = "python", caption }: CodeBlockProps): R
               <FileCode2 className="h-4 w-4 text-muted-foreground" />
             )}
             <span className="font-mono font-bold tracking-wide">
-              {!isSnippet ? `FILE: ${displayLabel}` : displayLabel.toUpperCase()}
+              {!isSnippet ? `${fileActionLabel}: ${displayLabel}` : displayLabel.toUpperCase()}
             </span>
           </div>
 
           {!isSnippet && (
             <span className="text-[11px] text-muted-foreground font-medium ml-6">
-              Open or create <strong className="text-foreground">{displayLabel}</strong> in your
-              project folder and type this code.
+              {instruction ? (
+                <>
+                  {instruction} <strong className="text-foreground">{displayLabel}</strong>.
+                </>
+              ) : (
+                <>
+                  Open or create <strong className="text-foreground">{displayLabel}</strong> in your
+                  project folder and type this code.
+                </>
+              )}
             </span>
           )}
           {isSnippet && lang === "bash" && (
