@@ -370,6 +370,7 @@ uv --version`,
           "Install Python 3.11 or 3.12.",
           "`python --version` should print your Python version.",
           "`uv` manages Python environments and packages for this project.",
+          "Test before moving on: run `python --version` and `uv --version` from the terminal.",
         ],
         resources: [
           { title: "python.org downloads", url: "https://www.python.org/downloads/", kind: "docs" },
@@ -414,6 +415,7 @@ uv --version`,
         recap: [
           "VS Code + the Python extension is enough.",
           "Open your project as a folder, not individual files.",
+          "Test before moving on: open the terminal inside VS Code and make sure it starts in `webcam-boxing`.",
         ],
       },
     ],
@@ -480,6 +482,7 @@ source .venv/bin/activate
           "`uv venv .venv` creates an isolated Python environment.",
           "Activate it every time you open the project.",
           "Install libraries with `uv pip install`, freeze them with `uv pip freeze`.",
+          "Test before moving on: run `python -c \"import cv2, mediapipe, pygame, numpy; print('ok')\"`.",
         ],
         resources: [
           {
@@ -607,6 +610,7 @@ print(p.health)  # 80
         recap: [
           "Functions, tuples, dicts, and classes are all you need.",
           "Coordinates are almost always tuples of (x, y).",
+          "Test before moving on: run `python scratch.py`. You should see `round 0`, `round 1`, `round 2`, then `80`.",
         ],
       },
     ],
@@ -645,6 +649,7 @@ cv2.destroyAllWindows()  # close windows when done`,
         recap: [
           "OpenCV = camera + window + a tiny bit of drawing.",
           "MediaPipe does the tracking, OpenCV just shows the pixels.",
+          "This module is a map of the OpenCV calls. The first runnable camera test is in the next module.",
         ],
       },
     ],
@@ -785,6 +790,7 @@ cv2.circle(frame, (w // 2, h // 2), 40, (0, 0, 255), 3)`,
           "A webcam is a loop: read a frame -> do something -> show it -> repeat.",
           "`waitKey(1)` is required for the window to update at all.",
           "Always release the camera in a `finally` block.",
+          "Test before moving on: run `python camera.py`, check that the mirrored webcam window opens, then press `q`.",
         ],
         resources: [
           {
@@ -815,7 +821,7 @@ cv2.circle(frame, (w // 2, h // 2), 40, (0, 0, 255), 3)`,
         ],
         blocks: [
           why(
-            "MediaPipe gives us 21 named points per hand. Building that tracker ourselves would be a huge project, so we call `hands.process(frame)` and read the answer.",
+            "Building a hand tracker ourselves would be a massive project. We would need training data, a model, math for 3D hand joints, and a lot of testing. Thankfully Google already made MediaPipe for us. It looks at the camera image and gives us 21 named points per hand.",
           ),
           video(
             "AI Hand Tracking with MediaPipe & Python (21 Landmarks Walkthrough)",
@@ -954,7 +960,7 @@ if __name__ == "__main__":
 `,
           ),
           info(
-            "Wave your hands. You should see a green skeleton with 21 dots per hand overlaid on top.",
+            "Test before moving on: run `python tracker.py` and wave your hands. You should see a green skeleton with 21 dots per hand overlaid on top. Press `q` to quit.",
           ),
           {
             type: "diagram",
@@ -990,6 +996,7 @@ if __name__ == "__main__":
           "MediaPipe consumes RGB frames and returns landmark lists.",
           "21 landmarks per hand, x/y/z normalized to [0, 1].",
           "Draw them with `mp.solutions.drawing_utils`.",
+          "Test before moving on: `python tracker.py` should show both hands with landmark dots and lines.",
         ],
         resources: [
           {
@@ -1046,6 +1053,7 @@ if __name__ == "__main__":
         recap: [
           "21 landmarks per hand, wrist = 0.",
           "We track the wrist because it's the most stable point during a punch.",
+          "Test before moving on: open the hand diagram and point to landmark `0`, then the fingertip landmarks `4`, `8`, `12`, `16`, and `20`.",
         ],
       },
     ],
@@ -1152,6 +1160,7 @@ def process(frame, results):
           "Multiply normalized x, y by width, height to get pixels.",
           "Use `multi_handedness` to tell left from right.",
           "Keep a small history: `collections.deque(maxlen=N)` is perfect.",
+          "This is a partial tracker edit. Test it by comparing your `tracker.py` with the full wrist extraction hint before moving on.",
         ],
       },
     ],
@@ -1306,6 +1315,7 @@ class WristVelocity:
           "Use `time.perf_counter()` for high-resolution timing.",
           "Exponential smoothing tames pixel jitter.",
           "One WristVelocity instance per wrist: never share state.",
+          'Test before moving on: run `python -c "from velocity import WristVelocity; v=WristVelocity(); print(v.update((0, 0))); print(v.update((10, 0)))"`.',
         ],
       },
     ],
@@ -1333,7 +1343,10 @@ class WristVelocity:
             "Gestures fail gracefully: worst case you miss a punch, you don't get a weird '3.7 newton' value.",
           ]),
         ],
-        recap: ["Detect the shape of a punch. Do not try to measure its force."],
+        recap: [
+          "Detect the shape of a punch. Do not try to measure its force.",
+          "Test before moving on: explain out loud why a webcam cannot measure punch force in newtons.",
+        ],
       },
       {
         id: "punch-thresholds",
@@ -1382,7 +1395,11 @@ def maybe_punch(side: str, wrist_pos):
               "The check has no memory. As long as speed stays above the threshold, every frame is a new punch. Module 13 fixes this by turning the detector into a state machine so 1 gesture fires exactly 1 event.",
           },
         ],
-        recap: ["Threshold alone spams events.", "We need a state machine to gate the trigger."],
+        recap: [
+          "Threshold alone spams events.",
+          "We need a state machine to gate the trigger.",
+          "This file is a deliberately flawed first try. The next module fixes the repeated-punch bug.",
+        ],
       },
     ],
   },
@@ -1574,6 +1591,7 @@ class Player:
         recap: [
           "States give us a clean '1 gesture = 1 event' contract.",
           "Peak speed inside LAUNCH becomes damage input.",
+          'Test before moving on: run `python -c "from player import Player; p=Player(); p.take_damage(20); print(p.health)"` and expect `80`.',
         ],
       },
     ],
@@ -1619,6 +1637,7 @@ def calibrate(get_speed, seconds=5, fps=60):
         recap: [
           "Threshold is not a constant: it's a per-player, per-setup value.",
           "Sample your own motion, take a percentile.",
+          'Test before moving on: run `python -c "from calibration import calibrate; print(calibrate(lambda: 1000, seconds=1, fps=3))"` and expect `1000.0`.',
         ],
       },
     ],
@@ -1736,6 +1755,7 @@ sys.exit()`,
         recap: [
           "Pygame is just an input/window/audio layer.",
           "Every game is: handle events -> update(dt) -> render -> flip.",
+          "Test before moving on: run `python game_window.py`. You should see a dark window with a red circle. Press Escape to quit.",
         ],
       },
     ],
@@ -1777,7 +1797,10 @@ def draw_enemy(screen, x, y, size=120, hit=False):
             "Every drawing function takes the surface first and returns nothing. That makes them dead simple to test and reuse.",
           ),
         ],
-        recap: ["Separate `renderer.py` from game logic keeps update code readable."],
+        recap: [
+          "Separate `renderer.py` from game logic keeps update code readable.",
+          "Test before moving on: run `python -c \"import renderer; print('ok')\"`. This file draws only after another file gives it a Pygame screen.",
+        ],
       },
     ],
   },
@@ -1907,6 +1930,7 @@ class Enemy:
         recap: [
           "4 states are enough for a fun arcade enemy.",
           "Telegraphs make the game feel fair.",
+          'Test before moving on: run `python -c "from enemy import Enemy; e=Enemy(); print(e.health, e.state.name)"` and expect `100 IDLE`.',
         ],
       },
     ],
@@ -1943,7 +1967,10 @@ def circles_hit(a, ra, b, rb):
             svg: hitboxCollisionSvg,
           },
         ],
-        recap: ["Squared-distance comparison avoids the expensive sqrt."],
+        recap: [
+          "Squared-distance comparison avoids the expensive sqrt.",
+          'Test before moving on: run `python -c "from combat import circles_hit; print(circles_hit((0,0), 10, (5,0), 10))"` and expect `True`.',
+        ],
       },
     ],
   },
@@ -1980,7 +2007,10 @@ def speed_to_damage(peak, cal):
             "Three buckets is enough. Continuous damage feels random; three tiers feel like the game noticed how hard you tried.",
           ),
         ],
-        recap: ["Damage is a bucketed function of peak speed, not a linear formula."],
+        recap: [
+          "Damage is a bucketed function of peak speed, not a linear formula.",
+          'Test before moving on: run `python -c "from combat import speed_to_damage; print(speed_to_damage(2000, 1000))"` and expect `15`.',
+        ],
       },
     ],
   },
@@ -2016,6 +2046,7 @@ def is_blocking(left_wrist, right_wrist, frame_h):
         recap: [
           "A block is a pose, not a gesture.",
           "Poses are cheap: compare y-values to a fraction of the frame height.",
+          'Test before moving on: run `python -c "from player import is_blocking; print(is_blocking((10,50),(20,50),200))"` and expect `True`.',
         ],
       },
     ],
@@ -2251,7 +2282,10 @@ finally:
             "This is the complete loop. Each frame reads the webcam, checks punches and blocks, lets the enemy act, draws health bars, then repeats.",
           ),
         ],
-        recap: ["main.py orchestrates modules: it should stay small."],
+        recap: [
+          "main.py orchestrates modules: it should stay small.",
+          "Test before moving on: run `python main.py`. You should see the game window, webcam input should drive punches, and Escape should quit.",
+        ],
       },
     ],
   },
@@ -2289,7 +2323,10 @@ current = "menu"
             "Scenes keep unrelated code apart. Menu code doesn't need to know a thing about MediaPipe.",
           ),
         ],
-        recap: ["A scene manager is just a dict + a string."],
+        recap: [
+          "A scene manager is just a dict + a string.",
+          "Test before moving on: run `python -c \"from scenes import scenes, current; print(current, list(scenes))\"` and expect `menu ['menu', 'play']`.",
+        ],
       },
     ],
   },
@@ -2322,7 +2359,10 @@ def on_hit(): hit.play()
             "Free sound sources: freesound.org (CC-licensed), or generate short retro punches with sfxr / jsfxr.",
           ),
         ],
-        recap: ["Sounds are objects you `.play()`: no channels required for a small game."],
+        recap: [
+          "Sounds are objects you `.play()`: no channels required for a small game.",
+          "Test before moving on: make sure `assets/sounds/hit.wav` and `assets/sounds/block.wav` exist before importing this file.",
+        ],
       },
     ],
   },
@@ -2369,7 +2409,10 @@ def apply_shake(screen_pos):
             "Screen shake is a tiny effect with a big feel. This demo uses one module-level value called `shake`. That is fine for a small effect, but in a larger game you would usually store effect state in a class.",
           ),
         ],
-        recap: ["Polish is a handful of small effects, not a mode."],
+        recap: [
+          "Polish is a handful of small effects, not a mode.",
+          'Test before moving on: run `python -c "from effects import add_shake, apply_shake; add_shake(3); print(apply_shake((100,100)))"` and expect a nearby `(x, y)` pair.',
+        ],
       },
     ],
   },

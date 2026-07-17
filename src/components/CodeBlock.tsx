@@ -117,6 +117,7 @@ export function CodeBlock({ code, lang = "python", caption }: CodeBlockProps): R
   const { filename, instruction } = getCodeBlockLabel(code, caption, lang);
   const isSnippet = filename.startsWith("snippet.");
   const displayLabel = !isSnippet ? filename : (caption ?? lang);
+  const projectPath = !isSnippet ? `webcam-boxing/${filename}` : displayLabel;
   const fileActionLabel = instruction ? "ADD TO" : "FILE";
 
   const copy = async (): Promise<void> => {
@@ -152,7 +153,7 @@ export function CodeBlock({ code, lang = "python", caption }: CodeBlockProps): R
               <FileCode2 className="h-4 w-4 text-muted-foreground" />
             )}
             <span className="font-mono font-bold tracking-wide">
-              {!isSnippet ? `${fileActionLabel}: ${displayLabel}` : displayLabel.toUpperCase()}
+              {!isSnippet ? `${fileActionLabel}: ${projectPath}` : displayLabel.toUpperCase()}
             </span>
           </div>
 
@@ -160,12 +161,13 @@ export function CodeBlock({ code, lang = "python", caption }: CodeBlockProps): R
             <span className="text-[11px] text-muted-foreground font-medium ml-6">
               {instruction ? (
                 <>
-                  {instruction} <strong className="text-foreground">{displayLabel}</strong>.
+                  {instruction} <strong className="text-foreground">{projectPath}</strong>.
                 </>
               ) : (
                 <>
-                  Open or create <strong className="text-foreground">{displayLabel}</strong> in your
-                  project folder and type this code.
+                  Open the <strong className="text-foreground">webcam-boxing</strong> folder in VS
+                  Code. Create <strong className="text-foreground">{displayLabel}</strong> directly
+                  inside it, then type this code.
                 </>
               )}
             </span>
