@@ -19,7 +19,6 @@ export function ResumeLearningButton({ variant = "default" }: { variant?: "defau
     );
   }
 
-  // Find the first lesson that is NOT completed
   let nextLesson = null;
   let allCompleted = true;
 

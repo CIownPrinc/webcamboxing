@@ -88,7 +88,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Webcam Boxing — Free Python Game Development & Computer Vision Course" },
+      { title: "Webcam Boxing - Free Python Game Development & Computer Vision Course" },
       {
         name: "description",
         content:
@@ -96,7 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         property: "og:title",
-        content: "Webcam Boxing — Free Python Game Development & Computer Vision Course",
+        content: "Webcam Boxing - Free Python Game Development & Computer Vision Course",
       },
       {
         property: "og:description",
@@ -107,7 +107,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "Webcam Boxing — Free Python Game Development & Computer Vision Course",
+        content: "Webcam Boxing - Free Python Game Development & Computer Vision Course",
       },
       {
         name: "twitter:description",
@@ -151,7 +151,6 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
         <script
-          // Apply persisted theme before paint to avoid a flash.
           dangerouslySetInnerHTML={{
             __html:
               "try{var s=JSON.parse(localStorage.getItem('wb.progress.v1')||'{}');document.documentElement.classList.toggle('dark',(s.theme||'dark')==='dark')}catch(e){}",

@@ -22,14 +22,13 @@ describe("Vision ML Classifier Unit Tests", () => {
   it("should calculate exact 3D elbow angle in degrees using Law of Cosines", () => {
     const shoulder: Landmark3D = { x: 0, y: 0, z: 0 };
     const elbow: Landmark3D = { x: 1, y: 0, z: 0 };
-    const wrist: Landmark3D = { x: 1, y: 1, z: 0 }; // 90 degree bend at (1,0,0)
+    const wrist: Landmark3D = { x: 1, y: 1, z: 0 };
     const angle = computeElbowAngle(shoulder, elbow, wrist);
     expect(angle).toBeCloseTo(90, 1);
   });
 
   it("should calculate hand closure metric indicating a closed fist vs open hand", () => {
     const wrist: Landmark3D = { x: 0.5, y: 0.5, z: 0 };
-    // Closed fist: fingertips right next to wrist/palm center (~0.05 distance)
     const closedFingertips: Landmark3D[] = [
       { x: 0.52, y: 0.48, z: 0 },
       { x: 0.51, y: 0.49, z: 0 },
@@ -73,11 +72,11 @@ describe("Vision ML Classifier Unit Tests", () => {
 
   it("should reject an open-hand rapid wave as an INVALID strike even if speed is high", () => {
     const features: KinematicFeatureVector = {
-      velocityZ: -1300, // fast forward speed
+      velocityZ: -1300,
       accelerationNorm: 5000,
       extensionRatio: 0.88,
       elbowAngleDegrees: 155,
-      handClosureMetric: 0.78, // OPEN HAND SLAP / WAVE (> 0.65)
+      handClosureMetric: 0.78,
       guardSymmetryScore: 0.1,
       horizontalTrajectoryVariance: 0.05,
     };
@@ -93,7 +92,7 @@ describe("Vision ML Classifier Unit Tests", () => {
       extensionRatio: 0.35,
       elbowAngleDegrees: 55,
       handClosureMetric: 0.25,
-      guardSymmetryScore: 0.92, // High guard symmetry near chin
+      guardSymmetryScore: 0.92,
       horizontalTrajectoryVariance: 0.01,
     };
     const prediction = classifyPunchML(features);

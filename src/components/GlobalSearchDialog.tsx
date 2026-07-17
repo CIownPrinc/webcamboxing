@@ -145,7 +145,7 @@ export function GlobalSearchDialog() {
                     className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                     aria-label="Close search"
                   >
-                    ✕
+                    x
                   </button>
                 </div>
 

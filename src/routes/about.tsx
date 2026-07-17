@@ -21,7 +21,6 @@ function AboutPage() {
     <main className="min-h-screen py-16 px-4 sm:px-6">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-col md:flex-row gap-12 items-start">
-          {/* Text Column */}
           <div className="flex-1 space-y-5 text-base text-foreground leading-relaxed">
             <h1 className="font-display text-4xl font-bold tracking-tight mb-8">
               About the Creator
@@ -60,8 +59,8 @@ function AboutPage() {
               it'll end up being the shorter one.
             </p>
             <p>
-              Hope this isn't the last thing I build🤞. (Besides, I already have a list of projects
-              I want to make after this one.)
+              Hope this isn't the last thing I build. (Besides, I already have a list of projects I
+              want to make after this one.)
             </p>
             <p>
               If you want to reach me, send me an email at{" "}
@@ -91,7 +90,6 @@ function AboutPage() {
             </div>
           </div>
 
-          {/* Carousel Column */}
           <div className="w-full md:w-[400px] lg:w-[450px] shrink-0 sticky top-24">
             <div className="glass-panel rounded-2xl p-2 shadow-xl">
               <Carousel className="w-full">

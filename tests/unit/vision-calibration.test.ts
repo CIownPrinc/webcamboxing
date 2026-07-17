@@ -26,7 +26,7 @@ describe("Vision Calibration Unit Tests", () => {
   it("should compute exponential moving average velocity cleanly without lag", () => {
     const prev: Point2D = { x: 100, y: 100 };
     const curr: Point2D = { x: 130, y: 140 };
-    const dt = 0.016; // ~60 FPS
+    const dt = 0.016;
     const alpha = APP_CONFIG.calibration.velocitySmoothingAlpha;
     const speed = computeWristVelocity(curr, prev, dt, alpha, 100);
     expect(speed).toBeGreaterThan(100);

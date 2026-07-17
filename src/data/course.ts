@@ -1,7 +1,3 @@
-// Course data for "Webcam Boxing: From Zero to Punch-Out!!"
-// All lesson content is authored inline here so it can be searched, indexed,
-// and rendered from a single source of truth.
-
 export type Block =
   | { type: "p"; text: string }
   | { type: "h"; text: string; level?: 2 | 3 }
@@ -42,10 +38,6 @@ export type Module = {
   summary: string;
   lessons: Lesson[];
 };
-
-/*: ------------------------------------------------------------------------ */
-/*  SVG diagram helpers                                                        */
-/*: ------------------------------------------------------------------------ */
 
 const gameLoopSvg = `
 <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Game loop">
@@ -131,7 +123,7 @@ const velocitySmoothingSvg = `
   <path d="M40 170 Q90 130 140 110 T240 95 T340 100 T390 110" fill="none" stroke="#22c55e" stroke-width="3"/>
   <g font-family="Inter" font-size="11" fill="currentColor">
     <text x="50" y="45" fill="#ef4444" font-weight="600">: Raw Noisy Speed (Motion Blur / Jitter)</text>
-    <text x="50" y="65" fill="#22c55e" font-weight="600">── Exponential Smoothed Velocity (α = 0.35)</text>
+    <text x="50" y="65" fill="#22c55e" font-weight="600">-- Exponential Smoothed Velocity (alpha = 0.35)</text>
     <text x="220" y="190" text-anchor="middle" opacity="0.8">Time (Frames @ 60 FPS)</text>
   </g>
 </svg>`;
@@ -144,12 +136,8 @@ const hitboxCollisionSvg = `
   <circle cx="165" cy="110" r="4" fill="#22c55e"/>
   <text x="100" y="114" font-family="Inter" font-size="12" fill="#22c55e" font-weight="bold">Player Fist (Circle)</text>
   <circle cx="165" cy="110" r="8" fill="#ef4444" opacity="0.8"/>
-  <text x="210" y="115" font-family="Inter" font-size="13" fill="#ef4444" font-weight="bold" text-anchor="middle">💥 INTERSECTION DETECTED!</text>
+  <text x="210" y="115" font-family="Inter" font-size="13" fill="#ef4444" font-weight="bold" text-anchor="middle">INTERSECTION DETECTED!</text>
 </svg>`;
-
-/*: ------------------------------------------------------------------------ */
-/*  Helpers                                                                    */
-/*: ------------------------------------------------------------------------ */
 
 const p = (text: string): Block => ({ type: "p", text });
 const h = (text: string, level: 2 | 3 = 2): Block => ({ type: "h", text, level });
@@ -180,6 +168,7 @@ const warn = (text: string, title = "Watch out"): Block => ({
 });
 const tip = (text: string, title = "Tip"): Block => ({ type: "callout", kind: "tip", title, text });
 const analogy = (text: string): Block => ({ type: "analogy", text });
+const hint = (label: string, text: string): Block => ({ type: "hint", label, text });
 const video = (
   title: string,
   youtubeId: string,
@@ -192,10 +181,6 @@ const video = (
   caption,
   startSeconds,
 });
-
-/*: ------------------------------------------------------------------------ */
-/*  Modules                                                                    */
-/*: ------------------------------------------------------------------------ */
 
 export const modules: Module[] = [
   {
@@ -408,7 +393,7 @@ pip: version`,
           ]),
           h("Open your project folder"),
           p(
-            "File → Open Folder → create an empty folder called `webcam-boxing`. Everything you write in this course will live under that folder.",
+            "File -> Open Folder -> create an empty folder called `webcam-boxing`. Everything you write in this course will live under that folder.",
           ),
           tip(
             "The keyboard shortcut Ctrl+` (backtick) opens VS Code's integrated terminal. Get used to it: you'll live there.",
@@ -758,7 +743,7 @@ cv2.circle(frame, (w // 2, h // 2), 40, (0, 0, 255), 3)`,
           },
         },
         recap: [
-          "A webcam is a loop: read a frame → do something → show it → repeat.",
+          "A webcam is a loop: read a frame -> do something -> show it -> repeat.",
           "`waitKey(1)` is required for the window to update at all.",
           "Always release the camera in a `finally` block.",
         ],
@@ -810,7 +795,7 @@ mp_draw = mp.solutions.drawing_utils
 def main():
     cap = cv2.VideoCapture(0)
 
-    # max_num_hands=2 → track both hands
+    # max_num_hands=2 -> track both hands
     # min_detection_confidence: throw out weak guesses
     with mp_hands.Hands(
         max_num_hands=2,
@@ -1025,7 +1010,7 @@ def process(frame, results):
         blocks: [
           h("The math"),
           p(
-            "Velocity is (current position − previous position) divided by the time between them. For a 2D point we get a vector; its length is the speed.",
+            "Velocity is (current position - previous position) divided by the time between them. For a 2D point we get a vector; its length is the speed.",
           ),
           code(
             "python",
@@ -1040,7 +1025,7 @@ class WristVelocity:
     """
 
     def __init__(self, alpha: float = 0.4):
-        # alpha = 0 → no smoothing.  alpha = 1 → ignore new data entirely.
+        # alpha = 0 -> no smoothing.  alpha = 1 -> ignore new data entirely.
         self.alpha = alpha
         self._prev_pos = None
         self._prev_t = None
@@ -1190,7 +1175,7 @@ def maybe_punch(side: str, wrist_pos):
     lessons: [
       {
         id: "punch-fsm",
-        title: "IDLE → CHAMBER → LAUNCH → EXTEND → COOLDOWN",
+        title: "IDLE -> CHAMBER -> LAUNCH -> EXTEND -> COOLDOWN",
         minutes: 22,
         difficulty: "Intermediate",
         objectives: [
@@ -1242,7 +1227,7 @@ class PunchDetector:
         elif self.state == Punch.LAUNCH:
             self._peak_speed = max(self._peak_speed, speed)
             if speed < self.threshold * 0.6:
-                # movement is slowing → punch complete
+                # movement is slowing -> punch complete
                 event = ("punch", self._peak_speed)
                 self.state = Punch.COOLDOWN
                 self._t_cooldown_ends = now + self.cooldown
@@ -1255,21 +1240,21 @@ class PunchDetector:
 `,
           ),
           why(
-            "Firing on entry to LAUNCH would fire many times as speed hovers near the threshold. Firing when the wrist slows down (LAUNCH → COOLDOWN) captures 'one punch, 1 event' cleanly. And the peak speed becomes our damage input.",
+            "Firing on entry to LAUNCH would fire many times as speed hovers near the threshold. Firing when the wrist slows down (LAUNCH -> COOLDOWN) captures 'one punch, 1 event' cleanly. And the peak speed becomes our damage input.",
           ),
           {
             type: "quiz",
             question:
               "In this state machine, WHEN do we actually emit the ('punch', peak_speed) event?",
             options: [
-              "The moment speed first crosses the threshold (IDLE → LAUNCH).",
+              "The moment speed first crosses the threshold (IDLE -> LAUNCH).",
               "Every frame we're in LAUNCH.",
               "When we leave LAUNCH because the wrist is slowing down.",
               "When the cooldown ends.",
             ],
             answer: 2,
             explain:
-              "Emitting on IDLE → LAUNCH would fire multiple times as speed hovers near the threshold. Emitting when speed drops back below 60% of threshold means we've seen a full 'up-and-down' hump: 1 gesture, 1 event - and we've captured the peak speed to use as damage.",
+              "Emitting on IDLE -> LAUNCH would fire multiple times as speed hovers near the threshold. Emitting when speed drops back below 60% of threshold means we've seen a full 'up-and-down' hump: 1 gesture, 1 event - and we've captured the peak speed to use as damage.",
           },
         ],
         mistakes: [
@@ -1388,7 +1373,7 @@ sys.exit()
         ],
         recap: [
           "Pygame is just an input/window/audio layer.",
-          "Every game is: handle events → update(dt) → render → flip.",
+          "Every game is: handle events -> update(dt) -> render -> flip.",
         ],
       },
     ],
@@ -1437,7 +1422,7 @@ def draw_enemy(screen, x, y, size=120, hit=False):
     id: "enemy-fsm",
     number: 17,
     title: "Enemy state machine",
-    summary: "A dumb-but-satisfying opponent: idle → telegraph → attack → recover.",
+    summary: "A dumb-but-satisfying opponent: idle -> telegraph -> attack -> recover.",
     lessons: [
       {
         id: "enemy",
@@ -1542,7 +1527,7 @@ def circles_hit(a, ra, b, rb):
     lessons: [
       {
         id: "health-flow",
-        title: "Damage flow and speed → damage mapping",
+        title: "Damage flow and speed -> damage mapping",
         minutes: 15,
         difficulty: "Intermediate",
         objectives: [
@@ -1617,7 +1602,7 @@ def is_blocking(left_wrist, right_wrist, frame_h):
         difficulty: "Intermediate",
         objectives: [
           "Run tracker and game in the same process",
-          "Detect win (enemy hp ≤ 0) and lose (player hp ≤ 0)",
+          "Detect win (enemy hp <= 0) and lose (player hp <= 0)",
         ],
         blocks: [
           info(
@@ -1801,7 +1786,7 @@ def apply_shake(screen_pos):
         difficulty: "Beginner",
         objectives: ["Pick a next step that matches your interest"],
         blocks: [
-          h("Congratulations! 🎉", 2),
+          h("Congratulations!", 2),
           p(
             "You've just finished building a fully functional webcam-controlled game from scratch. We took raw, noisy pixels from a cheap camera, extracted landmarks with deep learning, smoothed out the jitter, mapped it to game state, and wrapped it in a satisfying game loop.",
           ),
@@ -1829,7 +1814,7 @@ def apply_shake(screen_pos):
           ),
         ],
         recap: [
-          "The core pattern (signal → FSM → cooldown → render) generalizes to almost any webcam game.",
+          "The core pattern (signal -> FSM -> cooldown -> render) generalizes to almost any webcam game.",
         ],
       },
     ],
@@ -1879,7 +1864,7 @@ export const glossary: { term: string; def: string }[] = [
   },
   {
     term: "Exponential moving average",
-    def: "A smoothing formula: smoothed = α × new + (1 − α) × previous. Cheap and effective.",
+    def: "A smoothing formula: smoothed = alpha * new + (1 - alpha) * previous. Cheap and effective.",
   },
   {
     term: "Calibration",
@@ -1891,7 +1876,7 @@ export const glossary: { term: string; def: string }[] = [
   },
   {
     term: "Game loop",
-    def: "The repeating cycle of Input → Update → Render that every real-time game runs at ~60 Hz.",
+    def: "The repeating cycle of Input -> Update -> Render that every real-time game runs at ~60 Hz.",
   },
 
   {

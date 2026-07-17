@@ -58,7 +58,6 @@ function Curriculum() {
     ],
   };
 
-  // Find the first module with an incomplete lesson
   let activeModuleId = modules[0].id;
   if (hydrated) {
     for (const m of modules) {
@@ -137,7 +136,7 @@ function Curriculum() {
                               <span className="flex-1 font-medium text-[15px]">{l.title}</span>
                               <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                                 <Clock className="h-3 w-3" />
-                                {l.minutes}m · {l.difficulty}
+                                {l.minutes}m - {l.difficulty}
                               </span>
                             </Link>
                           </li>
@@ -163,7 +162,6 @@ function Curriculum() {
                 const isActive = activeModuleId === m.id;
                 return (
                   <li key={m.id} className="relative">
-                    {/* Timeline dot */}
                     <div
                       className={`absolute -left-[17px] top-1.5 h-2 w-2 rounded-full border ${allDone ? "border-green-500 bg-green-500" : isActive ? "border-primary bg-primary" : "border-muted-foreground bg-background"}`}
                     />
@@ -175,7 +173,7 @@ function Curriculum() {
                       className={`block w-full rounded-md px-2 py-1.5 text-left text-[13px] transition-colors hover:bg-accent/60 truncate ${isActive ? "text-primary font-bold" : allDone ? "text-green-500/80 font-medium" : "text-muted-foreground"}`}
                       title={m.title}
                     >
-                      {String(m.number).padStart(2, "0")} · {m.title}
+                      {String(m.number).padStart(2, "0")} - {m.title}
                     </button>
                   </li>
                 );

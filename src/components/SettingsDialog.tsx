@@ -72,12 +72,11 @@ export function SettingsDialog() {
                     onClick={() => setOpen(false)}
                     className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                   >
-                    ✕
+                    x
                   </button>
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-                  {/* Theme Mode Selection */}
                   <div>
                     <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       Interface Theme
@@ -108,7 +107,6 @@ export function SettingsDialog() {
                     </div>
                   </div>
 
-                  {/* Background Preset Selection */}
                   <div>
                     <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       Background Wallpaper
@@ -148,7 +146,6 @@ export function SettingsDialog() {
                         );
                       })}
 
-                      {/* Pure Solid Option */}
                       <button
                         type="button"
                         onClick={() => setWallpaper("none")}
@@ -166,7 +163,6 @@ export function SettingsDialog() {
                         </span>
                       </button>
 
-                      {/* Custom Uploaded Option if present */}
                       {customWallpaper && (
                         <button
                           type="button"
@@ -193,7 +189,6 @@ export function SettingsDialog() {
                       )}
                     </div>
 
-                    {/* Custom File Uploader */}
                     <div className="mt-3">
                       <label className="neo-inset flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-border/80 bg-background/50 px-4 py-3 text-xs font-medium text-muted-foreground backdrop-blur transition-colors hover:border-primary hover:text-foreground">
                         <Upload className="h-3.5 w-3.5" />

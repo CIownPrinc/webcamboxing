@@ -5,7 +5,7 @@ import { BlockView } from "@/components/LessonBlocks";
 import { CodeBlock } from "@/components/CodeBlock";
 import { findLesson, modules, totalLessons, type Lesson, type Module } from "@/data/course";
 import { lessonKey, useHydrated, useProgress } from "@/lib/progress";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 
 export const Route = createFileRoute("/lessons/$moduleId/$lessonId")({
@@ -22,9 +22,9 @@ export const Route = createFileRoute("/lessons/$moduleId/$lessonId")({
     return found;
   },
   head: ({ loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Lesson not found — Webcam Boxing" }] };
-    const t = `${loaderData.lesson.title} — Module ${loaderData.module.number}: ${loaderData.module.title} | Python & CV Course`;
-    const d = `Learn ${loaderData.lesson.title} in Module ${loaderData.module.number} of Webcam Boxing. Objectives: ${loaderData.lesson.objectives.join(" · ")}`;
+    if (!loaderData) return { meta: [{ title: "Lesson not found - Webcam Boxing" }] };
+    const t = `${loaderData.lesson.title} - Module ${loaderData.module.number}: ${loaderData.module.title} | Python & CV Course`;
+    const d = `Learn ${loaderData.lesson.title} in Module ${loaderData.module.number} of Webcam Boxing. Objectives: ${loaderData.lesson.objectives.join(" - ")}`;
     const url = `https://webcamboxing.com/lessons/${loaderData.module.id}/${loaderData.lesson.id}`;
     return {
       meta: [
@@ -54,7 +54,7 @@ function LessonPage() {
   const key = lessonKey(mod.id, lesson.id);
   const done = hydrated && isDone(key);
 
-  const handleComplete = () => {
+  const handleComplete = useCallback(() => {
     toggle(key);
     if (!done && next === null && Object.keys(completed).length === totalLessons - 1) {
       confetti({
@@ -67,7 +67,6 @@ function LessonPage() {
       cheer
         .play()
         .then(() => {
-          // Fade out the cheer after 2.5 seconds so it doesn't last too long
           setTimeout(() => {
             let vol = 1.0;
             const fade = setInterval(() => {
@@ -83,7 +82,7 @@ function LessonPage() {
         })
         .catch((e) => console.error("Audio playback blocked", e));
     }
-  };
+  }, [completed, done, key, next, toggle]);
 
   useEffect(() => {
     if (hydrated) setLastVisited(mod.id, lesson.id);
@@ -91,9 +90,7 @@ function LessonPage() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Avoid triggering when user is typing in an input or textarea
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-      // Avoid triggering if the user is actively selecting text
       if (window.getSelection()?.toString().length) return;
 
       if (e.shiftKey && (e.key === "ArrowRight" || e.key.toLowerCase() === "j")) {
@@ -119,13 +116,13 @@ function LessonPage() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [next, prev, router, toggle, key]);
+  }, [handleComplete, next, prev, router]);
 
   const lessonSchema = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
     name: lesson.title,
-    description: lesson.objectives.join(" · "),
+    description: lesson.objectives.join(" - "),
     learningResourceType: "Tutorial",
     educationalLevel: "Beginner",
     inLanguage: "en",
@@ -231,7 +228,7 @@ function LessonPage() {
 
         <article className="prose-lesson min-w-0 glass-panel rounded-2xl p-6 md:p-8 shadow-xl">
           <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-            Module {mod.number} · {mod.title}
+            Module {mod.number} - {mod.title}
           </p>
           <h1 className="mt-2 font-display text-4xl font-bold leading-tight md:text-5xl">
             {lesson.title}
@@ -245,7 +242,7 @@ function LessonPage() {
             </span>
             <button
               onClick={handleComplete}
-              title="Shift+C to complete · Shift+→ next lesson"
+              title="Shift+C to complete - Shift+Right Arrow next lesson"
               className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-semibold transition-all ${done ? "border-primary bg-primary text-primary-foreground shadow-sm" : "border-border/80 bg-card hover:bg-accent hover:border-border"}`}
             >
               {done ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Circle className="h-3.5 w-3.5" />}
@@ -426,7 +423,7 @@ function LessonPage() {
           </kbd>
           <span className="text-muted-foreground/50 text-xs">+</span>
           <kbd className="inline-flex h-5 items-center justify-center rounded border border-border/80 bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-            →
+            Right Arrow
           </kbd>
           <span className="ml-1 text-xs font-medium text-foreground">Next</span>
         </div>

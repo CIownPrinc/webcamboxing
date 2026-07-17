@@ -1,10 +1,6 @@
 import { Check, Copy, Download, FileCode2, Terminal } from "lucide-react";
 import { useState } from "react";
 
-// Minimal, dependency-free Python/bash highlighter. Not perfect — good enough
-// to distinguish keywords, strings, comments, and numbers without a runtime
-// hit from prism/shiki.
-
 const PY_KEYWORDS = new Set(
   "False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield self".split(
     " ",
@@ -17,7 +13,6 @@ function tokenize(code: string, lang: string): { t: string; c?: string }[] {
   let i = 0;
   while (i < code.length) {
     const ch = code[i];
-    // comment
     if (isCommentChar && ch === isCommentChar) {
       let j = i;
       while (j < code.length && code[j] !== "\n") j++;
@@ -25,7 +20,6 @@ function tokenize(code: string, lang: string): { t: string; c?: string }[] {
       i = j;
       continue;
     }
-    // string
     if (ch === '"' || ch === "'") {
       const quote = ch;
       const triple = code.slice(i, i + 3) === quote.repeat(3);
@@ -40,7 +34,6 @@ function tokenize(code: string, lang: string): { t: string; c?: string }[] {
       i = j;
       continue;
     }
-    // number
     if (/[0-9]/.test(ch) && (i === 0 || !/[A-Za-z_]/.test(code[i - 1]))) {
       let j = i;
       while (j < code.length && /[0-9._]/.test(code[j])) j++;
@@ -48,7 +41,6 @@ function tokenize(code: string, lang: string): { t: string; c?: string }[] {
       i = j;
       continue;
     }
-    // identifier / keyword
     if (/[A-Za-z_]/.test(ch)) {
       let j = i;
       while (j < code.length && /[A-Za-z0-9_]/.test(code[j])) j++;
@@ -141,7 +133,6 @@ export function CodeBlock({
             </span>
           </div>
 
-          {/* Beginner-friendly instructional text */}
           {!isSnippet && (
             <span className="text-[11px] text-muted-foreground font-medium ml-6">
               Open or create <strong className="text-foreground">{displayLabel}</strong> in your

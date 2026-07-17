@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Webcam Boxing — Free Python Game Development & Computer Vision Course",
+        title: "Webcam Boxing - Free Python Game Development & Computer Vision Course",
       },
       {
         name: "description",
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Webcam Boxing — Free Python Game Development & Computer Vision Course",
+        content: "Webcam Boxing - Free Python Game Development & Computer Vision Course",
       },
       {
         property: "og:description",
