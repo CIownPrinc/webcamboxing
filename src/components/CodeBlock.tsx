@@ -1,5 +1,20 @@
 import { Check, Copy, Download, FileCode2, Terminal } from "lucide-react";
+import type { ReactElement } from "react";
 import { useState } from "react";
+
+import { APP_CONFIG } from "@/config/app.config";
+import { Button } from "@/components/ui/button";
+
+interface TokenizedCodePart {
+  readonly t: string;
+  readonly c?: string;
+}
+
+interface CodeBlockProps {
+  readonly code: string;
+  readonly lang?: string;
+  readonly caption?: string;
+}
 
 const PY_KEYWORDS = new Set(
   "False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield self".split(
@@ -7,8 +22,8 @@ const PY_KEYWORDS = new Set(
   ),
 );
 
-function tokenize(code: string, lang: string): { t: string; c?: string }[] {
-  const out: { t: string; c?: string }[] = [];
+function tokenize(code: string, lang: string): TokenizedCodePart[] {
+  const out: TokenizedCodePart[] = [];
   const isCommentChar = lang === "python" || lang === "bash" ? "#" : "";
   let i = 0;
   while (i < code.length) {
@@ -80,15 +95,7 @@ function getDownloadFilename(code: string, caption?: string, lang: string = "pyt
   return `snippet.${ext}`;
 }
 
-export function CodeBlock({
-  code,
-  lang = "python",
-  caption,
-}: {
-  code: string;
-  lang?: string;
-  caption?: string;
-}) {
+export function CodeBlock({ code, lang = "python", caption }: CodeBlockProps): ReactElement {
   const [copied, setCopied] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
   const tokens = tokenize(code, lang);
@@ -96,13 +103,13 @@ export function CodeBlock({
   const isSnippet = filename.startsWith("snippet.");
   const displayLabel = !isSnippet ? filename : (caption ?? lang);
 
-  const copy = async () => {
+  const copy = async (): Promise<void> => {
     await navigator.clipboard.writeText(code);
     setCopied(true);
-    setTimeout(() => setCopied(false), 1200);
+    setTimeout(() => setCopied(false), APP_CONFIG.ui.copyFeedbackResetMilliseconds);
   };
 
-  const download = () => {
+  const download = (): void => {
     const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -113,7 +120,7 @@ export function CodeBlock({
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     setDownloaded(true);
-    setTimeout(() => setDownloaded(false), 1200);
+    setTimeout(() => setDownloaded(false), APP_CONFIG.ui.copyFeedbackResetMilliseconds);
   };
 
   return (
@@ -146,9 +153,12 @@ export function CodeBlock({
           )}
         </div>
         <div className="flex items-center gap-1.5">
-          <button
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
             onClick={download}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-card/60 px-2.5 py-1 font-medium text-muted-foreground shadow-sm transition-all hover:bg-card hover:text-foreground"
+            className="h-7 gap-1.5 border-border/60 bg-card/60 px-2.5 text-xs font-medium text-muted-foreground shadow-sm hover:bg-card hover:text-foreground"
             aria-label={`Download ${filename}`}
             title={`Download as ${filename}`}
           >
@@ -158,15 +168,18 @@ export function CodeBlock({
               <Download className="h-3 w-3" />
             )}
             <span>{downloaded ? "Saved" : filename}</span>
-          </button>
-          <button
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
             onClick={copy}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-card/60 px-2.5 py-1 font-medium text-muted-foreground shadow-sm transition-all hover:bg-card hover:text-foreground"
+            className="h-7 gap-1.5 border-border/60 bg-card/60 px-2.5 text-xs font-medium text-muted-foreground shadow-sm hover:bg-card hover:text-foreground"
             aria-label="Copy code"
           >
             {copied ? <Check className="h-3 w-3 text-primary" /> : <Copy className="h-3 w-3" />}
             <span>{copied ? "Copied" : "Copy"}</span>
-          </button>
+          </Button>
         </div>
       </div>
       <pre className="overflow-x-auto p-4 text-[13.5px] leading-relaxed">

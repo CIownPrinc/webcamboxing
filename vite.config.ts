@@ -7,10 +7,6 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
-    test: {
-      exclude: ["tests/e2e/**", "node_modules/**"],
-      include: ["tests/unit/**/*.test.ts", "tests/integration/**/*.test.ts"],
-    },
     plugins: [
       VitePWA({
         registerType: "autoUpdate",
@@ -66,5 +62,5 @@ export default defineConfig({
         },
       }),
     ],
-  } as unknown as Record<string, unknown>,
+  },
 });

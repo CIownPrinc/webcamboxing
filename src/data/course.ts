@@ -39,6 +39,18 @@ export type Module = {
   lessons: Lesson[];
 };
 
+export interface LessonListItem {
+  readonly module: Module;
+  readonly lesson: Lesson;
+}
+
+export interface FindLessonResult {
+  readonly module: Module;
+  readonly lesson: Lesson;
+  readonly prev: LessonListItem | null;
+  readonly next: LessonListItem | null;
+}
+
 const gameLoopSvg = `
 <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Game loop">
   <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs>
@@ -316,7 +328,7 @@ export const modules: Module[] = [
         objectives: [
           "Install Python 3.11 or newer on your operating system",
           "Open a terminal and confirm `python: version` works",
-          "Understand what `pip` is",
+          "Understand what `uv` does for Python projects",
         ],
         blocks: [
           h("Why a specific version"),
@@ -344,10 +356,10 @@ export const modules: Module[] = [
 # or
 python3: version
 
-pip: version`,
+uv: version`,
           ),
           p(
-            "If you see something like `Python 3.12.3`, you're set. `pip` is the tool that downloads libraries like OpenCV and MediaPipe: we'll use it in Module 4.",
+            "If you see something like `Python 3.12.3`, Python is ready. `uv` is the tool we'll use to create environments and install libraries like OpenCV and MediaPipe.",
           ),
         ],
         mistakes: [
@@ -357,7 +369,7 @@ pip: version`,
         recap: [
           "Install Python 3.11 or 3.12.",
           "`python: version` should print your Python version.",
-          "`pip` is the package installer, and it comes with Python.",
+          "`uv` manages Python environments and packages for this project.",
         ],
         resources: [
           { title: "python.org downloads", url: "https://www.python.org/downloads/", kind: "docs" },
@@ -434,7 +446,7 @@ pip: version`,
           code(
             "bash",
             `# from inside your project folder
-python -m venv .venv
+uv venv .venv
 
 # macOS / Linux
 source .venv/bin/activate
@@ -443,14 +455,10 @@ source .venv/bin/activate
 .venv\\Scripts\\Activate.ps1`,
           ),
           p(
-            "Your terminal prompt should now start with `(.venv)`. Every `pip install` you run while active goes into this folder only.",
+            "Your terminal prompt should now start with `(.venv)`. Every `uv pip install` you run while active goes into this folder only.",
           ),
           h("Install the stack"),
-          code(
-            "bash",
-            `pip install: upgrade pip
-pip install opencv-python mediapipe pygame numpy`,
-          ),
+          code("bash", `uv pip install opencv-python mediapipe pygame numpy`),
           warn(
             "If MediaPipe fails to install, check your Python version. As of 2026 MediaPipe wheels exist for Python 3.10–3.12 on most platforms. If you're on 3.13 you may need to downgrade.",
           ),
@@ -458,20 +466,20 @@ pip install opencv-python mediapipe pygame numpy`,
         challenge: {
           prompt:
             "Freeze your installed packages into a requirements.txt file so anyone (including future-you) can recreate the environment.",
-          hint: "There is a pip command called `freeze`.",
+          hint: "`uv` can run pip-compatible freeze and install commands.",
           solution: {
             lang: "bash",
-            code: `pip freeze > requirements.txt
+            code: `uv pip freeze > requirements.txt
 # to recreate later:
-# pip install -r requirements.txt`,
+# uv pip install -r requirements.txt`,
             explain:
-              "`pip freeze` prints every installed package and its exact version. Redirecting to a file makes a portable recipe.",
+              "`uv pip freeze` prints every installed package and its exact version. Redirecting to a file makes a portable recipe.",
           },
         },
         recap: [
-          "`python -m venv .venv` creates an isolated Python.",
+          "`uv venv .venv` creates an isolated Python environment.",
           "Activate it every time you open the project.",
-          "Install libraries with pip, freeze them with `pip freeze`.",
+          "Install libraries with `uv pip install`, freeze them with `uv pip freeze`.",
         ],
         resources: [
           {
@@ -1821,9 +1829,11 @@ def apply_shake(screen_pos):
   },
 ];
 
-export const allLessons = modules.flatMap((m) => m.lessons.map((l) => ({ module: m, lesson: l })));
+export const allLessons: LessonListItem[] = modules.flatMap((m) =>
+  m.lessons.map((l) => ({ module: m, lesson: l })),
+);
 
-export function findLesson(moduleId: string, lessonId: string) {
+export function findLesson(moduleId: string, lessonId: string): FindLessonResult | null {
   const m = modules.find((x) => x.id === moduleId);
   if (!m) return null;
   const l = m.lessons.find((x) => x.id === lessonId);

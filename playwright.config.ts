@@ -1,14 +1,18 @@
 import { defineConfig } from "@playwright/test";
 
+import { APP_CONFIG } from "./src/config/app.config";
+
+const baseUrl = `http://${APP_CONFIG.e2e.host}:${APP_CONFIG.e2e.port}`;
+
 export default defineConfig({
   testDir: "tests/e2e",
   use: {
-    baseURL: "http://127.0.0.1:8080",
+    baseURL: baseUrl,
   },
   webServer: {
-    command: "pnpm run dev -- --host 127.0.0.1 --port 8080",
-    url: "http://127.0.0.1:8080",
-    reuseExistingServer: true,
-    timeout: 120_000,
+    command: `pnpm exec vite dev --host ${APP_CONFIG.e2e.host} --port ${APP_CONFIG.e2e.port}`,
+    url: baseUrl,
+    reuseExistingServer: false,
+    timeout: APP_CONFIG.e2e.startupTimeoutMilliseconds,
   },
 });

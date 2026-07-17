@@ -7,14 +7,17 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, type ReactElement, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { Button } from "../components/ui/button";
+import { APP_CONFIG } from "../config/app.config";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { registerAppServiceWorker } from "../lib/register-sw";
 import { useProgress } from "../lib/progress";
+import { BackgroundLayer } from "../components/BackgroundLayer";
 
-function NotFoundComponent() {
+function NotFoundComponent(): ReactElement {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -36,8 +39,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
+function ErrorComponent({ error, reset }: { error: Error; reset: () => void }): ReactElement {
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
@@ -53,7 +55,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
+          <Button
+            type="button"
             onClick={() => {
               try {
                 reset();
@@ -67,10 +70,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
                 }
               }, 150);
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Try again
-          </button>
+          </Button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
@@ -145,15 +147,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-function RootShell({ children }: { children: ReactNode }) {
+function RootShell({ children }: { children: ReactNode }): ReactElement {
   return (
     <html lang="en" className="dark">
       <head>
         <HeadContent />
         <script
           dangerouslySetInnerHTML={{
-            __html:
-              "try{var s=JSON.parse(localStorage.getItem('wb.progress.v1')||'{}');document.documentElement.classList.toggle('dark',(s.theme||'dark')==='dark')}catch(e){}",
+            __html: `try{var s=JSON.parse(localStorage.getItem('${APP_CONFIG.course.storageKey}')||'{}');document.documentElement.classList.toggle('dark',(s.theme||'dark')==='dark')}catch(e){}`,
           }}
         />
       </head>
@@ -165,9 +166,7 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-import { BackgroundLayer } from "../components/BackgroundLayer";
-
-function RootComponent() {
+function RootComponent(): ReactElement {
   const { queryClient } = Route.useRouteContext();
   const { theme } = useProgress();
 

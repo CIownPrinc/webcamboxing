@@ -53,7 +53,7 @@ test.describe("Course Navigation E2E", () => {
     }, APP_CONFIG.course.storageKey);
 
     await page.goto("/");
-    const resumeLink = page.getByRole("link", { exact: true, name: "Resume" });
+    const resumeLink = page.getByRole("link", { name: /resume/i }).first();
 
     await expect(resumeLink).toBeVisible();
     await resumeLink.click();

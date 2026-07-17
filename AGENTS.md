@@ -2,60 +2,93 @@
 
 > [!IMPORTANT]
 > This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
-> published git history — force pushing, or rebasing/amending/squashing commits
-> that are already pushed — as it rewrites history on Lovable's side and the
-> user will likely lose their project history.
+> published git history: no force pushing, rebasing, amending, or squashing
+> commits that are already pushed. Rewriting history can break Lovable sync and
+> cause project history loss.
 >
-> Commits you push to the connected branch sync back to Lovable and show up in
-> the editor, so keep the branch in a working state.
+> Commits pushed to the connected branch sync back to Lovable and show up in
+> the editor, so keep the branch working before pushing.
 
 <!-- LOVABLE:END -->
 
-# Engineering & Architectural Rules
+# AGENTS.md
 
-All agents and developers working on this codebase (`webcamboxing`) must strictly adhere to the following simple, non-negotiable rules:
+Simple rules for every agent and developer working in `C:\Users\persw\OneDrive\Desktop\webcamboxing`.
 
-## 1. Package Management & Tooling
+## Project Boundary
 
-- **JavaScript/TypeScript**: Strictly use `pnpm` (`pnpm add`, `pnpm run`). Standard `npm` and `yarn` are prohibited.
-- **Python**: Strictly use `uv` (`uv pip install`, `uv run`, `uv venv`). Standard `pip` is prohibited.
-- **Git & Husky**: Maintain strict `husky` hooks (`pre-commit` and `pre-push`) running linters and type checks so unverified or broken code is never pushed to `main`.
+- Work only inside this `webcamboxing` repo unless the user explicitly approves another path.
+- Do not confuse this project with other local folders.
+- Read the existing code before changing it. Preserve the product shape unless the user approves a bigger design change.
 
-## 2. Architecture & Frameworks
+## Package Tools
 
-- **Monolithic Architecture**: Strictly remain a unified **Monolith** structured and scaled with **Turborepo (`turbo`)**. Never break components or backend services out into microservices.
-- **UI Components (`shadcn/ui`)**: Always import and use existing `shadcn/ui` primitives (`@/components/ui/*`). Never recreate basic components (`Button`, `Card`, `Collapsible`, `Accordion`, `Input`) from scratch.
-- **Animations (`framer`)**: Use `framer-motion` (`framer`) or standard Radix/Tailwind animation primitives (`tw-animate-css`). Do not write ad-hoc CSS keyframe loops.
-- **Reusing Battle-Tested Libraries**: Never reinvent or hand-roll algorithms or utilities if a far superior, battle-tested library is already installed or standard (`zod`, `clsx`, `@tanstack/react-query`).
+- Use `pnpm` for JavaScript and TypeScript. Do not use `npm`, `yarn`, or `npx`.
+- Use `uv` for Python. Do not use direct `pip` or `python -m pip`.
+- Keep one lockfile path: `pnpm-lock.yaml` for JS/TS and `uv.lock` only if Python dependencies are added.
 
-## 3. Database & SQL
+## Architecture
 
-- **ORM Required**: Any database access or SQL operation MUST strictly use an ORM (`Drizzle ORM` or `Prisma`). Direct raw SQL strings and manual queries are strictly prohibited.
+- Keep the app as one monolith. Use Turborepo (`turbo`) to organize checks and builds; do not split into microservices.
+- The current frontend stack is TanStack Start, React, Vite, Tailwind, and shadcn/ui. Do not migrate frameworks, including to Next.js, without an explicit architecture decision from the user.
+- Put runtime knobs, thresholds, defaults, timings, and tuning values in `src/config/app.config.ts`.
 
-## 4. State Management & Performance
+## UI And Libraries
 
-- **TanStack Query (`@tanstack/react-query`)**: All asynchronous data fetching, caching, and server synchronization must go through strictly-typed TanStack Query hooks.
-- **Performance Best Practices**: Configure sensible `staleTime` and `gcTime` (centralized in `src/config/app.config.ts`). Avoid unnecessary re-renders using clean component boundaries, memoization where appropriate, and lightweight state subscriptions.
+- Use shadcn/ui primitives from `@/components/ui/*` for basic UI pieces such as buttons, cards, dialogs, accordions, collapsibles, inputs, selects, tabs, switches, sliders, and tooltips.
+- Use existing battle-tested libraries before writing custom infrastructure. Prefer `zod`, `clsx`, `tailwind-merge`, Radix, TanStack Query, TanStack Router, and existing shadcn components where they fit.
+- Use `tw-animate-css`, Radix animation behavior, or `framer-motion` when animation is needed. Do not create ad-hoc animation systems.
 
-## 5. Development Methodology & Code Quality
+## Data And SQL
 
-- **Test-Driven Development (TDD) & Test Pyramid**: Strictly follow Red-Green-Refactor TDD for every feature, state transition, and utility function before changing business logic. All code MUST be covered by three strict testing layers:
-  1. **Unit Tests**: Fast, isolated verification of individual utilities, Zod schemas, hooks, and Python computer vision functions (`tests/unit/`).
-  2. **Integration Tests**: Verification of state transitions, TanStack Query interactions, storage hooks, and component integration (`tests/integration/`).
-  3. **End-to-End (E2E) Tests**: Full-browser and gameplay flow testing via Playwright (`tests/e2e/`).
-- **XP + Clean Code + Code Complete + Pragmatic Programmer**: Keep code simple, DRY (`Don't Repeat Yourself`), orthogonal, and self-documenting (`Single Responsibility Principle`).
-- **Strict TypeScript (`strict: true`)**: Zero `any` types. All functions, hooks, and services must declare explicit TypeScript `interface` contracts (`interface ProgressServiceResult`, `interface CourseConfiguration`).
-- **Easy Fine-Tuning**: Keep runtime parameters, calibration thresholds, UI defaults, and constants centralized and easily configurable in `src/config/app.config.ts`.
+- Any database or SQL work must go through an ORM such as Drizzle ORM or Prisma.
+- Do not write raw SQL strings or hand-built SQL query functions.
 
-## 6. Comments Policy (CRITICAL)
+## Async State And Performance
 
-- Comments MUST ONLY be about **LEGAL** notices, **COMPLIANCE** mandates, or genuine **TODOs**.
-- NEVER write comments that reiterate what the code is doing, explain task implementation logic, or leave behind debugging traces. Self-documenting code and clear function interfaces replace explanatory comments.
+- Server data, async data fetching, caching, retries, and synchronization must use strictly typed TanStack Query hooks.
+- Use the query defaults in `src/config/app.config.ts` unless a feature has a clear reason to override them.
+- Keep component boundaries small enough that state changes do not rerender unrelated UI.
 
-## 7. Communication, Teaching & Project Boundaries
+## Type Safety
 
-- **Project Boundary Verification (`webcamboxing` strictly)**: Always verify and confirm operations strictly inside the `C:\Users\persw\OneDrive\Desktop\webcamboxing` directory. Never confuse this project with outside directories or projects (such as `top boxer`).
-- **First Principles & Building Blocks Teaching**: Always write explanations in simple, clear English without unnecessary jargon or verbosity. Explain every technology, concept, or formula from the ground up using **First Principles and Building Blocks** so the user learns deeply without removing granularity or engineering control.
-- **Immediate First-Principles Bug Explanations**: Whenever any bug, build error, or test failure occurs, immediately explain: (1) what the bug is, (2) exactly why it happened from first principles, and (3) why that category of bug is dangerous in professional engineering.
-- **Interactive Design Decisions (LLD -> System -> Product)**: Actively involve the user in design choices across **Product Design** (gameplay feel, strictness), **System Design** (monolithic execution, ML pipeline boundaries), and **Low-Level Design (LLD)** (feature vectors, mathematical formulas, interfaces), giving the user complete control.
-- **State-of-the-Art ML Classification (`No Generic Shortcuts`)**: For all webcam punch and gesture detection, strictly utilize multi-feature spatial & kinematic Machine Learning classification (`PunchMLClassifier`) over simple speed threshold shortcuts.
+- TypeScript must stay strict.
+- Do not add `any`, `@ts-ignore`, `@ts-expect-error`, or `ts-nocheck` in authored files.
+- Generated files may contain generated typing escapes, but do not edit generated files by hand.
+- Exported functions, hooks, services, and shared helpers must declare explicit interfaces and return types.
+
+## Tests
+
+- Follow TDD: write or update the failing test first, then make it pass, then refactor.
+- Keep the test pyramid:
+  - Unit tests in `tests/unit/`.
+  - Integration tests in `tests/integration/`.
+  - End-to-end tests in `tests/e2e/`.
+- Use Vitest for unit and integration tests.
+- Use Playwright for browser and full course flow tests.
+- Husky pre-commit and pre-push hooks must run verification. Do not bypass hooks unless the user explicitly asks.
+
+## Code Quality
+
+- Follow XP, Clean Code, Code Complete, and Pragmatic Programmer principles in practical terms: small functions, clear names, low duplication, simple control flow, and code that explains itself through structure.
+- Keep changes scoped. Do not refactor unrelated areas unless needed for the task.
+- Avoid home-built versions of solved problems when a reliable package already exists.
+
+## Comments
+
+- Comments are allowed only for legal notices, compliance rules, or real TODOs.
+- Do not add comments that repeat what the code does, explain temporary debugging, narrate implementation steps, or restate the task.
+
+## Webcam Boxing ML
+
+- Punch and gesture detection must use multi-feature spatial and kinematic classification.
+- Do not replace the classifier with a simple speed-threshold shortcut as the final approach.
+- Make ML thresholds and model parameters easy to tune from configuration.
+
+## Teaching Style
+
+- Explain work in simple English.
+- Use first principles: start from the smallest useful building block, then connect it to the system.
+- Keep engineering granularity. Do not hide important details, but avoid jargon when plain words work.
+- When a bug, test failure, or build failure happens, explain what it is, why it happened, and why that class of bug matters in real software.
+- Involve the user in product design, system design, and low-level design decisions when the decision changes behavior, architecture, or learning outcomes.

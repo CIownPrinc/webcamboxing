@@ -38,6 +38,11 @@ export interface UiConfiguration {
   readonly enableAnimations: boolean;
   readonly defaultTheme: "light" | "dark";
   readonly toastDurationMilliseconds: number;
+  readonly mobileBreakpointPx: number;
+  readonly copyFeedbackResetMilliseconds: number;
+  readonly easterEggImpactLeadSeconds: number;
+  readonly easterEggFadeDelayMilliseconds: number;
+  readonly easterEggCompleteDelayMilliseconds: number;
 }
 
 export interface QueryClientConfiguration {
@@ -52,6 +57,13 @@ export interface AppConfiguration {
   readonly calibration: CalibrationConfiguration;
   readonly ui: UiConfiguration;
   readonly query: QueryClientConfiguration;
+  readonly e2e: EndToEndTestConfiguration;
+}
+
+export interface EndToEndTestConfiguration {
+  readonly host: string;
+  readonly port: number;
+  readonly startupTimeoutMilliseconds: number;
 }
 
 export const APP_CONFIG: AppConfiguration = {
@@ -79,11 +91,21 @@ export const APP_CONFIG: AppConfiguration = {
     enableAnimations: true,
     defaultTheme: "dark",
     toastDurationMilliseconds: 4000,
+    mobileBreakpointPx: 768,
+    copyFeedbackResetMilliseconds: 1200,
+    easterEggImpactLeadSeconds: 0.4,
+    easterEggFadeDelayMilliseconds: 1500,
+    easterEggCompleteDelayMilliseconds: 3000,
   },
   query: {
     defaultStaleTimeMilliseconds: 1000 * 60 * 5,
     defaultGcTimeMilliseconds: 1000 * 60 * 30,
     retryAttempts: 2,
     refetchOnWindowFocus: false,
+  },
+  e2e: {
+    host: "127.0.0.1",
+    port: 4173,
+    startupTimeoutMilliseconds: 120_000,
   },
 } as const;

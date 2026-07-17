@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react";
+import type { ReactElement } from "react";
 import { createPortal } from "react-dom";
 
-export function BoxerEasterEgg({
-  onImpact,
-  onComplete,
-}: {
-  onImpact: () => void;
-  onComplete: () => void;
-}) {
+import { APP_CONFIG } from "@/config/app.config";
+import { reportLovableError } from "@/lib/lovable-error-reporting";
+
+interface BoxerEasterEggProps {
+  readonly onImpact: () => void;
+  readonly onComplete: () => void;
+}
+
+export function BoxerEasterEgg({ onImpact, onComplete }: BoxerEasterEggProps): ReactElement {
   const [showGlass, setShowGlass] = useState(false);
   const [isFading, setIsFading] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -17,29 +20,35 @@ export function BoxerEasterEgg({
     const v = videoRef.current;
     if (!v) return;
 
-    const handleTimeUpdate = () => {
-      if (v.duration > 0 && v.currentTime >= v.duration - 0.4 && !hasImpacted.current) {
+    const handleTimeUpdate = (): void => {
+      if (
+        v.duration > 0 &&
+        v.currentTime >= v.duration - APP_CONFIG.ui.easterEggImpactLeadSeconds &&
+        !hasImpacted.current
+      ) {
         hasImpacted.current = true;
         setShowGlass(true);
         onImpact();
-        new Audio("/glass-break.wav").play().catch((e) => console.error(e));
+        new Audio("/glass-break.wav").play().catch((error: unknown) => {
+          reportLovableError(error, { source: "boxer_easter_egg_audio" });
+        });
       }
     };
 
-    const handleEnded = () => {
+    const handleEnded = (): void => {
       setTimeout(() => {
         setIsFading(true);
-      }, 1500);
+      }, APP_CONFIG.ui.easterEggFadeDelayMilliseconds);
 
       setTimeout(() => {
         onComplete();
-      }, 3000);
+      }, APP_CONFIG.ui.easterEggCompleteDelayMilliseconds);
     };
 
     v.addEventListener("timeupdate", handleTimeUpdate);
     v.addEventListener("ended", handleEnded);
-    v.play().catch((e) => {
-      console.error("Easter egg video playback failed", e);
+    v.play().catch((error: unknown) => {
+      reportLovableError(error, { source: "boxer_easter_egg_video" });
       onComplete();
     });
 
