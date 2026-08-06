@@ -18,6 +18,23 @@ dist-ssr
 .nitro
 *.local
 
+# Environment files and local credentials. Commit only sanitized templates.
+.env
+.env.*
+.envrc
+!.env.example
+!.env.*.example
+!.env.template
+!.env.*.template
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local AI assistant configuration and conversation/session artifacts.
+.claude/
+.codex/
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
@@ -27,6 +44,8 @@ dist-ssr
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
+Desktop.ini
 *.suo
 *.ntvs*
 *.njsproj
